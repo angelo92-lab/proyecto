@@ -19,6 +19,6 @@ class AnotacionesController extends Controller
             ->orderBy('a.fecha', 'DESC')
             ->get();
 
-        return view('anotaciones', compact('anotaciones'));
+        return view('Anotaciones', compact('anotaciones'));
     }
 }
