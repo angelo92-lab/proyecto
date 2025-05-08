@@ -25,6 +25,25 @@
     <h1>Reporte de Almuerzos por Alumno</h1>
     <h2>Alumno: {{ $student->Nombres }}</h2>
     <h3>Mes: {{ $month }}</h3>
-    <h3>Cantidad de veces almorzó: {{ $count }}</h3>
+    
+    <!-- Mostrar el total de almuerzos -->
+    <h3>Cantidad de veces almorzó: {{ count($lunchRecords) }}</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Almuerzo</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($lunchRecords as $lunchRecord)
+                <tr>
+                    <td>{{ $lunchRecord->fecha }}</td>
+                    <td>{{ $lunchRecord->almorzo == 1 ? 'Sí' : 'No' }}</td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </body>
 </html>
