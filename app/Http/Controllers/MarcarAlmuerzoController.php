@@ -54,7 +54,7 @@ class MarcarAlmuerzoController extends Controller
     // Nueva función para marcar almuerzo desde la máquina lectora
     public function marcar(Request $request)
     {
-        $rut = $request->input('rut');
+        $rut = $request->input('rut'); 
 
         if (!$rut) {
             return response()->json(['error' => 'RUT no proporcionado'], 400);

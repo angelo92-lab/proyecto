@@ -30,6 +30,13 @@ use App\Http\Controllers\MarcarAlmuerzoController;
 Route::get('marcaralmuerzo', [MarcarAlmuerzoController::class, 'index'])->name('marcaralmuerzo.index');
 Route::post('marcaralmuerzo', [MarcarAlmuerzoController::class, 'store'])->name('marcaralmuerzo.store');
 
-Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
-Route::get('/reportes/generar', [ReporteController::class, 'generar'])->name('reportes.generar');
 
+use App\Http\Controllers\ReportsController;
+
+Route::middleware(['auth'])->group(function () {
+    // Rutas para reportes
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::post('/reports/generate', [ReportsController::class, 'generate'])->name('reports.generate');
+    Route::post('/reports/export-csv', [ReportsController::class, 'exportCsv'])->name('reports.exportCsv');
+    Route::post('/reports/export-pdf', [ReportsController::class, 'exportPdf'])->name('reports.exportPdf');
+});
