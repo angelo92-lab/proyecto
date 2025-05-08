@@ -28,7 +28,7 @@
                     <li class="nav-item"><a href="{{ url('marcaralmuerzo') }}" class="nav-link">Marcar Almuerzo</a></li>
                     <li class="nav-item"><a href="{{ url('agregaranotacion') }}" class="nav-link">Agregar Anotación</a></li>
                     <li class="nav-item"><a href="{{ url('anotaciones') }}" class="nav-link">Anotaciones</a></li>
-                    <li class="nav-item"><a href="{{ route('reports.index') }}" class="nav-link">Reportes</a></li> <!-- Enlace a la página de reportes -->
+                    <li class="nav-item"><a href="{{ route('reportes.index') }}" class="nav-link">Reportes</a></li> <!-- Enlace a la página de reportes -->
                 </ul>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
