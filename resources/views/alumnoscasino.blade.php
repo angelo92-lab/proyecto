@@ -33,29 +33,32 @@
 </form>
 
 <table class="table table-bordered table-hover">
-    <thead class="table-dark">
+<thead class="table-dark">
+    <tr>
+        <th>Nombres</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>Rut</th>
+        <th>Digito Ver</th>
+        <th>Curso</th>
+        <th>Almorzó</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach ($alumnos as $row)
         <tr>
-            <th>Nombres</th>
-            <th>Rut</th>
-            <th>Digito Ver</th>
-            <th>Celular</th>
-            <th>Curso</th>
-            <th>Almorzó</th>
+            <td>{{ $row->Nombres }}</td>
+            <td>{{ $row->ApellidoPaterno }}</td>
+            <td>{{ $row->ApellidoMaterno }}</td>
+            <td>{{ $row->Run }}</td>
+            <td>{{ $row->{'Digito Ver'} }}</td>
+            <td>{{ $row->Curso }}</td>
+            <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success' : 'text-danger' }}">
+                {{ $row->almorzo_por_fecha }}
+            </td>
         </tr>
-    </thead>
-    <tbody>
-        @foreach ($alumnos as $row)
-            <tr>
-                <td>{{ $row->Nombres }}</td>
-                <td>{{ $row->Run }}</td>
-                <td>{{ $row->{'Digito Ver'} }}</td>
-                <td>{{ $row->Celular }}</td>
-                <td>{{ $row->Curso }}</td>
-                <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success' : 'text-danger' }}">
-                    {{ $row->almorzo_por_fecha }}
-                </td>
-            </tr>
-        @endforeach
-    </tbody>
+    @endforeach
+</tbody>
+
 </table>
 @endsection

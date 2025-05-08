@@ -27,7 +27,15 @@ class AlumnoController extends Controller
                 $join->on('a.Run', '=', 'al.rut_alumno')
                      ->where('al.fecha', '=', $fechaSeleccionada);
             })
-            ->select('a.*', DB::raw("CASE WHEN al.almorzo = 1 THEN 'Sí' ELSE 'No' END AS almorzo_por_fecha"));
+            ->select(
+                'a.Nombres',
+                'a.ApellidoPaterno',
+                'a.ApellidoMaterno',
+                'a.Run',
+                DB::raw('`a`.`Digito Ver` as `Digito Ver`'),
+                'a.Curso',
+                DB::raw("CASE WHEN al.almorzo = 1 THEN 'Sí' ELSE 'No' END AS almorzo_por_fecha")
+            );
 
         if ($cursoSeleccionado) {
             $query->where('a.Curso', $cursoSeleccionado);
