@@ -238,21 +238,13 @@ class ReportsController extends Controller
 {
     $type = $request->input('report_type');
 
-    // === REPORTE POR CURSO ===
     if ($type == 'course') {
         $curso = $request->input('curso');
         $dateFilterType = $request->input('date_filter_type');
         $date = $request->input('date');
 
-        // Rango de fechas
-        if ($dateFilterType == 'day') {
-            $dateStart = $dateEnd = $date;
-        } elseif ($dateFilterType == 'month') {
-            $dateStart = date('Y-m-01', strtotime($date));
-            $dateEnd = date('Y-m-t', strtotime($date));
-        } else {
-            return back()->with('error', 'Tipo de filtro de fecha no válido.');
-        }
+        $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
+        $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
         $students = DB::table('colegio20252')
             ->where('Curso', $curso)
@@ -294,13 +286,14 @@ class ReportsController extends Controller
         return $pdf->download('reporte_curso.pdf');
     }
 
-    // === REPORTE POR ALUMNO ===
-    if ($type == 'student') {
+    // Reporte individual por alumno
+    elseif ($type == 'student') {
         $studentName = $request->input('student_name');
         $month = $request->input('month');
 
         $student = DB::table('colegio20252')
             ->where('Nombres', $studentName)
+            ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
             ->first();
 
         if (!$student) {
@@ -342,7 +335,9 @@ class ReportsController extends Controller
         return $pdf->download('reporte_alumno.pdf');
     }
 
+    // Si no coincide ningún tipo
     return redirect()->back()->with('error', 'Tipo de reporte no válido para PDF.');
 }
+
 
 }
