@@ -121,16 +121,45 @@
    </div>
 
    <script>
-       function toggleReportForms() {
-           const reportType = document.getElementById('report_type').value;
-           document.getElementById('course_form').style.display = reportType === 'course' ? 'block' : 'none';
-           document.getElementById('student_form').style.display = reportType === 'student' ? 'block' : 'none';
-       }
+    function toggleReportForms() {
+        const reportType = document.getElementById('report_type').value;
 
-       function toggleDateInput() {
-           const dateFilterType = document.getElementById('date_filter_type').value;
-           document.getElementById('date_day_div').style.display = dateFilterType === 'day' ? 'block' : 'none';
-           document.getElementById('date_month_div').style.display = dateFilterType === 'month' ? 'block' : 'none';
-       }
-   </script>
+        // Mostrar y habilitar según tipo
+        const courseForm = document.getElementById('course_form');
+        const studentForm = document.getElementById('student_form');
+
+        courseForm.style.display = reportType === 'course' ? 'block' : 'none';
+        studentForm.style.display = reportType === 'student' ? 'block' : 'none';
+
+        // Habilita/deshabilita campos de curso
+        [...courseForm.querySelectorAll('input, select')].forEach(el => {
+            el.disabled = reportType !== 'course';
+        });
+
+        // Habilita/deshabilita campos de alumno
+        [...studentForm.querySelectorAll('input, select')].forEach(el => {
+            el.disabled = reportType !== 'student';
+        });
+    }
+
+    function toggleDateInput() {
+        const dateFilterType = document.getElementById('date_filter_type').value;
+        const dayDiv = document.getElementById('date_day_div');
+        const monthDiv = document.getElementById('date_month_div');
+
+        dayDiv.style.display = dateFilterType === 'day' ? 'block' : 'none';
+        monthDiv.style.display = dateFilterType === 'month' ? 'block' : 'none';
+
+        // Habilita solo el campo que corresponde
+        document.getElementById('date_day').disabled = dateFilterType !== 'day';
+        document.getElementById('date_month').disabled = dateFilterType !== 'month';
+    }
+
+    // Ejecutar en carga si ya se envió algo
+    document.addEventListener('DOMContentLoaded', () => {
+        toggleReportForms();
+        toggleDateInput();
+    });
+</script>
+
    @endsection  

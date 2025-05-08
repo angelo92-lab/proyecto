@@ -33,7 +33,7 @@ Route::post('marcaralmuerzo', [MarcarAlmuerzoController::class, 'store'])->name(
 
 use App\Http\Controllers\ReportsController;
 
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reportes.index');
+    Route::get('/reportes', [ReportsController::class, 'index'])->name('reportes.index');
     Route::post('/reports/generate', [ReportsController::class, 'generate'])->name('reports.generate');
     Route::post('/reports/export-csv', [ReportsController::class, 'exportCsv'])->name('reports.exportCsv');
     Route::post('/reports/export-pdf', [ReportsController::class, 'exportPdf'])->name('reports.exportPdf');

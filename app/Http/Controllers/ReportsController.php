@@ -18,6 +18,7 @@ class ReportsController extends Controller
     public function generate(Request $request)
     {
         $type = $request->input('report_type');
+        dd($request->all());
 
         if ($type == 'course') {
             $curso = $request->input('curso');
