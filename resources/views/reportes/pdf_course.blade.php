@@ -43,7 +43,7 @@
             <tr>
                 <td>{{ $data['nombres'] }}</td>
                 <td>{{ $data['rut'] }}</td>
-                <td>{{ $data['digito ver'] }}</td>
+                <td>{{ $data['digito_ver'] }}</td>
                 <td>{{ $data['celular'] }}</td>
                 <td>{{ $data['curso'] }}</td>
                 <td>{{ $data['almorzo'] }}</td>

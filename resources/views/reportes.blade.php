@@ -88,7 +88,7 @@
     <tr>
         <td class="border border-gray-300 p-2">{{ $data['nombres'] }}</td>
         <td class="border border-gray-300 p-2">{{ $data['rut'] }}</td>
-        <td class="border border-gray-300 p-2">{{ $data['digito ver'] }}</td>
+        <td class="border border-gray-300 p-2">{{ $data['digito_ver'] }}</td>
         <td class="border border-gray-300 p-2">{{ $data['celular'] }}</td>
         <td class="border border-gray-300 p-2">{{ $data['curso'] }}</td>
         <td class="border border-gray-300 p-2">{{ $data['almorzo'] }}</td>
