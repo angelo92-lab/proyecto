@@ -36,8 +36,8 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombre', 'rut', 'digito ver', 'celular', 'curso')
-                ->orderBy('nombre')
+                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->orderBy('nombres')
                 ->get();
 
             $studentIds = $students->pluck('id');
@@ -58,7 +58,7 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'nombre' => $student->nombre,
+                    'nombres' => $student->nombre,
                     'rut' => $student->rut,
                     'digito ver' => $student->digitoverificador,
                     'celular' => $student->celular,
@@ -79,7 +79,7 @@ class ReportsController extends Controller
             $studentName = $request->input('student_name');
             $month = $request->input('month');
 
-            $student = DB::table('colegio20252')->where('nombre', 'like', "%$studentName%")->first();
+            $student = DB::table('colegio20252')->where('nombres', 'like', "%$studentName%")->first();
 
             if (!$student) {
                 return redirect()->back()->with('error', 'Alumno no encontrado.');
@@ -128,8 +128,8 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombre', 'rut', 'digito ver', 'celular', 'curso')
-                ->orderBy('nombre')
+                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->orderBy('nombres')
                 ->get();
 
             $studentIds = $students->pluck('id');
@@ -150,7 +150,7 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'Nombre' => $student->nombre,
+                    'Nombres' => $student->nombre,
                     'RUT' => $student->rut,
                     'Digito Verificador' => $student->digitoverificador,
                     'Celular' => $student->celular,
@@ -182,7 +182,7 @@ class ReportsController extends Controller
             $studentName = $request->input('student_name');
             $month = $request->input('month');
 
-            $student = DB::table('colegio20252')->where('nombre', 'like', "%$studentName%")->first();
+            $student = DB::table('colegio20252')->where('nombres', 'like', "%$studentName%")->first();
 
             if (!$student) {
                 return redirect()->back()->with('error', 'Alumno no encontrado.');
@@ -240,8 +240,8 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombre', 'rut', 'digito ver', 'celular', 'curso')
-                ->orderBy('nombre')
+                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->orderBy('nombres')
                 ->get();
 
             $studentIds = $students->pluck('id');
@@ -262,7 +262,7 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'nombre' => $student->nombre,
+                    'nombres' => $student->nombre,
                     'rut' => $student->rut,
                     'digito ver' => $student->digitoverificador,
                     'celular' => $student->celular,
@@ -283,7 +283,7 @@ class ReportsController extends Controller
             $studentName = $request->input('student_name');
             $month = $request->input('month');
 
-            $student = DB::table('colegio20252')->where('nombre', 'like', "%$studentName%")->first();
+            $student = DB::table('colegio20252')->where('nombres', 'like', "%$studentName%")->first();
 
             if (!$student) {
                 return redirect()->back()->with('error', 'Alumno no encontrado.');
