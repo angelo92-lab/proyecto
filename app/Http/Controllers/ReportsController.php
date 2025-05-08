@@ -246,7 +246,7 @@ class ReportsController extends Controller
         $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
         $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-        $students = DB::table('colegio20252')
+        $students = DB::table('colegio20252')   
             ->where('Curso', $curso)
             ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
             ->orderBy('Nombres')
@@ -327,6 +327,9 @@ class ReportsController extends Controller
             'month' => $month,
             'lunchesByDate' => $lunchesByDate,
         ])->setPaper('a4', 'portrait');
+
+        
+        
 
         return $pdf->download('reporte_alumno.pdf');
     }
