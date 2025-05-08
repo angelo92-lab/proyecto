@@ -303,41 +303,37 @@ class ReportsController extends Controller
         $startDate = date('Y-m-01', strtotime($month));
         $endDate = date('Y-m-t', strtotime($month));
 
-        $daysOfMonth = []; // Asegúrate de que esta variable esté aquí, vacía inicialmente.
-$lunches = [];
+        $lunchesByDate = [];
 
-$period = new DatePeriod(
-    new DateTime($startDate),
-    new DateInterval('P1D'),
-    (new DateTime($endDate))->modify('+1 day')
-);
+        $period = new DatePeriod(
+            new DateTime($startDate),
+            new DateInterval('P1D'),
+            (new DateTime($endDate))->modify('+1 day')
+        );
 
-foreach ($period as $date) {
-    $formattedDate = $date->format('Y-m-d');
-    $daysOfMonth[] = $formattedDate;
+        foreach ($period as $date) {
+            $formattedDate = $date->format('Y-m-d');
+            $hadLunch = DB::table('almuerzos')
+                ->where('rut_alumno', $student->Run)
+                ->whereDate('fecha', $formattedDate)
+                ->where('almorzo', 1)
+                ->exists();
 
-    $hadLunch = DB::table('almuerzos')
-        ->where('rut_alumno', $student->Run)
-        ->whereDate('fecha', $formattedDate)
-        ->where('almorzo', 1)
-        ->exists();
+            $lunchesByDate[$formattedDate] = $hadLunch;
+        }
 
-    $lunches[$formattedDate] = $hadLunch;
-}
+        $pdf = PDF::loadView('pdf.reporte_alumno', [
+            'student' => $student,
+            'month' => $month,
+            'lunchesByDate' => $lunchesByDate,
+        ])->setPaper('a4', 'portrait');
 
-// Al final, pasa 'daysOfMonth' a la vista
-$pdf = PDF::loadView('pdf.reporte_alumno', [
-    'student' => $student,
-    'month' => $month,
-    'daysOfMonth' => $daysOfMonth,  // Aquí se pasa correctamente
-    'lunchesByDate' => $lunches,
-])->setPaper('a4', 'portrait');
         return $pdf->download('reporte_alumno.pdf');
     }
 
-    // Si no coincide ningún tipo
     return redirect()->back()->with('error', 'Tipo de reporte no válido para PDF.');
 }
+
 
 
 }
