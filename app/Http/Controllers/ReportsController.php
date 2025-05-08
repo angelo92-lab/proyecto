@@ -35,7 +35,7 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombres', 'Run', DB::raw('`digito ver` as digito_ver'), 'celular', 'curso') // Corrección: Reemplaza 'rut' por 'Run' y usa `digito ver`
+                ->select('id', 'nombres', 'Run', DB::raw('`digito ver` as digito_ver'), 'celular', 'curso')
                 ->orderBy('nombres')
                 ->get();
 
@@ -58,8 +58,8 @@ class ReportsController extends Controller
                 }
                 $reportData[] = [
                     'nombres' => $student->nombres,
-                    'rut' => $student->Run, // Reemplaza 'rut' por 'Run'
-                    'digito_ver' => $student->digito_ver, // Usa 'digito_ver' en vez de 'digito ver'
+                    'rut' => $student->Run,
+                    'digito_ver' => $student->digito_ver,
                     'celular' => $student->celular,
                     'curso' => $student->curso,
                     'almorzo' => $hadLunch ? 'Sí' : 'No',
@@ -88,7 +88,7 @@ class ReportsController extends Controller
             $dateEnd = date('Y-m-t', strtotime($month));
 
             $count = DB::table('almuerzos')
-                ->where('Run', $student->Run) // Usa 'Run' en lugar de 'rut'
+                ->where('estudiante_id', $student->id)
                 ->whereBetween('fecha', [$dateStart, $dateEnd])
                 ->where(function ($query) {
                     $query->where('almorzo', true)->orWhere('almorzo', 1);
