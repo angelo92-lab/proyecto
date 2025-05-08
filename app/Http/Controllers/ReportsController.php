@@ -9,7 +9,6 @@ use PDF; // Para generar PDF (requiere barryvdh/laravel-dompdf)
 
 class ReportsController extends Controller
 {
-    
     public function index()
     {
         // Traer cursos distintos para llenar dropdown
@@ -36,7 +35,7 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->select('id', 'nombres', 'Run', DB::raw('`digito ver` as digito_ver'), 'celular', 'curso') // Corrección: Reemplaza 'rut' por 'Run' y usa `digito ver`
                 ->orderBy('nombres')
                 ->get();
 
@@ -58,9 +57,9 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'nombres' => $student->nombre,
-                    'rut' => $student->rut,
-                    'digito ver' => $student->digitoverificador,
+                    'nombres' => $student->nombres,
+                    'rut' => $student->Run, // Reemplaza 'rut' por 'Run'
+                    'digito_ver' => $student->digito_ver, // Usa 'digito_ver' en vez de 'digito ver'
                     'celular' => $student->celular,
                     'curso' => $student->curso,
                     'almorzo' => $hadLunch ? 'Sí' : 'No',
@@ -89,7 +88,7 @@ class ReportsController extends Controller
             $dateEnd = date('Y-m-t', strtotime($month));
 
             $count = DB::table('almuerzos')
-                ->where('rut', $student->Run)
+                ->where('rut', $student->Run) // Usa 'Run' en lugar de 'rut'
                 ->whereBetween('fecha', [$dateStart, $dateEnd])
                 ->where(function ($query) {
                     $query->where('almorzo', true)->orWhere('almorzo', 1);
@@ -128,7 +127,7 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->select('id', 'nombres', 'Run', DB::raw('`digito ver` as digito_ver'), 'celular', 'curso') // Corrección: Reemplaza 'rut' por 'Run' y usa `digito ver`
                 ->orderBy('nombres')
                 ->get();
 
@@ -150,9 +149,9 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'Nombres' => $student->nombre,
-                    'RUT' => $student->rut,
-                    'Digito Verificador' => $student->digitoverificador,
+                    'Nombres' => $student->nombres,
+                    'RUT' => $student->Run, // Reemplaza 'rut' por 'Run'
+                    'Digito Verificador' => $student->digito_ver, // Usa 'digito_ver' en vez de 'digito ver'
                     'Celular' => $student->celular,
                     'Curso' => $student->curso,
                     'Almorzó' => $hadLunch ? 'Sí' : 'No',
@@ -199,7 +198,7 @@ class ReportsController extends Controller
                 })
                 ->count();
 
-            $filename = "reporte_alumno_{$student->nombre}_" . str_replace('-', '_', $month) . ".csv";
+            $filename = "reporte_alumno_{$student->nombres}_" . str_replace('-', '_', $month) . ".csv";
 
             $headers = [
                 "Content-type" => "text/csv",
@@ -212,7 +211,7 @@ class ReportsController extends Controller
             $callback = function () use ($student, $count, $month) {
                 $file = fopen('php://output', 'w');
                 fputcsv($file, ['Alumno', 'Mes', 'Cantidad de veces almorzó']);
-                fputcsv($file, [$student->nombre, $month, $count]);
+                fputcsv($file, [$student->nombres, $month, $count]);
                 fclose($file);
             };
 
@@ -240,7 +239,7 @@ class ReportsController extends Controller
 
             $students = DB::table('colegio20252')
                 ->where('curso', $curso)
-                ->select('id', 'nombres', 'rut', 'digito ver', 'celular', 'curso')
+                ->select('id', 'nombres', 'Run', DB::raw('`digito ver` as digito_ver'), 'celular', 'curso') // Reemplaza 'rut' por 'Run'
                 ->orderBy('nombres')
                 ->get();
 
@@ -262,53 +261,19 @@ class ReportsController extends Controller
                     });
                 }
                 $reportData[] = [
-                    'nombres' => $student->nombre,
-                    'rut' => $student->rut,
-                    'digito ver' => $student->digitoverificador,
+                    'nombres' => $student->nombres,
+                    'rut' => $student->Run, // Reemplaza 'rut' por 'Run'
+                    'digito_ver' => $student->digito_ver, // Usa 'digito_ver' en vez de 'digito ver'
                     'celular' => $student->celular,
                     'curso' => $student->curso,
                     'almorzo' => $hadLunch ? 'Sí' : 'No',
                 ];
             }
 
-            $pdf = PDF::loadView('reportes.pdf_course', [
-                'reportData' => $reportData,
-                'curso' => $curso,
-                'date' => $date,
-                'dateFilterType' => $dateFilterType,
-            ]);
-
-            return $pdf->download("reporte_curso_{$curso}_" . str_replace('-', '_', $date) . ".pdf");
-        } elseif ($type == 'student') {
-            $studentName = $request->input('student_name');
-            $month = $request->input('month');
-
-            $student = DB::table('colegio20252')->where('nombres', 'like', "%$studentName%")->first();
-
-            if (!$student) {
-                return redirect()->back()->with('error', 'Alumno no encontrado.');
-            }
-
-            $dateStart = date('Y-m-01', strtotime($month));
-            $dateEnd = date('Y-m-t', strtotime($month));
-
-            $count = DB::table('almuerzos')
-                ->where('estudiante_id', $student->id)
-                ->whereBetween('fecha', [$dateStart, $dateEnd])
-                ->where(function ($query) {
-                    $query->where('almorzo', true)->orWhere('almorzo', 1);
-                })
-                ->count();
-
-            $pdf = PDF::loadView('reportes.pdf_student', [
-                'student' => $student,
-                'month' => $month,
-                'count' => $count,
-            ]);
-
-            return $pdf->download("reporte_alumno_{$student->nombre}_" . str_replace('-', '_', $month) . ".pdf");
+            $pdf = PDF::loadView('pdf.reporte_curso', ['reportData' => $reportData, 'curso' => $curso, 'date' => $date]);
+            return $pdf->download('reporte_curso.pdf');
         } else {
-            return redirect()->back()->with('error', 'Tipo de reporte no válido para exportación.');
+            return redirect()->back()->with('error', 'Tipo de reporte no válido para PDF.');
         }
     }
 }
