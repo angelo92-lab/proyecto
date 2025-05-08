@@ -41,7 +41,7 @@
         <tbody>
             @foreach($reportData as $data)
             <tr>
-                <td>{{ $data['nombre'] }}</td>
+                <td>{{ $data['nombres'] }}</td>
                 <td>{{ $data['rut'] }}</td>
                 <td>{{ $data['digito ver'] }}</td>
                 <td>{{ $data['celular'] }}</td>

@@ -23,7 +23,7 @@
 </head>
 <body>
     <h1>Reporte de Almuerzos por Alumno</h1>
-    <h2>Alumno: {{ $student->nombre }}</h2>
+    <h2>Alumno: {{ $student->nombres }}</h2>
     <h3>Mes: {{ $month }}</h3>
     <h3>Cantidad de veces almorzó: {{ $count }}</h3>
 </body>
