@@ -51,7 +51,7 @@
             <td>{{ $row->ApellidoPaterno }}</td>
             <td>{{ $row->ApellidoMaterno }}</td>
             <td>{{ $row->Run }}</td>
-            <td>{{ $row->{'Digito Ver'} }}</td>
+            <td>{{ $row->DigitoVer }}</td>
             <td>{{ $row->Curso }}</td>
             <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success' : 'text-danger' }}">
                 {{ $row->almorzo_por_fecha }}
