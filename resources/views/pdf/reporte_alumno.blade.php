@@ -35,13 +35,14 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($daysOfMonth as $day)
-                <tr>
-                    <td>{{ \Carbon\Carbon::parse($day)->format('d-m-Y') }}</td>
-                    <td>{{ isset($lunchesByDate[$day]) && $lunchesByDate[$day] ? 'Sí' : 'No' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
+        <tbody>
+             @foreach ($daysOfMonth as $day)
+        <tr>
+            <td>{{ \Carbon\Carbon::parse($day)->format('d-m-Y') }}</td>
+            <td>{{ isset($lunchesByDate[$day]) && $lunchesByDate[$day] ? 'Sí' : 'No' }}</td>
+        </tr>
+             @endforeach
+</tbody>
     </table>
 
     <h3>Total días que almorzó: {{ collect($lunchesByDate)->filter()->count() }}</h3>

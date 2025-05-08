@@ -303,35 +303,35 @@ class ReportsController extends Controller
         $startDate = date('Y-m-01', strtotime($month));
         $endDate = date('Y-m-t', strtotime($month));
 
-        $daysOfMonth = []; // Asegurarnos de usar el mismo nombre de variable
-        $lunches = [];
+        $daysOfMonth = []; // Asegúrate de que esta variable esté aquí, vacía inicialmente.
+$lunches = [];
 
-        $period = new DatePeriod(
-            new DateTime($startDate),
-            new DateInterval('P1D'),
-            (new DateTime($endDate))->modify('+1 day')
-        );
+$period = new DatePeriod(
+    new DateTime($startDate),
+    new DateInterval('P1D'),
+    (new DateTime($endDate))->modify('+1 day')
+);
 
-        foreach ($period as $date) {
-            $formattedDate = $date->format('Y-m-d');
-            $daysOfMonth[] = $formattedDate;
+foreach ($period as $date) {
+    $formattedDate = $date->format('Y-m-d');
+    $daysOfMonth[] = $formattedDate;
 
-            $hadLunch = DB::table('almuerzos')
-                ->where('rut_alumno', $student->Run)
-                ->whereDate('fecha', $formattedDate)
-                ->where('almorzo', 1)
-                ->exists();
+    $hadLunch = DB::table('almuerzos')
+        ->where('rut_alumno', $student->Run)
+        ->whereDate('fecha', $formattedDate)
+        ->where('almorzo', 1)
+        ->exists();
 
-            $lunches[$formattedDate] = $hadLunch;
-        }
+    $lunches[$formattedDate] = $hadLunch;
+}
 
-        $pdf = PDF::loadView('pdf.reporte_alumno', [
-            'student' => $student,
-            'month' => $month,
-            'daysOfMonth' => $daysOfMonth, // Asegurándonos de que sea la misma variable
-            'lunchesByDate' => $lunches,
-        ])->setPaper('a4', 'portrait');
-
+// Al final, pasa 'daysOfMonth' a la vista
+$pdf = PDF::loadView('pdf.reporte_alumno', [
+    'student' => $student,
+    'month' => $month,
+    'daysOfMonth' => $daysOfMonth,  // Aquí se pasa correctamente
+    'lunchesByDate' => $lunches,
+])->setPaper('a4', 'portrait');
         return $pdf->download('reporte_alumno.pdf');
     }
 
