@@ -2,14 +2,43 @@
 <html>
 <head>
     <title>Reporte Alumno</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            table-layout: fixed;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: center;
+            word-wrap: break-word;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        h1, h2, h3 {
+            margin: 0;
+            padding: 4px 0;
+        }
+    </style>
 </head>
 <body>
     <h1>Reporte de Almuerzos</h1>
     <h2>Alumno: {{ $student->Nombres }}</h2>
     <h3>Curso: {{ $student->Curso }}</h3>
-    <h3>Mes: {{ $month }}</h3>
+    <h3>Mes: {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}</h3>
 
-    <table border="1" cellspacing="0" cellpadding="5">
+    <table>
         <thead>
             <tr>
                 <th>Fecha</th>
@@ -23,14 +52,13 @@
                 $end = Carbon::parse($month)->endOfMonth();
             @endphp
 
-            @while ($start <= $end)
-                @php $date = $start->format('Y-m-d'); @endphp
+            @for ($date = $start->copy(); $date <= $end; $date->addDay())
+                @php $formatted = $date->format('Y-m-d'); @endphp
                 <tr>
-                    <td>{{ $start->format('d-m-Y') }}</td>
-                    <td>{{ !empty($lunchesByDate[$date]) ? 'Sí' : 'No' }}</td>
+                    <td>{{ $date->format('d-m-Y') }}</td>
+                    <td>{{ !empty($lunchesByDate[$formatted]) ? 'Sí' : 'No' }}</td>
                 </tr>
-                @php $start->addDay(); @endphp
-            @endwhile
+            @endfor
         </tbody>
     </table>
 </body>
