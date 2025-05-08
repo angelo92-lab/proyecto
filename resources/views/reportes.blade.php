@@ -64,7 +64,8 @@
             </div>
         </div>
 
-        <button type="submit" class="bg-blue-500 text-white rounded p-2">Generar Reporte</button>
+        <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
+         Generar Reporte</button>
     </form>
 
     {{-- Opciones para exportar --}}
@@ -103,7 +104,8 @@
                 <input type="hidden" name="curso" value="{{ $selectedCurso }}">
                 <input type="hidden" name="date_filter_type" value="{{ $dateFilterType }}">
                 <input type="hidden" name="date" value="{{ $selectedDate }}">
-                <button type="submit" class="bg-green-500 text-white rounded p-2">Exportar a CSV</button>
+                <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
+                Exportar a CSV</button>
             </form>
 
             <form method="POST" action="{{ route('reports.exportPdf') }}" class="mt-2">
@@ -112,7 +114,8 @@
                 <input type="hidden" name="curso" value="{{ $selectedCurso }}">
                 <input type="hidden" name="date_filter_type" value="{{ $dateFilterType }}">
                 <input type="hidden" name="date" value="{{ $selectedDate }}">
-                <button type="submit" class="bg-red-500 text-white rounded p-2">Exportar a PDF</button>
+                <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
+                Exportar a PDF</button>
             </form>
         </div>
     </div>
