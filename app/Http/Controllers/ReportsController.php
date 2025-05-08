@@ -9,13 +9,6 @@ use PDF; // Para generar PDF (requiere barryvdh/laravel-dompdf)
 
 class ReportsController extends Controller
 {
-    public function index1()
-    {
-        // Verificar si el usuario está autenticado
-        if (!session()->has('usuario_id')) {
-            return redirect('login');
-        }
-    }
     
     public function index()
     {
