@@ -88,7 +88,7 @@ class ReportsController extends Controller
             $dateEnd = date('Y-m-t', strtotime($month));
 
             $count = DB::table('almuerzos')
-                ->where('rut', $student->Run) // Usa 'Run' en lugar de 'rut'
+                ->where('run', $student->Run) // Usa 'Run' en lugar de 'rut'
                 ->whereBetween('fecha', [$dateStart, $dateEnd])
                 ->where(function ($query) {
                     $query->where('almorzo', true)->orWhere('almorzo', 1);
