@@ -14,7 +14,7 @@ class ReportsController extends Controller
     {
         // Traer cursos distintos para llenar dropdown
         $courses = DB::table('colegio20252')->select('curso')->distinct()->orderBy('curso')->pluck('curso');
-        return view('reports.index', compact('courses'));
+        return view('reportes.index', compact('courses'));
     }
 
     public function generate(Request $request)
@@ -67,7 +67,7 @@ class ReportsController extends Controller
                 ];
             }
 
-            return view('reports.index', [
+            return view('reportes.index', [
                 'courses' => DB::table('colegio20252')->select('curso')->distinct()->orderBy('curso')->pluck('curso'),
                 'reportData' => $reportData,
                 'reportType' => 'course',
@@ -96,7 +96,7 @@ class ReportsController extends Controller
                 })
                 ->count();
 
-            return view('reports.index', [
+            return view('reportes.index', [
                 'courses' => DB::table('colegio20252')->select('curso')->distinct()->orderBy('curso')->pluck('curso'),
                 'reportType' => 'student',
                 'student' => $student,
@@ -271,7 +271,7 @@ class ReportsController extends Controller
                 ];
             }
 
-            $pdf = PDF::loadView('reports.pdf_course', [
+            $pdf = PDF::loadView('reportes.pdf_course', [
                 'reportData' => $reportData,
                 'curso' => $curso,
                 'date' => $date,
@@ -300,7 +300,7 @@ class ReportsController extends Controller
                 })
                 ->count();
 
-            $pdf = PDF::loadView('reports.pdf_student', [
+            $pdf = PDF::loadView('reportes.pdf_student', [
                 'student' => $student,
                 'month' => $month,
                 'count' => $count,
