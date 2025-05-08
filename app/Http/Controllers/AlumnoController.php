@@ -29,10 +29,10 @@ class AlumnoController extends Controller
             })
             ->select(
                 'a.Nombres',
-                'a.ApellidoPaterno',
-                'a.ApellidoMaterno',
+                DB::raw('`a`.`Apellido Paterno` as ApellidoPaterno'),
+                DB::raw('`a`.`Apellido Materno` as ApellidoMaterno'),
                 'a.Run',
-                DB::raw('`a`.`Digito Ver` as `Digito Ver`'),
+                DB::raw('`a`.`Digito Ver` as DigitoVer'),
                 'a.Curso',
                 DB::raw("CASE WHEN al.almorzo = 1 THEN 'Sí' ELSE 'No' END AS almorzo_por_fecha")
             );
