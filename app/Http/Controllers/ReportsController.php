@@ -303,7 +303,7 @@ class ReportsController extends Controller
         $startDate = date('Y-m-01', strtotime($month));
         $endDate = date('Y-m-t', strtotime($month));
 
-        $allDays = [];
+        $daysOfMonth = []; // Asegurarnos de usar el mismo nombre de variable
         $lunches = [];
 
         $period = new DatePeriod(
@@ -314,7 +314,7 @@ class ReportsController extends Controller
 
         foreach ($period as $date) {
             $formattedDate = $date->format('Y-m-d');
-            $allDays[] = $formattedDate;
+            $daysOfMonth[] = $formattedDate;
 
             $hadLunch = DB::table('almuerzos')
                 ->where('rut_alumno', $student->Run)
@@ -328,7 +328,7 @@ class ReportsController extends Controller
         $pdf = PDF::loadView('pdf.reporte_alumno', [
             'student' => $student,
             'month' => $month,
-            'daysOfMonth' => $allDays,
+            'daysOfMonth' => $daysOfMonth, // Asegurándonos de que sea la misma variable
             'lunchesByDate' => $lunches,
         ])->setPaper('a4', 'portrait');
 

@@ -35,10 +35,10 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($allDays as $day)
+            @foreach ($daysOfMonth as $day)
                 <tr>
                     <td>{{ \Carbon\Carbon::parse($day)->format('d-m-Y') }}</td>
-                    <td>{{ $lunchesByDate[$day] ? 'Sí' : 'No' }}</td>
+                    <td>{{ isset($lunchesByDate[$day]) && $lunchesByDate[$day] ? 'Sí' : 'No' }}</td>
                 </tr>
             @endforeach
         </tbody>
