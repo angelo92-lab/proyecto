@@ -35,7 +35,7 @@ use App\Http\Controllers\ReportsController;
 
 Route::middleware(['auth'])->group(function () {
     // Rutas para reportes
-    Route::get('/reports', [ReportsController::class, 'index'])->name('reports.index');
+    Route::get('/reports', [ReportsController::class, 'index'])->name('reportes.index');
     Route::post('/reports/generate', [ReportsController::class, 'generate'])->name('reports.generate');
     Route::post('/reports/export-csv', [ReportsController::class, 'exportCsv'])->name('reports.exportCsv');
     Route::post('/reports/export-pdf', [ReportsController::class, 'exportPdf'])->name('reports.exportPdf');
