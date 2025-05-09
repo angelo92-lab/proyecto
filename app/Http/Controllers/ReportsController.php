@@ -298,11 +298,14 @@ class ReportsController extends Controller
 
         // Generar PDF
         $pdf = PDF::loadView('pdf.reporte_curso', [
-            'reportData' => $reportData,
-            'curso' => $curso,
-            'date' => $date,
-            'days' => $days,
-        ])->setPaper('a4', 'landscape');
+    'reportData' => $reportData,
+    'curso' => $curso,
+    'date' => $date,
+    'days' => $days,  // Asegúrate de que esta variable se pase correctamente
+    'dateFilterType' => $dateFilterType,
+    'dateStart' => $dateStart,
+    'dateEnd' => $dateEnd,
+])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
     }
