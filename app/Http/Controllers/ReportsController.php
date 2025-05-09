@@ -300,6 +300,8 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
+        dd($days); // 👈 esto te debe mostrar un array de objetos DateTime
+
         // ✅ Esta línea corregida
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
