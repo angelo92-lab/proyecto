@@ -239,76 +239,76 @@ class ReportsController extends Controller
     $type = $request->input('report_type');
 
     // Reporte por curso
-    if ($type == 'course') {
-        $curso = $request->input('curso');
-        $dateFilterType = $request->input('date_filter_type');
-        $date = $request->input('date');
+   if ($type == 'course') {
+    $curso = $request->input('curso');
+    $dateFilterType = $request->input('date_filter_type');
+    $date = $request->input('date');
 
-        $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-        $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+    $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
+    $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-        // Obtener estudiantes del curso
-        $students = DB::table('colegio20252')   
-            ->where('Curso', $curso)
-            ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
-            ->orderBy('Nombres')
-            ->get();
+    // Generar lista de días
+    $period = new DatePeriod(
+        new DateTime($dateStart),
+        new DateInterval('P1D'),
+        (new DateTime($dateEnd))->modify('+1 day')
+    );
 
-        // Obtener almuerzos entre las fechas seleccionadas
-        $ruts = $students->pluck('Run');
-
-        $lunchRecords = DB::table('almuerzos')
-            ->whereIn('rut_alumno', $ruts)
-            ->whereBetween('fecha', [$dateStart, $dateEnd])
-            ->get()
-            ->groupBy('rut_alumno');
-
-        // Crear listado de días del mes
-        $period = new DatePeriod(
-            new DateTime($dateStart),
-            new DateInterval('P1D'),
-            (new DateTime($dateEnd))->modify('+1 day')
-        );
-
-        $days = [];
-        foreach ($period as $dateObj) {
-            $days[] = $dateObj->format('Y-m-d');
-        }
-
-        // Construir los datos para el reporte
-        $reportData = [];
-        foreach ($students as $student) {
-            $row = [
-                'nombres' => $student->Nombres,
-                'rut' => $student->Run,
-                'digito_ver' => $student->digito_ver,
-                'celular' => $student->Celular,
-                'curso' => $student->Curso,
-                'dias' => []
-            ];
-
-            foreach ($days as $day) {
-                // Si el alumno almorzó en este día, marca con ✓, si no con ✗
-                $almorzo = isset($lunchRecords[$student->Run]) && $lunchRecords[$student->Run]->contains('fecha', $day) ? '✓' : '✗';
-                $row['dias'][$day] = $almorzo;
-            }
-
-            $reportData[] = $row;
-        }
-
-        // Generar PDF
-        $pdf = PDF::loadView('pdf.reporte_curso', [
-    'reportData' => $reportData,
-    'curso' => $curso,
-    'date' => $date,
-    'days' => $days,  // Asegúrate de que esta variable se pase correctamente
-    'dateFilterType' => $dateFilterType,
-    'dateStart' => $dateStart,
-    'dateEnd' => $dateEnd,
-])->setPaper('a4', 'landscape');
-
-        return $pdf->download('reporte_curso.pdf');
+    $days = [];
+    foreach ($period as $dateObj) {
+        $days[] = $dateObj->format('Y-m-d');
     }
+
+    $students = DB::table('colegio20252')   
+        ->where('Curso', $curso)
+        ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
+        ->orderBy('Nombres')
+        ->get();
+
+    $ruts = $students->pluck('Run');
+
+    $lunchRecords = DB::table('almuerzos')
+        ->whereIn('rut_alumno', $ruts)
+        ->whereBetween('fecha', [$dateStart, $dateEnd])
+        ->get();
+
+    // Agrupar almuerzos por rut y fecha
+    $almuerzosPorRutFecha = [];
+    foreach ($lunchRecords as $almuerzo) {
+        $almuerzosPorRutFecha[$almuerzo->rut_alumno][$almuerzo->fecha] = $almuerzo->almorzo;
+    }
+
+    $reportData = [];
+    foreach ($students as $student) {
+        $row = [
+            'nombres' => $student->Nombres,
+            'rut' => $student->Run,
+            'digito_ver' => $student->digito_ver,
+            'celular' => $student->Celular,
+            'curso' => $student->Curso,
+            'dias' => []
+        ];
+
+        foreach ($days as $day) {
+            $almorzo = $almuerzosPorRutFecha[$student->Run][$day] ?? 0;
+            $row['dias'][$day] = $almorzo ? '✓' : '✗';
+        }
+
+        $reportData[] = $row;
+    }
+
+    $pdf = PDF::loadView('pdf.reporte_curso', [
+        'reportData' => $reportData,
+        'curso' => $curso,
+        'date' => $date,
+        'days' => $days,
+        'dateFilterType' => $dateFilterType,
+        'dateStart' => $dateStart,
+        'dateEnd' => $dateEnd,
+    ])->setPaper('a4', 'landscape');
+
+    return $pdf->download('reporte_curso.pdf');
+}
 
     // Reporte individual por alumno
     elseif ($type == 'student') {
