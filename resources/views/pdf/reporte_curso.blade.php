@@ -65,6 +65,9 @@
         <th>RUT</th>
         <th>Celular</th>
         <th>Curso</th>
+        @if (!isset($days))
+    <p style="color:red">La variable $days no está definida.</p>
+@endif
        @foreach ($days as $day)
         <th>{{ $day->format('d/m') }}</th>
         @endforeach
