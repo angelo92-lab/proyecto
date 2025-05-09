@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,7 +31,7 @@
         }
 
         th, td {
-            padding: 8px;
+            padding: 6px;
             text-align: center;
         }
 
@@ -55,47 +53,46 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Reporte de Almuerzos del Curso: {{ $curso }} - {{ $date }}</h1>
-        
-        <table>
-   <thead>
-    <tr>
-        <th>Nombre</th>
-        <th>RUT</th>
-        <th>Celular</th>
-        <th>Curso</th>
-        @if (!isset($days))
-    <p style="color:red">La variable $days no está definida.</p>
-@endif
-       @foreach ($days as $day)
-        <th>{{ $day->format('d/m') }}</th>
-        @endforeach
+<div class="container">
+    <h1>Reporte de Almuerzos - Curso: {{ $curso }} - {{ $date }}</h1>
 
-    </tr>
-</thead>
-<tbody>
-    @foreach ($reportData as $data)
-        <tr>
-            <td>{{ $data['Nombres'] }}</td>
-            <td>{{ $data['RUT'] }}-{{ $data['DigitoVer'] }}</td>
-            <td>{{ $data['Celular'] }}</td>
-            <td>{{ $data['Curso'] }}</td>
-            @foreach ($days as $day)
-                <td style="text-align: center;">
-                    {{ $data['Dias'][$day->format('Y-m-d')] ?? '✗' }}
-                </td>
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Celular</th>
+                <th>Curso</th>
+                @if(isset($days))
+                    @foreach ($days as $day)
+                        <th>{{ $day->format('d/m') }}</th>
+                    @endforeach
+                @else
+                    <th>Error: Días no disponibles</th>
+                @endif
+            </tr>
+        </thead>
+        <tbody>
+            @foreach ($reportData as $data)
+                <tr>
+                    <td>{{ $data['Nombres'] }}</td>
+                    <td>{{ $data['RUT'] }}-{{ $data['DigitoVer'] }}</td>
+                    <td>{{ $data['Celular'] }}</td>
+                    <td>{{ $data['Curso'] }}</td>
+                    @if(isset($days))
+                        @foreach ($days as $day)
+                            <td>{{ $data['Dias'][$day->format('Y-m-d')] ?? '✗' }}</td>
+                        @endforeach
+                    @endif
+                </tr>
             @endforeach
-        </tr>
-    @endforeach
-</tbody>
+        </tbody>
+    </table>
+</div>
 
-</table>
-    </div>
-
-    <div class="footer">
-        <p>Generado por el sistema de almuerzos escolares.</p>
-    </div>
+<div class="footer">
+    <p>Generado por el sistema de almuerzos escolares.</p>
+</div>
 
 </body>
 </html>
