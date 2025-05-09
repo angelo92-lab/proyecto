@@ -282,6 +282,11 @@ class ReportsController extends Controller
         // Preparar datos para la vista
         $reportData = [];
         foreach ($students as $student) {
+            // Asegurar que el estudiante tenga datos válidos
+            if (!$student->Nombres || !$student->Run) {
+                continue; // omitir si falta info clave
+            }
+
             $row = [
                 'Nombres' => $student->Nombres,
                 'RUT' => $student->Run,
@@ -299,19 +304,17 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-        // Renderizar PDF con la vista y pasar correctamente $days
+        // Renderizar PDF
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
             'curso' => $curso,
             'date' => $date,
             'dateFilterType' => $dateFilterType,
-            'days' => $days, // 👈 ¡clave!
+            'days' => $days,
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
     }
-
-
 
 
 
