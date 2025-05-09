@@ -19,9 +19,18 @@ class AnotacionController extends Controller
         $mensaje = $request->input('guardado', '');
 
         if ($nombreBuscado) {
+            // Recuperar también Dirección y Comuna Residencia
             $alumno = DB::table('colegio20252')
                 ->where('Nombres', 'like', "%$nombreBuscado%")
-                ->first();
+                ->first([
+                    'Nombres', 
+                    'Apellido Paterno', 
+                    'Run', 
+                    'Celular', 
+                    'Fecha Nacimiento', 
+                    'Direccion',        // asegúrate que coincida con el nombre en tu tabla
+                    'Comuna Residencia'  // asegúrate que coincida con el nombre en tu tabla
+                ]);
         }
 
         return view('agregaranotacion', compact('alumno', 'nombreBuscado', 'mensaje'));
@@ -44,3 +53,4 @@ class AnotacionController extends Controller
         }
     }
 }
+

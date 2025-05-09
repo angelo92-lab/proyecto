@@ -43,6 +43,8 @@
         <p><strong>RUT:</strong> {{ $alumno->Run }}</p>
         <p><strong>Celular:</strong> {{ $alumno->Celular }}</p>
         <p><strong>Fecha Nacimiento:</strong> {{ $alumno->{'Fecha Nacimiento'} }}</p>
+        <p><strong>Dirección:</strong> {{ $alumno->Direccion }}</p> <!-- Nueva línea para Dirección -->
+        <p><strong>Comuna Residencia:</strong> {{ $alumno->Comuna Residencia }}</p> <!-- Nueva línea para Comuna Residencia -->
 
         <form method="post" action="{{ route('anotacion.store') }}" id="anotacionForm">
             @csrf
