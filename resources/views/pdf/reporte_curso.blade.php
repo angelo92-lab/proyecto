@@ -57,31 +57,31 @@
         <h1>Reporte de Almuerzos del Curso: {{ $curso }} - {{ $date }}</h1>
         
         <table>
-            <thead>
-                <tr>
-                    <th>Alumno</th>
-                    <th>RUT</th>
-                    <th>DV</th>
-                    <th>Celular</th>
-                    @foreach ($days as $day)
-                        <th>{{ \Carbon\Carbon::parse($day)->format('d') }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($reportData as $student)
-                    <tr>
-                        <td>{{ $student['nombres'] }}</td>
-                        <td>{{ $student['rut'] }}</td>
-                        <td>{{ $student['digito_ver'] }}</td>
-                        <td>{{ $student['celular'] }}</td>
-                        @foreach ($days as $day)
-                            <td>{{ $student['dias'][$day] }}</td>
-                        @endforeach
-                    </tr>
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>RUT</th>
+            <th>Celular</th>
+            <th>Curso</th>
+            @foreach ($days as $day)
+                <th>{{ $day->format('d-m-Y') }}</th> <!-- Muestra las fechas de los días -->
+            @endforeach
+        </tr>
+    </thead>
+    <tbody>
+        @foreach ($reportData as $data)
+            <tr>
+                <td>{{ $data['nombres'] }}</td>
+                <td>{{ $data['rut'] }}</td>
+                <td>{{ $data['celular'] }}</td>
+                <td>{{ $data['curso'] }}</td>
+                @foreach ($days as $day)
+                    <td>{{ $data['dias'][$day->format('Y-m-d')] }}</td> <!-- Mostrar almuerzo para cada día -->
                 @endforeach
-            </tbody>
-        </table>
+            </tr>
+        @endforeach
+    </tbody>
+</table>
     </div>
 
     <div class="footer">

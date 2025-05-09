@@ -285,6 +285,7 @@ class ReportsController extends Controller
             ];
 
             foreach ($days as $day) {
+                // Verifica si el estudiante tiene almuerzo en ese día
                 $almorzo = isset($lunchRecords[$student->Run][$day->format('Y-m-d')]) ? '✓' : '✗';
                 $row['dias'][$day->format('Y-m-d')] = $almorzo;
             }
@@ -292,13 +293,13 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-        // Generar el PDF
+        // Generar el PDF con la variable 'days' incluida
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
             'curso' => $curso,
             'date' => $date,
-            'days' => $days,
             'dateFilterType' => $dateFilterType,
+            'days' => $days  // Asegúrate de pasar 'days' a la vista
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
