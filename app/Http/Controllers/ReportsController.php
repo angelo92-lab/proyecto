@@ -257,7 +257,7 @@ class ReportsController extends Controller
 
         $interval = new DateInterval('P1D');
         $period = new DatePeriod($startDate, $interval, $endDate);
-        $days = iterator_to_array($period); // convierte a array
+        $days = iterator_to_array($period);
 
         // Obtener estudiantes del curso
         $students = DB::table('colegio20252')
@@ -300,17 +300,19 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-        // Generar el PDF con todos los datos necesarios
+        // ✅ Esta línea corregida
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
             'curso' => $curso,
             'date' => $date,
             'dateFilterType' => $dateFilterType,
-            'days' => $days // ✅ SE PASA A LA VISTA
+            'days' => $days,
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
     }
+
+
 
 
         if ($type == 'student') {
