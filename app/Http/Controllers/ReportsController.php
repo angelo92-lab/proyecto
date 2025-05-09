@@ -238,54 +238,71 @@ class ReportsController extends Controller
     }
 
     public function exportPdf(Request $request)
-    {
-        $type = $request->input('report_type');
+{
+    $type = $request->input('report_type');
 
-        if ($type == 'course') {
-            $curso = $request->input('curso');
-            $dateFilterType = $request->input('date_filter_type');
-            $date = $request->input('date');
+    if ($type == 'course') {
+        $curso = $request->input('curso');
+        $dateFilterType = $request->input('date_filter_type');
+        $date = $request->input('date');
 
-            $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-            $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+        // Calcular el rango de fechas basadas en el tipo de filtro
+        $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
+        $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-            $students = DB::table('colegio20252')
-                ->where('Curso', $curso)
-                ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
-                ->orderBy('Nombres')
-                ->get();
+        // Generar lista de días
+        $startDate = new DateTime($dateStart);
+        $endDate = new DateTime($dateEnd);
+        $interval = new DateInterval('P1D'); // Un día
+        $dateRange = new DatePeriod($startDate, $interval, $endDate);
+        $days = iterator_to_array($dateRange);  // Esto genera un array con las fechas
 
-            $ruts = $students->pluck('Run');
+        // Obtener los estudiantes del curso
+        $students = DB::table('colegio20252')
+            ->where('Curso', $curso)
+            ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
+            ->orderBy('Nombres')
+            ->get();
 
-            $lunchRecords = DB::table('almuerzos')
-                ->whereIn('rut_alumno', $ruts)
-                ->whereBetween('fecha', [$dateStart, $dateEnd])
-                ->get()
-                ->groupBy('rut_alumno');
+        $ruts = $students->pluck('Run');
 
-            $reportData = [];
+        // Obtener los almuerzos de los estudiantes en el rango de fechas
+        $lunchRecords = DB::table('almuerzos')
+            ->whereIn('rut_alumno', $ruts)
+            ->whereBetween('fecha', [$dateStart, $dateEnd])
+            ->get()
+            ->groupBy('rut_alumno');
 
-            foreach ($students as $student) {
-                $hadLunch = isset($lunchRecords[$student->Run]) && $lunchRecords[$student->Run]->contains('almorzo', 1);
-                $reportData[] = [
-                    'Nombres' => $student->Nombres,
-                    'RUT' => $student->Run,
-                    'Dígito Verificador' => $student->digito_ver,
-                    'Celular' => $student->Celular,
-                    'Curso' => $student->Curso,
-                    'Almorzó' => $hadLunch ? 'Sí' : 'No',
-                ];
+        $reportData = [];
+        foreach ($students as $student) {
+            $row = [
+                'nombres' => $student->Nombres,
+                'rut' => $student->Run,
+                'digito_ver' => $student->digito_ver,
+                'celular' => $student->Celular,
+                'curso' => $student->Curso,
+                'dias' => []
+            ];
+
+            foreach ($days as $day) {
+                $almorzo = isset($lunchRecords[$student->Run][$day->format('Y-m-d')]) ? '✓' : '✗';
+                $row['dias'][$day->format('Y-m-d')] = $almorzo;
             }
 
-            $pdf = PDF::loadView('pdf.reporte_curso', [
-                'reportData' => $reportData,
-                'curso' => $curso,
-                'date' => $date,
-                'dateFilterType' => $dateFilterType,
-            ])->setPaper('a4', 'landscape');
-
-            return $pdf->download('reporte_curso.pdf');
+            $reportData[] = $row;
         }
+
+        // Generar el PDF
+        $pdf = PDF::loadView('pdf.reporte_curso', [
+            'reportData' => $reportData,
+            'curso' => $curso,
+            'date' => $date,
+            'days' => $days,
+            'dateFilterType' => $dateFilterType,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('reporte_curso.pdf');
+    }
 
         if ($type == 'student') {
             $studentName = $request->input('student_name');
