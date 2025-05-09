@@ -28,8 +28,8 @@ class AnotacionController extends Controller
                     'Run', 
                     'Celular', 
                     'Fecha Nacimiento', 
-                    'Direccion',        // asegúrate que coincida con el nombre en tu tabla
-                    'Comuna Residencia'  // asegúrate que coincida con el nombre en tu tabla
+                    'Dirección',        // Asegúrate que este nombre coincida con el de tu base de datos
+                    'Comuna Residencia' // Cambiado a 'Comuna Residencia' para evitar el error de sintaxis
                 ]);
         }
 
@@ -53,4 +53,4 @@ class AnotacionController extends Controller
         }
     }
 }
-
+        
