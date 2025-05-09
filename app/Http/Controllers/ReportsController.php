@@ -304,17 +304,18 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
+// Generar el reporte
+dd($reportData); // Esto te permitirá ver cómo es la estructura de los datos
 
-        // Renderizar PDF
-        $pdf = PDF::loadView('pdf.reporte_curso', [
-            'reportData' => $reportData,
-            'curso' => $curso,
-            'date' => $date,
-            'dateFilterType' => $dateFilterType,
-            'days' => $days,
-        ])->setPaper('a4', 'landscape');
+$pdf = PDF::loadView('pdf.reporte_curso', [
+    'reportData' => $reportData,
+    'curso' => $curso,
+    'date' => $date,
+    'dateFilterType' => $dateFilterType,
+    'days' => $days,
+])->setPaper('a4', 'landscape');
 
-        return $pdf->download('reporte_curso.pdf');
+return $pdf->download('reporte_curso.pdf');
     }
 
 
