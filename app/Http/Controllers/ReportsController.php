@@ -304,7 +304,6 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-        dd($reportData);
 
         // Renderizar PDF
         $pdf = PDF::loadView('pdf.reporte_curso', [

@@ -75,13 +75,14 @@
         <tbody>
             @foreach ($reportData as $data)
                 <tr>
-                    <td>{{ $data['Nombres'] }}</td>
-                    <td>{{ $data['RUT'] }}-{{ $data['DigitoVer'] }}</td>
-                    <td>{{ $data['Celular'] }}</td>
-                    <td>{{ $data['Curso'] }}</td>
+                    <!-- Verifica si $data es un array o un objeto -->
+                    <td>{{ is_array($data) ? $data['Nombres'] : $data->Nombres }}</td>
+                    <td>{{ is_array($data) ? $data['RUT'] : $data->RUT }}-{{ is_array($data) ? $data['DigitoVer'] : $data->DigitoVer }}</td>
+                    <td>{{ is_array($data) ? $data['Celular'] : $data->Celular }}</td>
+                    <td>{{ is_array($data) ? $data['Curso'] : $data->Curso }}</td>
                     @if(isset($days))
                         @foreach ($days as $day)
-                            <td>{{ $data['Dias'][$day->format('Y-m-d')] ?? '✗' }}</td>
+                            <td>{{ is_array($data) ? ($data['Dias'][$day->format('Y-m-d')] ?? '✗') : ($data->Dias[$day->format('Y-m-d')] ?? '✗') }}</td>
                         @endforeach
                     @endif
                 </tr>
