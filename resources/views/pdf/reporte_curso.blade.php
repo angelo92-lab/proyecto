@@ -65,9 +65,10 @@
         <th>RUT</th>
         <th>Celular</th>
         <th>Curso</th>
-        @foreach ($days as $day)
-            <th>{{ $day->format('d/m') }}</th>
+       @foreach ($days as $day)
+        <th>{{ $day->format('d/m') }}</th>
         @endforeach
+
     </tr>
 </thead>
 <tbody>

@@ -250,16 +250,15 @@ class ReportsController extends Controller
         $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
         $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-        // Generar lista de días del mes o día específico
+        // Generar lista de días
         $startDate = new DateTime($dateStart);
         $endDate = new DateTime($dateEnd);
-        $endDate->modify('+1 day'); // para incluir el último día
-
+        $endDate->modify('+1 day'); // incluir último día
         $interval = new DateInterval('P1D');
         $period = new DatePeriod($startDate, $interval, $endDate);
-        $days = iterator_to_array($period);
+        $days = iterator_to_array($period); // array de DateTime
 
-        // Obtener estudiantes del curso
+        // Obtener estudiantes
         $students = DB::table('colegio20252')
             ->where('Curso', $curso)
             ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
@@ -268,13 +267,13 @@ class ReportsController extends Controller
 
         $ruts = $students->pluck('Run');
 
-        // Obtener almuerzos del rango de fechas
+        // Obtener almuerzos
         $lunches = DB::table('almuerzos')
             ->whereIn('rut_alumno', $ruts)
             ->whereBetween('fecha', [$dateStart, $dateEnd])
             ->get();
 
-        // Agrupar almuerzos por rut y fecha
+        // Mapear almuerzos por rut y fecha
         $lunchMap = [];
         foreach ($lunches as $lunch) {
             $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
@@ -300,19 +299,18 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-        dd($days); // 👈 esto te debe mostrar un array de objetos DateTime
-
-        // ✅ Esta línea corregida
+        // Renderizar PDF con la vista y pasar correctamente $days
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
             'curso' => $curso,
             'date' => $date,
             'dateFilterType' => $dateFilterType,
-            'days' => $days,
+            'days' => $days, // 👈 ¡clave!
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
     }
+
 
 
 
