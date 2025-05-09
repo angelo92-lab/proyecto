@@ -57,30 +57,33 @@
         <h1>Reporte de Almuerzos del Curso: {{ $curso }} - {{ $date }}</h1>
         
         <table>
-    <thead>
+   <thead>
+    <tr>
+        <th>Nombre</th>
+        <th>RUT</th>
+        <th>Celular</th>
+        <th>Curso</th>
+        @foreach ($days as $day)
+            <th>{{ $day->format('d/m') }}</th>
+        @endforeach
+    </tr>
+</thead>
+<tbody>
+    @foreach ($reportData as $data)
         <tr>
-            <th>Nombre</th>
-            <th>RUT</th>
-            <th>Celular</th>
-            <th>Curso</th>
+            <td>{{ $data['Nombres'] }}</td>
+            <td>{{ $data['RUT'] }}-{{ $data['DigitoVer'] }}</td>
+            <td>{{ $data['Celular'] }}</td>
+            <td>{{ $data['Curso'] }}</td>
             @foreach ($days as $day)
-                <th>{{ $day->format('d-m-Y') }}</th> <!-- Muestra las fechas de los días -->
+                <td style="text-align: center;">
+                    {{ $data['Dias'][$day->format('Y-m-d')] ?? '✗' }}
+                </td>
             @endforeach
         </tr>
-    </thead>
-    <tbody>
-        @foreach ($reportData as $data)
-            <tr>
-                <td>{{ $data['nombres'] }}</td>
-                <td>{{ $data['rut'] }}</td>
-                <td>{{ $data['celular'] }}</td>
-                <td>{{ $data['curso'] }}</td>
-                @foreach ($days as $day)
-                    <td>{{ $data['dias'][$day->format('Y-m-d')] }}</td> <!-- Mostrar almuerzo para cada día -->
-                @endforeach
-            </tr>
-        @endforeach
-    </tbody>
+    @endforeach
+</tbody>
+
 </table>
     </div>
 

@@ -237,7 +237,7 @@ class ReportsController extends Controller
         return back()->with('error', 'Tipo de reporte no válido');
     }
 
-    public function exportPdf(Request $request)
+   public function exportPdf(Request $request)
 {
     $type = $request->input('report_type');
 
@@ -246,18 +246,20 @@ class ReportsController extends Controller
         $dateFilterType = $request->input('date_filter_type');
         $date = $request->input('date');
 
-        // Calcular el rango de fechas basadas en el tipo de filtro
+        // Calcular fechas de inicio y fin
         $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
         $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-        // Generar lista de días
+        // Generar lista de días del mes o día específico
         $startDate = new DateTime($dateStart);
         $endDate = new DateTime($dateEnd);
-        $interval = new DateInterval('P1D'); // Un día
-        $dateRange = new DatePeriod($startDate, $interval, $endDate);
-        $days = iterator_to_array($dateRange);  // Esto genera un array con las fechas
+        $endDate->modify('+1 day'); // para incluir el último día
 
-        // Obtener los estudiantes del curso
+        $interval = new DateInterval('P1D');
+        $period = new DatePeriod($startDate, $interval, $endDate);
+        $days = iterator_to_array($period); // convierte a array
+
+        // Obtener estudiantes del curso
         $students = DB::table('colegio20252')
             ->where('Curso', $curso)
             ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
@@ -266,44 +268,50 @@ class ReportsController extends Controller
 
         $ruts = $students->pluck('Run');
 
-        // Obtener los almuerzos de los estudiantes en el rango de fechas
-        $lunchRecords = DB::table('almuerzos')
+        // Obtener almuerzos del rango de fechas
+        $lunches = DB::table('almuerzos')
             ->whereIn('rut_alumno', $ruts)
             ->whereBetween('fecha', [$dateStart, $dateEnd])
-            ->get()
-            ->groupBy('rut_alumno');
+            ->get();
 
+        // Agrupar almuerzos por rut y fecha
+        $lunchMap = [];
+        foreach ($lunches as $lunch) {
+            $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
+        }
+
+        // Preparar datos para la vista
         $reportData = [];
         foreach ($students as $student) {
             $row = [
-                'nombres' => $student->Nombres,
-                'rut' => $student->Run,
-                'digito_ver' => $student->digito_ver,
-                'celular' => $student->Celular,
-                'curso' => $student->Curso,
-                'dias' => []
+                'Nombres' => $student->Nombres,
+                'RUT' => $student->Run,
+                'DigitoVer' => $student->digito_ver,
+                'Celular' => $student->Celular,
+                'Curso' => $student->Curso,
+                'Dias' => []
             ];
 
             foreach ($days as $day) {
-                // Verifica si el estudiante tiene almuerzo en ese día
-                $almorzo = isset($lunchRecords[$student->Run][$day->format('Y-m-d')]) ? '✓' : '✗';
-                $row['dias'][$day->format('Y-m-d')] = $almorzo;
+                $fecha = $day->format('Y-m-d');
+                $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
             }
 
             $reportData[] = $row;
         }
 
-        // Generar el PDF con la variable 'days' incluida
+        // Generar el PDF con todos los datos necesarios
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
             'curso' => $curso,
             'date' => $date,
             'dateFilterType' => $dateFilterType,
-            'days' => $days  // Asegúrate de pasar 'days' a la vista
+            'days' => $days // ✅ SE PASA A LA VISTA
         ])->setPaper('a4', 'landscape');
 
         return $pdf->download('reporte_curso.pdf');
     }
+
 
         if ($type == 'student') {
             $studentName = $request->input('student_name');
