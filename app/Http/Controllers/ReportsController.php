@@ -354,6 +354,13 @@ class ReportsController extends Controller
             'lunchesByDate' => $lunchesByDate,
         ])->setPaper('a4', 'portrait');
 
+        dd([
+    'reportData' => $reportData,
+    'curso' => $curso,
+    'date' => $date,
+    'days' => $days,
+]);
+
         return $pdf->download('reporte_alumno.pdf');
     }
 
