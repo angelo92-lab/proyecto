@@ -1,3 +1,5 @@
+
+<pre>{{ print_r($days, true) }}</pre>
 <!DOCTYPE html>
 <html lang="es">
 <head>
