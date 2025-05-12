@@ -42,6 +42,12 @@
             color: red;
             font-weight: bold;
         }
+        .asistio {
+            background-color: #c8e6c9; /* verde claro */
+        }
+        .no-asistio {
+            background-color: #ffcdd2; /* rojo claro */
+        }
     </style>
 </head>
 <body>
