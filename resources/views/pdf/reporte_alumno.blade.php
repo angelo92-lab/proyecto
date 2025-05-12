@@ -34,6 +34,14 @@
         th {
             background-color: #f5f5f5;
         }
+        .tick {
+            color: green;
+            font-weight: bold;
+        }
+        .cross {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +72,7 @@
                     $formato = $day->format('d-m-Y');
                     $almorzo = isset($almuerzoDias[$fecha]);
                     $tick = $almorzo ? '✓' : '✗';
+                    $clase = $almorzo ? 'tick' : 'cross';
                     if ($almorzo) {
                         $totalSi++;
                     } else {
@@ -72,7 +81,7 @@
                 @endphp
                 <tr>
                     <td>{{ $formato }}</td>
-                    <td>{{ $tick }}</td>
+                    <td class="{{ $clase }}">{{ $tick }}</td>
                 </tr>
             @endforeach
         </tbody>
