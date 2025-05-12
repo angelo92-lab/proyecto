@@ -5,7 +5,7 @@
     <title>Reporte Alumno - {{ $student->Nombres }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             font-size: 12px;
             color: #333;
         }
