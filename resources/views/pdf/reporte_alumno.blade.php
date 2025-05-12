@@ -39,6 +39,13 @@
 <body>
     <div class="header">
         <h1>REPORTE DE ALMUERZOS DEL ALUMNO</h1>
+        <div style="text-align: center; margin-bottom: 20px;">
+    <h2>REPORTE DE ALMUERZOS INDIVIDUAL</h2>
+    <p>
+        Alumno: {{ $student->Nombres }}<br>
+        Mes: {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}
+    </p>
+</div>
         <small>{{ $student->Nombres }} | RUT: {{ $student->Run }}-{{ $student->{'Digito Ver'} }} | Mes: {{ \Carbon\Carbon::parse($month)->format('F Y') }}</small>
     </div>
 

@@ -237,10 +237,11 @@ class ReportsController extends Controller
                 ->get();
 
             $pdf = PDF::loadView('pdf.reporte_alumno', [
-                'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
-                'student' => $student,
-                'month' => $month,
-            ])->setPaper('a4', 'landscape');
+    'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
+    'student' => $student,
+    'month' => $month,
+])->setPaper('a4', 'landscape');
+
 
             return $pdf->download('reporte_alumno.pdf');
         }
