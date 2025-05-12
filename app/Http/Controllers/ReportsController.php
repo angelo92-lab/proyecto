@@ -295,10 +295,10 @@ private function generateCourseReportData($students, $lunches, $days)
 {
     $lunchMap = [];
     foreach ($lunches as $lunch) {
-        $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
-    }
+    $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
+}
 
-    $reportData = [];
+    $reportData = [];   
     foreach ($students as $student) {
         if (!$student->Nombres || !$student->Run) continue;
 
@@ -315,6 +315,8 @@ private function generateCourseReportData($students, $lunches, $days)
             $fecha = $day->format('Y-m-d');
             $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
         }
+
+        dd($row);
 
         $reportData[] = $row;
     }
