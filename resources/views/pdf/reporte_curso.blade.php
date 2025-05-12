@@ -72,10 +72,6 @@
         </thead>
         <tbody>
             @foreach($reportData as $row)
-            @php
-                $totalSi = 0;
-                $totalNo = 0;
-            @endphp
                 <tr>
                     <td class="student-name">{{ $row['Nombres'] }}</td>
                     <td>{{ $row['RUT'] }}</td>
@@ -87,11 +83,6 @@
                     $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
                     $valor = $row['Dias'][$fecha] ?? '-';
                     $class = $valor === '✓' ? 'asistio' : ($valor === '✗' ? 'no-asistio' : '');
-                    if ($almorzo) {
-                        $totalSi++;
-                    } else {
-                        $totalNo++;
-                    }
                 @endphp
             <td class="{{ $class }}">{{ $valor }}</td>
             @endforeach

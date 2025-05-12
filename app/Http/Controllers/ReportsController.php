@@ -71,7 +71,7 @@ class ReportsController extends Controller
         $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
         $days = [];
-        if ($dateFilterType === 'month') {
+        if ($dateFilterType === '   ') {
             $startDate = new DateTime($dateStart);
             $endDate = new DateTime($dateEnd);
             $endDate->modify('+1 day'); // incluir último día
