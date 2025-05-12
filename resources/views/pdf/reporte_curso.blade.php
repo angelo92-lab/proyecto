@@ -73,13 +73,13 @@
                     <td>{{ $row['celular'] }}</td>
                     <td>{{ $row['curso'] }}</td>
                     @foreach($days as $day)
-                        @php
-                            $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
-                            $valor = $row['Dias'][$fecha] ?? '-';
-                            $class = $valor === '✓' ? 'asistio' : ($valor === '✗' ? 'no-asistio' : '');
-                        @endphp
-                        <td class="{{ $class }}">{{ $valor }}</td>
-                    @endforeach
+                 @php
+                    $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
+                    $valor = $row['Dias'][$fecha] ?? '-';
+                    $class = $valor === '✓' ? 'asistio' : ($valor === '✗' ? 'no-asistio' : '');
+                @endphp
+            <td class="{{ $class }}">{{ $valor }}</td>
+            @endforeach
                 </tr>
             @endforeach
         </tbody>
