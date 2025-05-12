@@ -60,20 +60,23 @@
         </thead>
 <tbody>
     @foreach($reportData as $row)
-        <tr>
-            <td class="student-name">{{ $row['nombres'] }}</td>
-            <td>{{ $row['rut'] }}</td>
-            <td>{{ $row['digito_ver'] }}</td>
-            <td>{{ $row['celular'] }}</td>
-            <td>{{ $row['curso'] }}</td>
-            @foreach($days as $day)
-                @php
-                    $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
-                @endphp
-                <td>{{ $row['dias'][$fecha] ?? '' }}</td>
-            @endforeach
-        </tr>
-    @endforeach
+    <tr>
+        <td class="student-name">{{ $row['nombres'] }}</td>
+        <td>{{ $row['rut'] }}</td>
+        <td>{{ $row['digito_ver'] }}</td>
+        <td>{{ $row['celular'] }}</td>
+        <td>{{ $row['curso'] }}</td>
+        @foreach($days as $day)
+            @php
+                $fecha = $day->format('Y-m-d');  // Asegúrate de que la fecha esté en formato Y-m-d
+                // Comprobar si el almuerzo existe para ese estudiante en esa fecha
+                $estado = isset($lunchMap[$row['rut']][$fecha]) ? '✓' : '✗';
+            @endphp
+            <td>{{ $estado }}</td>
+        @endforeach
+    </tr>
+@endforeach
+
 </tbody>
 
     </table>
