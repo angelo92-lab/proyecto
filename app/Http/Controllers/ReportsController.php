@@ -258,7 +258,7 @@ class ReportsController extends Controller
             $rut = $this->normalizeRut($lunch->rut_alumno);
             $lunchMap[$rut][$lunch->fecha] = true;
         }
-
+        
         $reportData = [];
         foreach ($students as $student) {
             if (!$student->Nombres || !$student->Run) continue;

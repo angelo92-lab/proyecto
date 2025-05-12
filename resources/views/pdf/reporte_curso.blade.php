@@ -67,7 +67,7 @@
         <tbody>
             @foreach($reportData as $row)
                 <tr>
-                    <td class="student-name">{{ $row['nombres'] }}</td>
+                    <td class="student-name">{{ $row['Nombres'] }}</td>
                     <td>{{ $row['rut'] }}</td>
                     <td>{{ $row['digito_ver'] }}</td>
                     <td>{{ $row['celular'] }}</td>
