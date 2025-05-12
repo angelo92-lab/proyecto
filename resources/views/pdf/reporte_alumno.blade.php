@@ -41,7 +41,7 @@
         <h1>REPORTE DE ALMUERZOS DEL ALUMNO</h1>
         <p>
             Alumno: <strong>{{ $student->Nombres }}</strong><br>
-            RUT: {{ $student->Run }}-{{ $student->{'DigitoVer'} }}<br>
+            RUT: {{ $student->Run }}-{{ $student->{'Digito Ver'} }}<br>
             Mes: {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}
         </p>
     </div>
