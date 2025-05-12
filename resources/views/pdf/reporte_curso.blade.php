@@ -59,19 +59,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($reportData as $row)
-                <tr>
-                    <td class="student-name">{{ $row['nombres'] }}</td>
-                    <td>{{ $row['rut'] }}</td>
-                    <td>{{ $row['digito_ver'] }}</td>
-                    <td>{{ $row['celular'] }}</td>
-                    <td>{{ $row['curso'] }}</td>
-                    @foreach($row['Dias'] ?? [] as $estado)
-                        <td>{{ $estado }}</td>
-                    @endforeach
-                </tr>
+         @foreach($reportData as $row)
+            <tr>
+                <td class="student-name">{{ $row['Nombres'] }}</td>
+                    <td>{{ $row['RUT'] }}</td>
+                    <td>{{ $row['DigitoVer'] }}</td>
+                    <td>{{ $row['Celular'] }}</td>
+                    <td>{{ $row['Curso'] }}</td>
+            @foreach($days as $day)
+                @php
+                    $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
+                @endphp
+                <td>{{ $row['Dias'][$fecha] ?? '' }}</td>
             @endforeach
-        </tbody>
+         </tr>
+        @endforeach
+    </tbody>
     </table>
 </body>
 </html>
