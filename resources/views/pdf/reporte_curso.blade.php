@@ -69,7 +69,7 @@
                 <tr>
                     <td class="student-name">{{ $row['Nombres'] }}</td>
                     <td>{{ $row['RUT'] }}</td>
-                    <td>{{ $row['digito_ver'] }}</td>
+                    <td>{{ $row['DigitoVer'] }}</td>
                     <td>{{ $row['Celular'] }}</td>
                     <td>{{ $row['Curso'] }}</td>
                     @foreach($days as $day)
