@@ -221,92 +221,103 @@ class ReportsController extends Controller
     }
 
     public function exportPdf(Request $request)
-    {
-        $type = $request->input('report_type');
+{
+    $type = $request->input('report_type');
 
-        if ($type === 'course') {
-            $curso = $request->input('curso');
-            $dateFilterType = $request->input('date_filter_type');
-            $date = $request->input('date');
+    if ($type === 'course') {
+        $curso = $request->input('curso');
+        $dateFilterType = $request->input('date_filter_type');
+        $date = $request->input('date');
 
-            [$dateStart, $dateEnd] = $this->getDateRange($dateFilterType, $date);
+        [$dateStart, $dateEnd] = $this->getDateRange($dateFilterType, $date);
 
-            $startDate = new DateTime($dateStart);
-            $endDate = new DateTime($dateEnd);
-            $endDate->modify('+1 day');
-            $interval = new DateInterval('P1D');
-            $days = iterator_to_array(new DatePeriod($startDate, $interval, $endDate));
+        $days = $this->getDaysInRange($dateStart, $dateEnd);
 
-            [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
+        [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
 
-            $lunchMap = [];
-            foreach ($lunches as $lunch) {
-                $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
-            }
+        $reportData = $this->generateCourseReportData($students, $lunches, $days);
 
-            $reportData = [];
-            foreach ($students as $student) {
-                if (!$student->Nombres || !$student->Run) continue;
-
-                $row = [
-                    'Nombres' => $student->Nombres,
-                    'RUT' => $student->Run,
-                    'DigitoVer' => $student->digito_ver,
-                    'Celular' => $student->Celular,
-                    'Curso' => $student->Curso,
-                    'Dias' => [],
-                ];
-
-                foreach ($days as $day) {
-                    $fecha = $day->format('Y-m-d');
-                    $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
-                }
-
-                $reportData[] = $row;
-            }
-
-            if (empty($reportData)) {
-                return back()->with('error', 'No hay datos disponibles para el curso seleccionado en el rango de fechas.');
-            }
-
-            $pdf = PDF::loadView('pdf.reporte_curso', [
-                'reportData' => $reportData,
-                'curso' => $curso,
-                'date' => $date,
-                'dateFilterType' => $dateFilterType,
-                'days' => $days,
-            ])->setPaper('a4', 'landscape');
-
-            return $pdf->download('reporte_curso.pdf');
+        if (empty($reportData)) {
+            return back()->with('error', 'No hay datos disponibles para el curso seleccionado en el rango de fechas.');
         }
 
-        if ($type === 'student') {
-            $studentName = $request->input('student_name');
-            $month = $request->input('month');
+        $pdf = PDF::loadView('pdf.reporte_curso', [
+            'reportData' => $reportData,
+            'curso' => $curso,
+            'date' => $date,
+            'dateFilterType' => $dateFilterType,
+            'days' => $days,
+        ])->setPaper('a4', 'landscape');
 
-            $student = DB::table('colegio20252')
-                ->where('Nombres', 'like', "%$studentName%")
-                ->first();
-
-            if (!$student) {
-                return back()->with('error', 'Estudiante no encontrado');
-            }
-
-            $lunchRecords = DB::table('almuerzos')
-                ->where('rut_alumno', $student->Run)
-                ->whereMonth('fecha', date('m', strtotime($month)))
-                ->whereYear('fecha', date('Y', strtotime($month)))
-                ->get();
-
-            $pdf = PDF::loadView('pdf.reporte_alumno', [
-                'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
-                'student' => $student,
-                'month' => $month,
-            ])->setPaper('a4', 'landscape');
-
-            return $pdf->download('reporte_alumno.pdf');
-        }
-
-        return back()->with('error', 'Tipo de reporte no válido');
+        return $pdf->download('reporte_curso.pdf');
     }
+
+    if ($type === 'student') {
+        $studentName = $request->input('student_name');
+        $month = $request->input('month');
+
+        $student = DB::table('colegio20252')
+            ->where('Nombres', 'like', "%$studentName%")
+            ->first();
+
+        if (!$student) {
+            return back()->with('error', 'Estudiante no encontrado');
+        }
+
+        $lunchRecords = DB::table('almuerzos')
+            ->where('rut_alumno', $student->Run)
+            ->whereMonth('fecha', date('m', strtotime($month)))
+            ->whereYear('fecha', date('Y', strtotime($month)))
+            ->get();
+
+        $pdf = PDF::loadView('pdf.reporte_alumno', [
+            'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
+            'student' => $student,
+            'month' => $month,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('reporte_alumno.pdf');
+    }
+
+    return back()->with('error', 'Tipo de reporte no válido');
+}
+
+private function getDaysInRange($dateStart, $dateEnd)
+{
+    $startDate = new DateTime($dateStart);
+    $endDate = new DateTime($dateEnd);
+    $endDate->modify('+1 day');
+    $interval = new DateInterval('P1D');
+    return iterator_to_array(new DatePeriod($startDate, $interval, $endDate));
+}
+
+private function generateCourseReportData($students, $lunches, $days)
+{
+    $lunchMap = [];
+    foreach ($lunches as $lunch) {
+        $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
+    }
+
+    $reportData = [];
+    foreach ($students as $student) {
+        if (!$student->Nombres || !$student->Run) continue;
+
+        $row = [
+            'Nombres' => $student->Nombres,
+            'RUT' => $student->Run,
+            'DigitoVer' => $student->digito_ver,
+            'Celular' => $student->Celular,
+            'Curso' => $student->Curso,
+            'Dias' => [],
+        ];
+
+        foreach ($days as $day) {
+            $fecha = $day->format('Y-m-d');
+            $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
+        }
+
+        $reportData[] = $row;
+    }
+
+    return $reportData;
 }
