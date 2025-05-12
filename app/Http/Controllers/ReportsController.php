@@ -303,18 +303,20 @@ private function generateCourseReportData($students, $lunches, $days)
         if (!$student->Nombres || !$student->Run) continue;
 
         $row = [
-            'Nombres' => $student->Nombres,
-            'RUT' => $student->Run,
-            'DigitoVer' => $student->digito_ver,
-            'Celular' => $student->Celular,
-            'Curso' => $student->Curso,
-            'Dias' => [],
-        ];
+    'Nombres' => $student->Nombres,
+    'RUT' => $student->Run,
+    'DigitoVer' => $student->digito_ver,
+    'Celular' => $student->Celular,
+    'Curso' => $student->Curso,
+    'Dias' => [],
+];
+
 
         foreach ($days as $day) {
-            $fecha = $day->format('Y-m-d');
-            $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
-        }
+    $fecha = $day->format('Y-m-d');
+    $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
+}
+
 
         $reportData[] = $row;
     }
