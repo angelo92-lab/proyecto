@@ -52,94 +52,55 @@ class ReportsController extends Controller
         return [$students, $lunches];
     }
 
-   public function generate(Request $request)
-{
-    $reportType = $request->input('report_type');
+    public function generate(Request $request)
+    {
+        $reportType = $request->input('report_type');
 
-    if ($reportType == 'course') {
-        $validated = $request->validate([
-            'curso' => 'required|string',
-            'date_filter_type' => 'required|in:day,month',
-            'date' => 'required|date',
-        ]);
+        if ($reportType == 'course') {
+            $validated = $request->validate([
+                'curso' => 'required|string',
+                'date_filter_type' => 'required|in:day,month',
+                'date' => 'required|date',
+            ]);
 
-        $curso = $validated['curso'];
-        $dateFilterType = $validated['date_filter_type'];
-        $date = $validated['date'];
+            $curso = $validated['curso'];
+            $dateFilterType = $validated['date_filter_type'];
+            $date = $validated['date'];
 
-        $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-        $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+            $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
+            $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
-        $days = [];
-        if ($dateFilterType === '   ') {
-            $startDate = new DateTime($dateStart);
-            $endDate = new DateTime($dateEnd);
-            $endDate->modify('+1 day'); // incluir último día
-            $interval = new DateInterval('P1D');
-            $period = new DatePeriod($startDate, $interval, $endDate);
-            $days = iterator_to_array($period); // array de DateTime
-        } else {
-            $days = [new DateTime($date)];
+            $days = [];
+           // Generar arreglo de días según tipo de filtro
+            if ($dateFilterType === 'month') {
+                $startDate = new DateTime($dateStart);
+                $endDate = new DateTime($dateEnd);
+                $endDate->modify('+1 day'); // incluir último día
+                $interval = new DateInterval('P1D');
+                $period = new DatePeriod($startDate, $interval, $endDate);
+                $days = iterator_to_array($period); // array de DateTime
+            } else {
+                // Solo un día en el array
+                $days = [new DateTime($date)];
+            }
+
+
+            [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
+            $reportData = $this->generateCourseReportData($students, $lunches, $days);
+
+            $pdf = PDF::loadView('pdf.reporte_curso', [
+                'reportData' => $reportData,
+                'curso' => $curso,
+                'date' => $date,
+                'dateFilterType' => $dateFilterType,
+                'days' => $days,
+            ])->setPaper('a4', 'landscape');
+
+            return $pdf->download('reporte_curso.pdf');
         }
 
-        [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
-        $reportData = $this->generateCourseReportData($students, $lunches, $days);
-
-        $pdf = PDF::loadView('pdf.reporte_curso', [
-            'reportData' => $reportData,
-            'curso' => $curso,
-            'date' => $date,
-            'dateFilterType' => $dateFilterType,
-            'days' => $days,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('reporte_curso.pdf');
+        return back()->with('error', 'Seleccione un tipo de reporte válido');
     }
-
-    if ($reportType == 'student') {
-        $validated = $request->validate([
-            'student_name' => 'required|string',
-            'month' => 'required|date',
-        ]);
-
-        $studentName = $validated['student_name'];
-        $month = $validated['month'];
-
-        $student = DB::table('colegio20252')
-            ->where('Nombres', 'like', "%$studentName%")
-            ->first();
-
-        if (!$student) {
-            return back()->with('error', 'Estudiante no encontrado');
-        }
-
-        $start = date('Y-m-01', strtotime($month));
-        $end = date('Y-m-t', strtotime($month));
-        $days = $this->getDaysInRange($start, $end);
-
-        $lunchRecords = DB::table('almuerzos')
-            ->where('rut_alumno', $student->Run)
-            ->whereBetween('fecha', [$start, $end])
-            ->get();
-
-        $almuerzoDias = [];
-        foreach ($lunchRecords as $record) {
-            $almuerzoDias[$record->fecha] = true;
-        }
-
-        $pdf = PDF::loadView('pdf.reporte_alumno', [
-            'student' => $student,
-            'month' => $month,
-            'days' => $days,
-            'almuerzoDias' => $almuerzoDias,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('reporte_alumno.pdf');
-    }
-
-    return back()->with('error', 'Seleccione un tipo de reporte válido');
-}
-
 
     public function exportCsv(Request $request)
     {
@@ -295,8 +256,10 @@ class ReportsController extends Controller
 
     return $pdf->download('reporte_alumno.pdf');
 }
+
+
                 return back()->with('error', 'Tipo de reporte no válido');
-                    }
+            }
 
     private function getDaysInRange($dateStart, $dateEnd)
     {
