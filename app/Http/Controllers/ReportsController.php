@@ -282,9 +282,9 @@ class ReportsController extends Controller
         // Preparar datos para la vista
         $reportData = [];
         foreach ($students as $student) {
-            // Asegurar que el estudiante tenga datos válidos
+            // Validar datos del estudiante
             if (!$student->Nombres || !$student->Run) {
-                continue; // omitir si falta info clave
+                continue;
             }
 
             $row = [
@@ -304,54 +304,50 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
-// Generar el reporte
-dd($reportData); // Esto te permitirá ver cómo es la estructura de los datos
+        // Generar y descargar PDF
+        $pdf = PDF::loadView('pdf.reporte_curso', [
+            'reportData' => $reportData,
+            'curso' => $curso,
+            'date' => $date,
+            'dateFilterType' => $dateFilterType,
+            'days' => $days,
+        ])->setPaper('a4', 'landscape');
 
-$pdf = PDF::loadView('pdf.reporte_curso', [
-    'reportData' => $reportData,
-    'curso' => $curso,
-    'date' => $date,
-    'dateFilterType' => $dateFilterType,
-    'days' => $days,
-])->setPaper('a4', 'landscape');
-
-return $pdf->download('reporte_curso.pdf');
+        return $pdf->download('reporte_curso.pdf');
     }
 
+    if ($type == 'student') {
+        $studentName = $request->input('student_name');
+        $month = $request->input('month');
 
+        $student = DB::table('colegio20252')
+            ->where('Nombres', 'like', "%$studentName%")
+            ->first();
 
-        if ($type == 'student') {
-            $studentName = $request->input('student_name');
-            $month = $request->input('month');
-
-            $student = DB::table('colegio20252')
-                ->where('Nombres', 'like', "%$studentName%")
-                ->first();
-
-            if (!$student) {
-                return back()->with('error', 'Estudiante no encontrado');
-            }
-
-            $lunchRecords = DB::table('almuerzos')
-                ->where('rut_alumno', $student->Run)
-                ->whereMonth('fecha', '=', date('m', strtotime($month)))
-                ->whereYear('fecha', '=', date('Y', strtotime($month)))
-                ->get();
-
-            $reportData = [
-                'student' => $student,
-                'lunchRecords' => $lunchRecords,
-            ];
-
-            $pdf = PDF::loadView('pdf.reporte_alumno', [
-                'reportData' => $reportData,
-                'student' => $student,
-                'month' => $month,
-            ])->setPaper('a4', 'landscape');
-
-            return $pdf->download('reporte_alumno.pdf');
+        if (!$student) {
+            return back()->with('error', 'Estudiante no encontrado');
         }
 
-        return back()->with('error', 'Tipo de reporte no válido');
+        $lunchRecords = DB::table('almuerzos')
+            ->where('rut_alumno', $student->Run)
+            ->whereMonth('fecha', '=', date('m', strtotime($month)))
+            ->whereYear('fecha', '=', date('Y', strtotime($month)))
+            ->get();
+
+        $reportData = [
+            'student' => $student,
+            'lunchRecords' => $lunchRecords,
+        ];
+
+        $pdf = PDF::loadView('pdf.reporte_alumno', [
+            'reportData' => $reportData,
+            'student' => $student,
+            'month' => $month,
+        ])->setPaper('a4', 'landscape');
+
+        return $pdf->download('reporte_alumno.pdf');
     }
+
+    return back()->with('error', 'Tipo de reporte no válido');
+}
 }
