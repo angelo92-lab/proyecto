@@ -39,14 +39,11 @@
 <body>
     <div class="header">
         <h1>REPORTE DE ALMUERZOS DEL ALUMNO</h1>
-        <div style="text-align: center; margin-bottom: 20px;">
-    <h2>REPORTE DE ALMUERZOS INDIVIDUAL</h2>
-    <p>
-        Alumno: {{ $student->Nombres }}<br>
-        Mes: {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}
-    </p>
-</div>
-        <small>{{ $student->Nombres }} | RUT: {{ $student->Run }}-{{ $student->{'Digito Ver'} }} | Mes: {{ \Carbon\Carbon::parse($month)->format('F Y') }}</small>
+        <p>
+            Alumno: <strong>{{ $student->Nombres }}</strong><br>
+            RUT: {{ $student->Run }}-{{ $student->{'DigitoVer'} }}<br>
+            Mes: {{ \Carbon\Carbon::parse($month)->translatedFormat('F Y') }}
+        </p>
     </div>
 
     <table>
@@ -57,13 +54,38 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($reportData['lunchRecords'] as $record)
+            @php
+                $totalSi = 0;
+                $totalNo = 0;
+            @endphp
+            @foreach($days as $day)
+                @php
+                    $fecha = $day->format('Y-m-d');
+                    $formato = $day->format('d-m-Y');
+                    $almorzo = isset($almuerzoDias[$fecha]);
+                    $tick = $almorzo ? '✓' : '✗';
+                    if ($almorzo) {
+                        $totalSi++;
+                    } else {
+                        $totalNo++;
+                    }
+                @endphp
                 <tr>
-                    <td>{{ \Carbon\Carbon::parse($record->fecha)->format('d-m-Y') }}</td>
-                    <td>{{ $record->almorzo ? 'Sí' : 'No' }}</td>
+                    <td>{{ $formato }}</td>
+                    <td>{{ $tick }}</td>
                 </tr>
             @endforeach
         </tbody>
+        <tfoot>
+            <tr>
+                <th>Total Sí</th>
+                <td>{{ $totalSi }}</td>
+            </tr>
+            <tr>
+                <th>Total No</th>
+                <td>{{ $totalNo }}</td>
+            </tr>
+        </tfoot>
     </table>
 </body>
 </html>

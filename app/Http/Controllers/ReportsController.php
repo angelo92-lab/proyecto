@@ -218,36 +218,46 @@ class ReportsController extends Controller
             return $pdf->download('reporte_curso.pdf');
         }
 
-        if ($type === 'student') {
-            $studentName = $request->input('student_name');
-            $month = $request->input('month');
+            if ($type === 'student') {
+    $studentName = $request->input('student_name');
+    $month = $request->input('month');
 
-            $student = DB::table('colegio20252')
-                ->where('Nombres', 'like', "%$studentName%")
-                ->first();
+    $student = DB::table('colegio20252')
+        ->where('Nombres', 'like', "%$studentName%")
+        ->first();
 
-            if (!$student) {
-                return back()->with('error', 'Estudiante no encontrado');
-            }
-
-            $lunchRecords = DB::table('almuerzos')
-                ->where('rut_alumno', $student->Run)
-                ->whereMonth('fecha', date('m', strtotime($month)))
-                ->whereYear('fecha', date('Y', strtotime($month)))
-                ->get();
-
-            $pdf = PDF::loadView('pdf.reporte_alumno', [
-    'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
-    'student' => $student,
-    'month' => $month,
-])->setPaper('a4', 'landscape');
-
-
-            return $pdf->download('reporte_alumno.pdf');
-        }
-
-        return back()->with('error', 'Tipo de reporte no válido');
+    if (!$student) {
+        return back()->with('error', 'Estudiante no encontrado');
     }
+
+    // Obtener fecha de inicio y fin del mes
+    $start = date('Y-m-01', strtotime($month));
+    $end = date('Y-m-t', strtotime($month));
+    $days = $this->getDaysInRange($start, $end);
+
+    // Obtener almuerzos del alumno en ese mes
+    $lunchRecords = DB::table('almuerzos')
+        ->where('rut_alumno', $student->Run)
+        ->whereBetween('fecha', [$start, $end])
+        ->get();
+
+    // Mapear fechas donde almorzó
+    $almuerzoDias = [];
+    foreach ($lunchRecords as $record) {
+        $almuerzoDias[$record->fecha] = true;
+    }
+
+    $pdf = PDF::loadView('pdf.reporte_alumno', [
+        'student' => $student,
+        'month' => $month,
+        'days' => $days,
+        'almuerzoDias' => $almuerzoDias,
+    ])->setPaper('a4', 'landscape');
+
+    return $pdf->download('reporte_alumno.pdf');
+}
+                return back()->with('error', 'Tipo de reporte no válido');
+                }
 
     private function getDaysInRange($dateStart, $dateEnd)
     {
