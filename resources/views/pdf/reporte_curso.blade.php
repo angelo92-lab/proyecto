@@ -5,7 +5,7 @@
     <title>Reporte Curso - {{ $curso }}</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'DejaVu Sans', sans-serif;
             font-size: 12px;
             color: #333;
         }
@@ -37,6 +37,12 @@
         .student-name {
             text-align: left;
         }
+        .asistio {
+            background-color: #c8e6c9; /* verde claro */
+        }
+        .no-asistio {
+            background-color: #ffcdd2; /* rojo claro */
+        }
     </style>
 </head>
 <body>
@@ -58,27 +64,25 @@
                 @endforeach
             </tr>
         </thead>
-<tbody>
-    @foreach($reportData as $row)
-    <tr>
-        <td class="student-name">{{ $row['nombres'] }}</td>
-        <td>{{ $row['rut'] }}</td>
-        <td>{{ $row['digito_ver'] }}</td>
-        <td>{{ $row['celular'] }}</td>
-        <td>{{ $row['curso'] }}</td>
-        @foreach($days as $day)
-            @php
-                $fecha = $day->format('Y-m-d');  // Asegúrate de que la fecha esté en formato Y-m-d
-                // Comprobar si el almuerzo existe para ese estudiante en esa fecha
-                $estado = isset($lunchMap[$row['rut']][$fecha]) ? '✓' : '✗';
-            @endphp
-            <td>{{ $estado }}</td>
-        @endforeach
-    </tr>
-@endforeach
-
-</tbody>
-
+        <tbody>
+            @foreach($reportData as $row)
+                <tr>
+                    <td class="student-name">{{ $row['nombres'] }}</td>
+                    <td>{{ $row['rut'] }}</td>
+                    <td>{{ $row['digito_ver'] }}</td>
+                    <td>{{ $row['celular'] }}</td>
+                    <td>{{ $row['curso'] }}</td>
+                    @foreach($days as $day)
+                        @php
+                            $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
+                            $valor = $row['Dias'][$fecha] ?? '-';
+                            $class = $valor === '✓' ? 'asistio' : ($valor === '✗' ? 'no-asistio' : '');
+                        @endphp
+                        <td class="{{ $class }}">{{ $valor }}</td>
+                    @endforeach
+                </tr>
+            @endforeach
+        </tbody>
     </table>
 </body>
 </html>

@@ -316,8 +316,6 @@ private function generateCourseReportData($students, $lunches, $days)
             $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
         }
 
-        dd($row);
-
         $reportData[] = $row;
     }
 
