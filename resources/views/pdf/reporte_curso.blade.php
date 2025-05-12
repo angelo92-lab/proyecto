@@ -48,7 +48,13 @@
 <body>
     <div class="header">
         <h1>REPORTE DE ALMUERZOS</h1>
-        <small>Curso: {{ $curso }} | Fecha: {{ $date }} | Tipo: {{ $dateFilterType == 'day' ? 'Diario' : 'Mensual' }}</small>
+       <small>Curso: {{ $curso }} | Fecha: {{ $date }} | Tipo: 
+        @if($dateFilterType == 'day')
+            Reporte del Día
+        @else
+            Reporte del Mes
+        @endif
+    </small>
     </div>
 
     <table>

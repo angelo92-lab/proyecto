@@ -71,13 +71,19 @@ class ReportsController extends Controller
             $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
 
             $days = [];
-            if ($dateFilterType == 'month') {
+           // Generar arreglo de días según tipo de filtro
+            if ($dateFilterType === 'month') {
                 $startDate = new DateTime($dateStart);
                 $endDate = new DateTime($dateEnd);
-                $endDate->modify('+1 day');
+                $endDate->modify('+1 day'); // incluir último día
                 $interval = new DateInterval('P1D');
-                $days = iterator_to_array(new DatePeriod($startDate, $interval, $endDate));
+                $period = new DatePeriod($startDate, $interval, $endDate);
+                $days = iterator_to_array($period); // array de DateTime
+            } else {
+                // Solo un día en el array
+                $days = [new DateTime($date)];
             }
+
 
             [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
             $reportData = $this->generateCourseReportData($students, $lunches, $days);
@@ -258,7 +264,7 @@ class ReportsController extends Controller
             $rut = $this->normalizeRut($lunch->rut_alumno);
             $lunchMap[$rut][$lunch->fecha] = true;
         }
-        
+
         $reportData = [];
         foreach ($students as $student) {
             if (!$student->Nombres || !$student->Run) continue;
