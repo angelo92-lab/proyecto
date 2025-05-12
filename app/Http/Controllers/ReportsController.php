@@ -9,58 +9,70 @@ use PDF;
 use DateTime;
 use DatePeriod;
 use DateInterval;
-use Carbon\Carbon;
 
 class ReportsController extends Controller
 {
     public function index()
     {
-        $courses = DB::table('colegio20252')->select('Curso')->distinct()->orderBy('Curso')->pluck('Curso');
+        $courses = DB::table('colegio20252')
+            ->select('Curso')
+            ->distinct()
+            ->orderBy('Curso')
+            ->pluck('Curso');
+
         return view('reportes', compact('courses'));
+    }
+
+    // Utilidad para calcular rango de fechas
+    private function getDateRange($type, $date)
+    {
+        if ($type === 'day') {
+            return [$date, $date];
+        }
+
+        $start = date('Y-m-01', strtotime($date));
+        $end = date('Y-m-t', strtotime($date));
+        return [$start, $end];
+    }
+
+    // Utilidad para obtener estudiantes y almuerzos
+    private function getStudentsAndLunches($curso, $dateStart, $dateEnd)
+    {
+        $students = DB::table('colegio20252')
+            ->where('Curso', $curso)
+            ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
+            ->orderBy('Nombres')
+            ->get();
+
+        $ruts = $students->pluck('Run');
+
+        $lunches = DB::table('almuerzos')
+            ->whereIn('rut_alumno', $ruts)
+            ->whereBetween('fecha', [$dateStart, $dateEnd])
+            ->get();
+
+        return [$students, $lunches];
     }
 
     public function generate(Request $request)
     {
-        // Obtener el tipo de reporte desde la solicitud
         $reportType = $request->input('report_type');
 
-        if ($reportType == 'course') {
-            // Validación de los campos de curso
+        if ($reportType === 'course') {
             $validated = $request->validate([
                 'curso' => 'required|string',
                 'date_filter_type' => 'required|in:day,month',
                 'date' => 'required|date',
             ]);
 
-            $curso = $validated['curso'];
-            $dateFilterType = $validated['date_filter_type'];
-            $date = $validated['date'];
+            [$dateStart, $dateEnd] = $this->getDateRange($validated['date_filter_type'], $validated['date']);
+            [$students, $lunches] = $this->getStudentsAndLunches($validated['curso'], $dateStart, $dateEnd);
 
-            // Calcular el rango de fechas basado en el tipo de filtro
-            $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-            $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+            $grouped = $lunches->groupBy('rut_alumno');
 
-            // Obtener los estudiantes del curso
-            $students = DB::table('colegio20252')
-                ->where('Curso', $curso)
-                ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
-                ->orderBy('Nombres')
-                ->get();
-
-            $ruts = $students->pluck('Run');
-
-            // Obtener los almuerzos de los estudiantes en el rango de fechas
-            $lunchRecords = DB::table('almuerzos')
-                ->whereIn('rut_alumno', $ruts)
-                ->whereBetween('fecha', [$dateStart, $dateEnd])
-                ->get()
-                ->groupBy('rut_alumno');
-
-            // Preparar los datos para el reporte
-            $reportData = [];
-            foreach ($students as $student) {
-                $hadLunch = isset($lunchRecords[$student->Run]) && $lunchRecords[$student->Run]->contains('almorzo', 1);
-                $reportData[] = [
+            $reportData = $students->map(function ($student) use ($grouped) {
+                $hadLunch = isset($grouped[$student->Run]) && $grouped[$student->Run]->contains('almorzo', 1);
+                return [
                     'nombres' => $student->Nombres,
                     'rut' => $student->Run,
                     'digito_ver' => $student->digito_ver,
@@ -68,64 +80,47 @@ class ReportsController extends Controller
                     'curso' => $student->Curso,
                     'almorzo' => $hadLunch ? 'Sí' : 'No',
                 ];
-            }
+            });
 
-            // Generar el PDF
             $pdf = PDF::loadView('pdf.reporte_curso', [
                 'reportData' => $reportData,
-                'curso' => $curso,
-                'date' => $date,
-                'dateFilterType' => $dateFilterType,
+                'curso' => $validated['curso'],
+                'date' => $validated['date'],
+                'dateFilterType' => $validated['date_filter_type'],
             ])->setPaper('a4', 'landscape');
 
-            // Descargar el PDF
             return $pdf->download('reporte_curso.pdf');
         }
 
-        if ($reportType == 'student') {
-            // Validación de los campos de alumno
+        if ($reportType === 'student') {
             $validated = $request->validate([
                 'student_name' => 'required|string',
                 'month' => 'required|date_format:Y-m',
             ]);
 
-            $studentName = $validated['student_name'];
-            $month = $validated['month'];
-
-            // Buscar el estudiante por nombre
             $student = DB::table('colegio20252')
-                ->where('Nombres', 'like', "%$studentName%")
+                ->where('Nombres', 'like', "%{$validated['student_name']}%")
                 ->first();
 
             if (!$student) {
                 return back()->with('error', 'Estudiante no encontrado');
             }
 
-            // Obtener el registro de almuerzos del estudiante
             $lunchRecords = DB::table('almuerzos')
                 ->where('rut_alumno', $student->Run)
-                ->whereMonth('fecha', '=', date('m', strtotime($month)))
-                ->whereYear('fecha', '=', date('Y', strtotime($month)))
+                ->whereMonth('fecha', date('m', strtotime($validated['month'])))
+                ->whereYear('fecha', date('Y', strtotime($validated['month'])))
                 ->get();
 
-            // Preparar los datos para el reporte
-            $reportData = [
-                'student' => $student,
-                'lunchRecords' => $lunchRecords,
-            ];
-
-            // Generar el PDF
             $pdf = PDF::loadView('pdf.reporte_alumno', [
-                'reportData' => $reportData,
+                'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
                 'student' => $student,
-                'month' => $month,
+                'month' => $validated['month'],
             ])->setPaper('a4', 'landscape');
 
-            // Descargar el PDF
             return $pdf->download('reporte_alumno.pdf');
         }
 
-        // Si no se ha seleccionado un tipo de reporte válido
         return back()->with('error', 'Seleccione un tipo de reporte válido');
     }
 
@@ -133,33 +128,19 @@ class ReportsController extends Controller
     {
         $type = $request->input('report_type');
 
-        if ($type == 'course') {
+        if ($type === 'course') {
             $curso = $request->input('curso');
             $dateFilterType = $request->input('date_filter_type');
             $date = $request->input('date');
 
-            $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-            $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+            [$dateStart, $dateEnd] = $this->getDateRange($dateFilterType, $date);
+            [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
 
-            $students = DB::table('colegio20252')
-                ->where('Curso', $curso)
-                ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
-                ->orderBy('Nombres')
-                ->get();
+            $grouped = $lunches->groupBy('rut_alumno');
 
-            $ruts = $students->pluck('Run');
-
-            $lunchRecords = DB::table('almuerzos')
-                ->whereIn('rut_alumno', $ruts)
-                ->whereBetween('fecha', [$dateStart, $dateEnd])
-                ->get()
-                ->groupBy('rut_alumno');
-
-            $reportData = [];
-
-            foreach ($students as $student) {
-                $hadLunch = isset($lunchRecords[$student->Run]) && $lunchRecords[$student->Run]->contains('almorzo', 1);
-                $reportData[] = [
+            $data = $students->map(function ($student) use ($grouped) {
+                $hadLunch = isset($grouped[$student->Run]) && $grouped[$student->Run]->contains('almorzo', 1);
+                return [
                     'Nombres' => $student->Nombres,
                     'RUT' => $student->Run,
                     'Dígito Verificador' => $student->digito_ver,
@@ -167,31 +148,27 @@ class ReportsController extends Controller
                     'Curso' => $student->Curso,
                     'Almorzó' => $hadLunch ? 'Sí' : 'No',
                 ];
-            }
+            });
 
             $filename = "reporte_curso_{$curso}_" . str_replace('-', '_', $date) . ".csv";
 
-            $headers = [
+            return Response::stream(function () use ($data) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, array_keys($data[0]));
+                foreach ($data as $row) {
+                    fputcsv($file, $row);
+                }
+                fclose($file);
+            }, 200, [
                 "Content-type" => "text/csv",
                 "Content-Disposition" => "attachment; filename={$filename}",
                 "Pragma" => "no-cache",
                 "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
                 "Expires" => "0"
-            ];
-
-            $callback = function () use ($reportData) {
-                $file = fopen('php://output', 'w');
-                fputcsv($file, array_keys($reportData[0]));
-                foreach ($reportData as $row) {
-                    fputcsv($file, $row);
-                }
-                fclose($file);
-            };
-
-            return Response::stream($callback, 200, $headers);
+            ]);
         }
 
-        elseif ($type == 'student') {
+        if ($type === 'student') {
             $studentName = $request->input('student_name');
             $month = $request->input('month');
 
@@ -203,12 +180,12 @@ class ReportsController extends Controller
                 return redirect()->back()->with('error', 'Alumno no encontrado.');
             }
 
-            $dateStart = date('Y-m-01', strtotime($month));
-            $dateEnd = date('Y-m-t', strtotime($month));
+            $start = date('Y-m-01', strtotime($month));
+            $end = date('Y-m-t', strtotime($month));
 
             $count = DB::table('almuerzos')
                 ->where('rut_alumno', $student->Run)
-                ->whereBetween('fecha', [$dateStart, $dateEnd])
+                ->whereBetween('fecha', [$start, $end])
                 ->where(function ($q) {
                     $q->where('almorzo', true)->orWhere('almorzo', 1);
                 })
@@ -216,145 +193,110 @@ class ReportsController extends Controller
 
             $filename = "reporte_alumno_{$student->Nombres}_" . str_replace('-', '_', $month) . ".csv";
 
-            $headers = [
+            return Response::stream(function () use ($student, $count, $month) {
+                $file = fopen('php://output', 'w');
+                fputcsv($file, ['Alumno', 'Mes', 'Cantidad de veces almorzó']);
+                fputcsv($file, [$student->Nombres, $month, $count]);
+                fclose($file);
+            }, 200, [
                 "Content-type" => "text/csv",
                 "Content-Disposition" => "attachment; filename={$filename}",
                 "Pragma" => "no-cache",
                 "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
                 "Expires" => "0"
-            ];
-
-            $callback = function () use ($student, $count, $month) {
-                $file = fopen('php://output', 'w');
-                fputcsv($file, ['Alumno', 'Mes', 'Cantidad de veces almorzó']);
-                fputcsv($file, [$student->Nombres, $month, $count]);
-                fclose($file);
-            };
-
-            return Response::stream($callback, 200, $headers);
+            ]);
         }
 
         return back()->with('error', 'Tipo de reporte no válido');
     }
 
-   public function exportPdf(Request $request)
-{
-    $type = $request->input('report_type');
+    public function exportPdf(Request $request)
+    {
+        $type = $request->input('report_type');
 
-    if ($type == 'course') {
-        $curso = $request->input('curso');
-        $dateFilterType = $request->input('date_filter_type');
-        $date = $request->input('date');
+        if ($type === 'course') {
+            $curso = $request->input('curso');
+            $dateFilterType = $request->input('date_filter_type');
+            $date = $request->input('date');
 
-        // Calcular fechas de inicio y fin
-        $dateStart = $dateFilterType == 'day' ? $date : date('Y-m-01', strtotime($date));
-        $dateEnd = $dateFilterType == 'day' ? $date : date('Y-m-t', strtotime($date));
+            [$dateStart, $dateEnd] = $this->getDateRange($dateFilterType, $date);
 
-        // Generar lista de días
-        $startDate = new DateTime($dateStart);
-        $endDate = new DateTime($dateEnd);
-        $endDate->modify('+1 day'); // incluir último día
-        $interval = new DateInterval('P1D');
-        $period = new DatePeriod($startDate, $interval, $endDate);
-        $days = iterator_to_array($period); // array de DateTime
+            $startDate = new DateTime($dateStart);
+            $endDate = new DateTime($dateEnd);
+            $endDate->modify('+1 day');
+            $interval = new DateInterval('P1D');
+            $days = iterator_to_array(new DatePeriod($startDate, $interval, $endDate));
 
-        // Obtener estudiantes
-        $students = DB::table('colegio20252')
-            ->where('Curso', $curso)
-            ->select('Run', 'Nombres', DB::raw('`Digito Ver` as digito_ver'), 'Celular', 'Curso')
-            ->orderBy('Nombres')
-            ->get();
+            [$students, $lunches] = $this->getStudentsAndLunches($curso, $dateStart, $dateEnd);
 
-        $ruts = $students->pluck('Run');
-
-        // Obtener almuerzos
-        $lunches = DB::table('almuerzos')
-            ->whereIn('rut_alumno', $ruts)
-            ->whereBetween('fecha', [$dateStart, $dateEnd])
-            ->get();
-
-        // Mapear almuerzos por rut y fecha
-        $lunchMap = [];
-        foreach ($lunches as $lunch) {
-            $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
-        }
-
-        // Preparar datos para la vista
-        $reportData = [];
-        foreach ($students as $student) {
-            // Validar datos del estudiante
-            if (!$student->Nombres || !$student->Run) {
-                continue; // Omitir si falta información clave
+            $lunchMap = [];
+            foreach ($lunches as $lunch) {
+                $lunchMap[$lunch->rut_alumno][$lunch->fecha] = true;
             }
 
-            $row = [
-                'Nombres' => $student->Nombres,
-                'RUT' => $student->Run,
-                'DigitoVer' => $student->digito_ver,
-                'Celular' => $student->Celular,
-                'Curso' => $student->Curso,
-                'Dias' => []
-            ];
+            $reportData = [];
+            foreach ($students as $student) {
+                if (!$student->Nombres || !$student->Run) continue;
 
-            foreach ($days as $day) {
-                $fecha = $day->format('Y-m-d');
-                $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
+                $row = [
+                    'Nombres' => $student->Nombres,
+                    'RUT' => $student->Run,
+                    'DigitoVer' => $student->digito_ver,
+                    'Celular' => $student->Celular,
+                    'Curso' => $student->Curso,
+                    'Dias' => [],
+                ];
+
+                foreach ($days as $day) {
+                    $fecha = $day->format('Y-m-d');
+                    $row['Dias'][$fecha] = isset($lunchMap[$student->Run][$fecha]) ? '✓' : '✗';
+                }
+
+                $reportData[] = $row;
             }
 
-            $reportData[] = $row;
+            if (empty($reportData)) {
+                return back()->with('error', 'No hay datos disponibles para el curso seleccionado en el rango de fechas.');
+            }
+
+            $pdf = PDF::loadView('pdf.reporte_curso', [
+                'reportData' => $reportData,
+                'curso' => $curso,
+                'date' => $date,
+                'dateFilterType' => $dateFilterType,
+                'days' => $days,
+            ])->setPaper('a4', 'landscape');
+
+            return $pdf->download('reporte_curso.pdf');
         }
 
-        // Verificar si hay datos para mostrar
-        if (empty($reportData)) {
-            return back()->with('error', 'No hay datos disponibles para el curso seleccionado en el rango de fechas.');
+        if ($type === 'student') {
+            $studentName = $request->input('student_name');
+            $month = $request->input('month');
+
+            $student = DB::table('colegio20252')
+                ->where('Nombres', 'like', "%$studentName%")
+                ->first();
+
+            if (!$student) {
+                return back()->with('error', 'Estudiante no encontrado');
+            }
+
+            $lunchRecords = DB::table('almuerzos')
+                ->where('rut_alumno', $student->Run)
+                ->whereMonth('fecha', date('m', strtotime($month)))
+                ->whereYear('fecha', date('Y', strtotime($month)))
+                ->get();
+
+            $pdf = PDF::loadView('pdf.reporte_alumno', [
+                'reportData' => ['student' => $student, 'lunchRecords' => $lunchRecords],
+                'student' => $student,
+                'month' => $month,
+            ])->setPaper('a4', 'landscape');
+
+            return $pdf->download('reporte_alumno.pdf');
         }
 
-        // Generar y descargar PDF
-        $pdf = PDF::loadView('pdf.reporte_curso', [
-            'reportData' => $reportData,
-            'curso' => $curso,
-            'date' => $date,
-            'dateFilterType' => $dateFilterType,
-            'days' => $days,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('reporte_curso.pdf');
+        return back()->with('error', 'Tipo de reporte no válido');
     }
-
-
-
-    if ($type == 'student') {
-        $studentName = $request->input('student_name');
-        $month = $request->input('month');
-
-        $student = DB::table('colegio20252')
-            ->where('Nombres', 'like', "%$studentName%")
-            ->first();
-
-        if (!$student) {
-            return back()->with('error', 'Estudiante no encontrado');
-        }
-
-        $lunchRecords = DB::table('almuerzos')
-            ->where('rut_alumno', $student->Run)
-            ->whereMonth('fecha', '=', date('m', strtotime($month)))
-            ->whereYear('fecha', '=', date('Y', strtotime($month)))
-            ->get();
-
-        $reportData = [
-            'student' => $student,
-            'lunchRecords' => $lunchRecords,
-        ];
-
-        $pdf = PDF::loadView('pdf.reporte_alumno', [
-            'reportData' => $reportData,
-            'student' => $student,
-            'month' => $month,
-        ])->setPaper('a4', 'landscape');
-
-        return $pdf->download('reporte_alumno.pdf');
-    }
-
-    return back()->with('error', 'Tipo de reporte no válido');
-}
 }
