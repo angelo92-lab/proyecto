@@ -284,7 +284,7 @@ class ReportsController extends Controller
         foreach ($students as $student) {
             // Validar datos del estudiante
             if (!$student->Nombres || !$student->Run) {
-                continue;
+                continue; // Omitir si falta información clave
             }
 
             $row = [
@@ -304,6 +304,11 @@ class ReportsController extends Controller
             $reportData[] = $row;
         }
 
+        // Verificar si hay datos para mostrar
+        if (empty($reportData)) {
+            return back()->with('error', 'No hay datos disponibles para el curso seleccionado en el rango de fechas.');
+        }
+
         // Generar y descargar PDF
         $pdf = PDF::loadView('pdf.reporte_curso', [
             'reportData' => $reportData,
@@ -315,6 +320,8 @@ class ReportsController extends Controller
 
         return $pdf->download('reporte_curso.pdf');
     }
+
+
 
     if ($type == 'student') {
         $studentName = $request->input('student_name');
