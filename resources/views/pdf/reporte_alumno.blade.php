@@ -28,19 +28,14 @@
         }
         th, td {
             border: 1px solid #aaa;
-            padding: 6px;
+            padding: 4px;
             text-align: center;
         }
         th {
-            background-color: #f5f5f5;
+            background-color: #f0f0f0;
         }
-        .tick {
-            color: green;
-            font-weight: bold;
-        }
-        .cross {
-            color: red;
-            font-weight: bold;
+        .student-name {
+            text-align: left;
         }
         .asistio {
             background-color: #c8e6c9; /* verde claro */
