@@ -68,10 +68,10 @@
             @foreach($reportData as $row)
                 <tr>
                     <td class="student-name">{{ $row['Nombres'] }}</td>
-                    <td>{{ $row['rut'] }}</td>
+                    <td>{{ $row['RUT'] }}</td>
                     <td>{{ $row['digito_ver'] }}</td>
-                    <td>{{ $row['celular'] }}</td>
-                    <td>{{ $row['curso'] }}</td>
+                    <td>{{ $row['Celular'] }}</td>
+                    <td>{{ $row['Curso'] }}</td>
                     @foreach($days as $day)
                  @php
                     $fecha = \Carbon\Carbon::parse($day)->format('Y-m-d');
