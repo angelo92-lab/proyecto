@@ -28,20 +28,19 @@
         }
         th, td {
             border: 1px solid #aaa;
-            padding: 4px;
+            padding: 6px;
             text-align: center;
         }
         th {
-            background-color: #f0f0f0;
+            background-color: #f5f5f5;
         }
-        .student-name {
-            text-align: left;
+        .tick {
+            color: green;
+            font-weight: bold;
         }
-        .asistio {
-            background-color: #c8e6c9; /* verde claro */
-        }
-        .no-asistio {
-            background-color: #ffcdd2; /* rojo claro */
+        .cross {
+            color: red;
+            font-weight: bold;
         }
     </style>
 </head>
