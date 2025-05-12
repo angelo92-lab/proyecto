@@ -321,3 +321,4 @@ private function generateCourseReportData($students, $lunches, $days)
 
     return $reportData;
 }
+}
