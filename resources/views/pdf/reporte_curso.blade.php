@@ -66,7 +66,7 @@
                     <td>{{ $row['digito_ver'] }}</td>
                     <td>{{ $row['celular'] }}</td>
                     <td>{{ $row['curso'] }}</td>
-                    @foreach($row['dias'] as $estado)
+                    @foreach($row['Dias] as $estado)
                         <td>{{ $estado }}</td>
                     @endforeach
                 </tr>
