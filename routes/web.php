@@ -43,4 +43,8 @@ use App\Http\Controllers\ReportsController;
 
    Route::get('/tiempo', [ClimaController::class, 'showTemperature'])->name('clima');
        
+use App\Http\Controllers\FuncionarioController;
+
+Route::get('importar-funcionarios', [FuncionarioController::class, 'showImportForm'])->name('funcionarios.import.form');
+Route::post('importar-funcionarios', [FuncionarioController::class, 'import'])->name('funcionarios.import');
 
