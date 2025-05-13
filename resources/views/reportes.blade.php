@@ -1,163 +1,152 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto p-4 max-w-5xl">
-    <h2 class="text-2xl font-semibold mb-6">Generador de Reportes de Almuerzos</h2>
+<div class="container mx-auto max-w-5xl px-4 py-6">
+    <div class="bg-white p-6 rounded shadow">
+        <h2 class="text-2xl font-bold text-primary mb-4 text-center">📊 Generador de Reportes de Almuerzos</h2>
 
-    @if(session('error'))
-        <div class="bg-red-100 text-red-900 p-3 mb-4 rounded">{{ session('error') }}</div>
-    @endif
+        @if(session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
 
-    {{-- Formulario para elegir tipo de reporte --}}
-    <form method="POST" action="{{ route('reports.generate') }}" class="mb-6 space-y-4 bg-white p-6 rounded shadow">
-        @csrf
-        <div class="mb-3">
-            <label for="report_type" class="block font-medium mb-1">Tipo de Reporte:</label>
-            <select name="report_type" id="report_type" class="border border-gray-300 rounded w-full p-2" required onchange="toggleReportForms()">
-                <option value="" disabled selected>Seleccione...</option>
-                <option value="course" {{ old('report_type') == 'course' ? 'selected' : '' }}>Por Curso</option>
-                <option value="student" {{ old('report_type') == 'student' ? 'selected' : '' }}>Por Alumno</option>
-            </select>
-        </div>
+        <form method="POST" action="{{ route('reports.generate') }}" class="space-y-4">
+            @csrf
 
-        {{-- Formulario para reporte por curso --}}
-        <div id="course_form" style="display:none;">
             <div class="mb-3">
-                <label for="curso" class="block font-medium mb-1">Curso:</label>
-                <select name="curso" id="curso" class="border border-gray-300 rounded w-full p-2">
-                    <option value="" disabled selected>Seleccione curso</option>
-                    @foreach($courses as $course)
-                    <option value="{{ $course }}" {{ old('curso') == $course ? 'selected' : '' }}>{{ $course }}</option>
-                    @endforeach
+                <label for="report_type" class="form-label fw-semibold">Tipo de Reporte</label>
+                <select name="report_type" id="report_type" class="form-select" required onchange="toggleReportForms()">
+                    <option value="" disabled selected>Seleccione...</option>
+                    <option value="course" {{ old('report_type') == 'course' ? 'selected' : '' }}>Por Curso</option>
+                    <option value="student" {{ old('report_type') == 'student' ? 'selected' : '' }}>Por Alumno</option>
                 </select>
             </div>
 
-            <div class="mb-3">
-                <label for="date_filter_type" class="block font-medium mb-1">Filtrar por:</label>
-                <select name="date_filter_type" id="date_filter_type" class="border border-gray-300 rounded w-full p-2" onchange="toggleDateInput()">
-                    <option value="day" {{ old('date_filter_type') == 'day' ? 'selected' : '' }}>Día</option>
-                    <option value="month" {{ old('date_filter_type') == 'month' ? 'selected' : '' }}>Mes</option>
-                </select>
+            {{-- Reporte por curso --}}
+            <div id="course_form" style="display:none;">
+                <div class="mb-3">
+                    <label for="curso" class="form-label fw-semibold">Curso</label>
+                    <select name="curso" id="curso" class="form-select">
+                        <option value="" disabled selected>Seleccione curso</option>
+                        @foreach($courses as $course)
+                            <option value="{{ $course }}" {{ old('curso') == $course ? 'selected' : '' }}>{{ $course }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="date_filter_type" class="form-label fw-semibold">Filtrar por</label>
+                    <select name="date_filter_type" id="date_filter_type" class="form-select" onchange="toggleDateInput()">
+                        <option value="day" {{ old('date_filter_type') == 'day' ? 'selected' : '' }}>Día</option>
+                        <option value="month" {{ old('date_filter_type') == 'month' ? 'selected' : '' }}>Mes</option>
+                    </select>
+                </div>
+
+                <div class="mb-3" id="date_day_div" style="display:none;">
+                    <label for="date_day" class="form-label fw-semibold">Fecha (día)</label>
+                    <input type="date" name="date" id="date_day" class="form-control" value="{{ old('date') }}">
+                </div>
+
+                <div class="mb-3" id="date_month_div" style="display:none;">
+                    <label for="date_month" class="form-label fw-semibold">Fecha (mes)</label>
+                    <input type="month" name="date" id="date_month" class="form-control" value="{{ old('date') }}">
+                </div>
             </div>
 
-            <div class="mb-3" id="date_day_div" style="display:none;">
-                <label for="date" class="block font-medium mb-1">Fecha (día):</label>
-                <input type="date" name="date" id="date_day" class="border border-gray-300 rounded w-full p-2" value="{{ old('date') }}">
+            {{-- Reporte por alumno --}}
+            <div id="student_form" style="display:none;">
+                <div class="mb-3">
+                    <label for="student_name" class="form-label fw-semibold">Nombre del Alumno</label>
+                    <input type="text" name="student_name" id="student_name" class="form-control" value="{{ old('student_name') }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="month" class="form-label fw-semibold">Mes</label>
+                    <input type="month" name="month" id="month" class="form-control" value="{{ old('month') }}">
+                </div>
             </div>
 
-            <div class="mb-3" id="date_month_div" style="display:none;">
-                <label for="date_month" class="block font-medium mb-1">Fecha (mes):</label>
-                <input type="month" name="date" id="date_month" class="border border-gray-300 rounded w-full p-2" value="{{ old('date') }}">
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">
+                    <i class="bi bi-bar-chart-fill me-1"></i> Generar Reporte
+                </button>
             </div>
-        </div>
+        </form>
+    </div>
 
-        {{-- Formulario para reporte por alumno --}}
-        <div id="student_form" style="display:none;">
-            <div class="mb-3">
-                <label for="student_name" class="block font-medium mb-1">Nombre del Alumno:</label>
-                <input type="text" name="student_name" id="student_name" class="border border-gray-300 rounded w-full p-2" required value="{{ old('student_name') }}">
-            </div>
-
-            <div class="mb-3">
-                <label for="month" class="block font-medium mb-1">Mes:</label>
-                <input type="month" name="month" id="month" class="border border-gray-300 rounded w-full p-2" required value="{{ old('month') }}">
-            </div>
-        </div>
-
-        <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
-         Generar Reporte</button>
-    </form>
-
-    {{-- Opciones para exportar --}}
+    {{-- Resultados --}}
     @if(isset($reportData))
-    <div class="mt-6">
-        <h3 class="text-xl font-semibold">Resultados del Reporte</h3>
-        <table class="min-w-full border border-gray-300 mt-4">
-            <thead>
-                <tr>
-                    <th class="border border-gray-300 p-2">Nombre</th>
-                    <th class="border border-gray-300 p-2">RUT</th>
-                    <th class="border border-gray-300 p-2">Dígito Verificador</th>
-                    <th class="border border-gray-300 p-2">Celular</th>
-                    <th class="border border-gray-300 p-2">Curso</th>
-                    <th class="border border-gray-300 p-2">Almorzó</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($reportData as $data)
-                <tr>
-                    <td class="border border-gray-300 p-2">{{ $data['nombres'] }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data['rut'] }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data['digito_ver'] }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data['celular'] }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data['curso'] }}</td>
-                    <td class="border border-gray-300 p-2">{{ $data['almorzo'] }}</td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="mt-5 bg-white p-4 rounded shadow">
+        <h3 class="text-lg fw-bold mb-3">📋 Resultados del Reporte</h3>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>RUT</th>
+                        <th>Dígito Verificador</th>
+                        <th>Celular</th>
+                        <th>Curso</th>
+                        <th>Almorzó</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($reportData as $data)
+                    <tr>
+                        <td>{{ $data['nombres'] }}</td>
+                        <td>{{ $data['rut'] }}</td>
+                        <td>{{ $data['digito_ver'] }}</td>
+                        <td>{{ $data['celular'] }}</td>
+                        <td>{{ $data['curso'] }}</td>
+                        <td>{{ $data['almorzo'] }}</td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        <div class="mt-4">
+        <div class="mt-3 d-flex gap-2">
             <form method="POST" action="{{ route('reports.exportCsv') }}">
                 @csrf
                 <input type="hidden" name="report_type" value="course">
                 <input type="hidden" name="curso" value="{{ $selectedCurso }}">
                 <input type="hidden" name="date_filter_type" value="{{ $dateFilterType }}">
                 <input type="hidden" name="date" value="{{ $selectedDate }}">
-                <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
-                Exportar a CSV</button>
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-file-earmark-spreadsheet me-1"></i> Exportar CSV
+                </button>
             </form>
 
-            <form method="POST" action="{{ route('reports.exportPdf') }}" class="mt-2">
+            <form method="POST" action="{{ route('reports.exportPdf') }}">
                 @csrf
                 <input type="hidden" name="report_type" value="course">
                 <input type="hidden" name="curso" value="{{ $selectedCurso }}">
                 <input type="hidden" name="date_filter_type" value="{{ $dateFilterType }}">
                 <input type="hidden" name="date" value="{{ $selectedDate }}">
-                <button style="background-color: #007bff; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer;">
-                Exportar a PDF</button>
+                <button type="submit" class="btn btn-outline-danger">
+                    <i class="bi bi-file-earmark-pdf me-1"></i> Exportar PDF
+                </button>
             </form>
         </div>
     </div>
     @endif
 </div>
 
+{{-- JavaScript --}}
 <script>
     function toggleReportForms() {
         const reportType = document.getElementById('report_type').value;
-
-        // Mostrar y habilitar según tipo
-        const courseForm = document.getElementById('course_form');
-        const studentForm = document.getElementById('student_form');
-
-        courseForm.style.display = reportType === 'course' ? 'block' : 'none';
-        studentForm.style.display = reportType === 'student' ? 'block' : 'none';
-
-        // Habilita/deshabilita campos de curso
-        [...courseForm.querySelectorAll('input, select')].forEach(el => {
-            el.disabled = reportType !== 'course';
-        });
-
-        // Habilita/deshabilita campos de alumno
-        [...studentForm.querySelectorAll('input, select')].forEach(el => {
-            el.disabled = reportType !== 'student';
-        });
+        document.getElementById('course_form').style.display = reportType === 'course' ? 'block' : 'none';
+        document.getElementById('student_form').style.display = reportType === 'student' ? 'block' : 'none';
     }
 
     function toggleDateInput() {
-        const dateFilterType = document.getElementById('date_filter_type').value;
-        const dayDiv = document.getElementById('date_day_div');
-        const monthDiv = document.getElementById('date_month_div');
-
-        dayDiv.style.display = dateFilterType === 'day' ? 'block' : 'none';
-        monthDiv.style.display = dateFilterType === 'month' ? 'block' : 'none';
-
-        // Habilita solo el campo que corresponde
-        document.getElementById('date_day').disabled = dateFilterType !== 'day';
-        document.getElementById('date_month').disabled = dateFilterType !== 'month';
+        const type = document.getElementById('date_filter_type').value;
+        document.getElementById('date_day_div').style.display = type === 'day' ? 'block' : 'none';
+        document.getElementById('date_month_div').style.display = type === 'month' ? 'block' : 'none';
+        document.getElementById('date_day').disabled = type !== 'day';
+        document.getElementById('date_month').disabled = type !== 'month';
     }
 
-    // Ejecutar en carga si ya se envió algo
     document.addEventListener('DOMContentLoaded', () => {
         toggleReportForms();
         toggleDateInput();
