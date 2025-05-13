@@ -9,7 +9,7 @@ class ClimaController extends Controller
 {
     public function showTemperature()
     {
-        // Coordenadas de tu ciudad, reemplaza con la latitud y longitud correctas
+       
         $latitude = -30.69833;  
         $longitude = -70.95778;
 
