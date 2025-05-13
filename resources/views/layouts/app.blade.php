@@ -11,7 +11,8 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
 
-    
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
+
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
 </head>
 <body>
