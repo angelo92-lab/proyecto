@@ -41,5 +41,5 @@ use App\Http\Controllers\ReportsController;
 
 use App\Http\Controllers\ClimaController;
 
-Route::get('/clima', [ClimaController::class, 'mostrarClima'])->name('clima');
+Route::get('/tiempo', [ClimaController::class, 'showTemperature'])->name('tiempo');
 
