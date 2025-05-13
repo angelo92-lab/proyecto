@@ -3,41 +3,50 @@
 @section('title', 'Marcar Almuerzo')
 
 @section('content')
-<h1 class="mb-4 text-center">Marcar Almuerzo</h1>
+<div class="container py-4">
+    <h1 class="mb-4 text-center text-primary fw-bold">Marcar Almuerzo</h1>
 
-@if ($mensaje)
-    <div id="manual-message" class="alert alert-info animate__animated animate__fadeInDown" style="animation-duration: 1s;">
-        {{ $mensaje }}
+    @if ($mensaje)
+        <div id="manual-message" class="alert alert-info animate__animated animate__fadeInDown shadow-sm">
+            {{ $mensaje }}
+        </div>
+    @endif
+
+    <!-- Formulario manual -->
+    <div class="card shadow-sm border-0 mb-5">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-3 text-success">Ingreso Manual</h5>
+            <form method="post" action="{{ route('marcaralmuerzo.store') }}" id="manualForm">
+                @csrf
+                <div class="mb-3 col-md-6 mx-auto">
+                    <label for="rut" class="form-label">Ingrese RUT del alumno:</label>
+                    <input type="text" id="rut" name="rut" class="form-control text-center" placeholder="Ej: 12345678-9" required autocomplete="off">
+                </div>
+                <div class="text-center">
+                    <button type="submit" id="botonManual" class="btn btn-success btn-lg btn-animate shadow">
+                        <span class="spinner-border spinner-border-sm d-none me-2" role="status" aria-hidden="true"></span>
+                        Marcar Almuerzo
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
-@endif
 
-<!-- Formulario manual -->
-<form method="post" action="{{ route('marcaralmuerzo.store') }}" class="mb-4" id="manualForm">
-    @csrf
-    <div class="mb-3 col-md-6 mx-auto">
-        <label for="rut" class="form-label">Ingrese RUT del alumno:</label>
-        <input type="text" id="rut" name="rut" class="form-control" placeholder="Ej: 12345678-9" required autocomplete="off">
+    <!-- Escaneo automático -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body">
+            <h5 class="card-title text-center mb-3 text-primary">Escaneo Automático</h5>
+            <div class="mb-4 col-md-6 mx-auto">
+                <label for="barcodeInput" class="form-label">Escanea el código de barra aquí:</label>
+                <input type="text" id="barcodeInput" autofocus class="form-control text-center" placeholder="Esperando escaneo..." autocomplete="off" />
+            </div>
+            <div id="scan-message" class="alert text-center" style="display:none;"></div>
+        </div>
     </div>
-    <div class="text-center">
-        <button type="submit" id="botonManual" class="btn btn-success btn-animate">
-            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-            Marcar Almuerzo
-        </button>
+
+    <div class="text-center mt-5">
+        <a href="{{ url('alumnoscasino') }}" class="btn btn-secondary shadow-sm">Volver a Lista de Alumnos</a>
     </div>
-</form>
-
-<hr>
-
-<!-- Escaneo automático -->
-<div class="mb-4 col-md-6 mx-auto">
-    <label for="barcodeInput" class="form-label">Escanea el código de barra aquí:</label>
-    <input type="text" id="barcodeInput" autofocus class="form-control" placeholder="Esperando escaneo..." autocomplete="off" />
-</div>
-
-<div id="scan-message" class="alert text-center" style="display:none;"></div>
-
-<div class="text-center mt-4">
-    <a href="{{ url('alumnoscasino') }}" class="btn btn-secondary">Volver a Lista de Alumnos</a>
 </div>
 
 <style>
@@ -49,12 +58,12 @@
     100% {opacity: 0;}
 }
 .btn-animate:hover {
-  animation: pulse 1s infinite;
+    animation: pulse 1s infinite;
 }
 @keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 </style>
 
@@ -76,7 +85,6 @@ function showMessage(text, isError = false) {
     mensajeDiv.textContent = text;
     mensajeDiv.style.display = 'block';
 
-    // Después de 4 segundos hace fadeOut
     setTimeout(() => {
         mensajeDiv.classList.remove('animate__fadeInDown');
         mensajeDiv.classList.add('animate__fadeOutUp');

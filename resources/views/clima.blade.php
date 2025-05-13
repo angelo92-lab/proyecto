@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Temperatura Aire Monte Patria</title>
     <style>
-        /* Reset básico */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
             display: flex;
@@ -22,19 +21,24 @@
             color: #1e1e2f;
         }
         .card {
-            background: #ffffffcc;
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(10px);
-            border-radius: 15px;
+            border-radius: 16px;
             padding: 2.5rem 3rem;
-            max-width: 390px;
+            max-width: 400px;
             width: 100%;
-            box-shadow: 0 8px 20px rgba(102, 166, 255, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
             text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         h1 {
             font-weight: 700;
             font-size: 1.75rem;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             color: #1446a0;
         }
         .temperature {
@@ -47,7 +51,7 @@
             font-size: 1.1rem;
             color: #555a75;
             margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
         }
         .wind {
@@ -55,7 +59,10 @@
             color: #444a65;
             font-weight: 600;
         }
-        /* Mensaje error estilo */
+        .icon {
+            font-size: 2rem;
+            margin-right: 0.3rem;
+        }
         .error {
             color: #ff4c4c;
             font-size: 1.2rem;
@@ -64,13 +71,14 @@
         }
         @media (max-width: 400px) {
             .card {
-                padding: 2rem 2rem;
+                padding: 2rem;
                 max-width: 100%;
             }
 
             .temperature {
                 font-size: 2.8rem;
             }
+
             h1 {
                 font-size: 1.5rem;
             }
@@ -79,16 +87,16 @@
 </head>
 <body>
     <div class="card">
-        <h1>Temperatura Aire Monte Patria</h1>
+        <h1>🌡️ Temperatura Aire Monte Patria</h1>
 
         @if (isset($error))
             <div class="error">
                 {{ $error }}
             </div>
         @else
-            <div class="temperature">{{ $temperature }}°C</div>
+            <div class="temperature">🌡️ {{ $temperature }}°C</div>
             <div class="label">Temperatura actual</div>
-            <div class="wind">Velocidad del viento: {{ $windSpeed }} km/h</div>
+            <div class="wind">💨 Velocidad del viento: {{ $windSpeed }} km/h</div>
         @endif
     </div>
 </body>
