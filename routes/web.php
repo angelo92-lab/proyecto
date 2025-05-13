@@ -39,5 +39,7 @@ use App\Http\Controllers\ReportsController;
     Route::post('/reports/export-pdf', [ReportsController::class, 'exportPdf'])->name('reports.exportPdf'); 
 
 
+use App\Http\Controllers\ClimaController;
+
 Route::get('/clima', [ClimaController::class, 'mostrarClima'])->name('clima');
 
