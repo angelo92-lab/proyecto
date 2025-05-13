@@ -10,8 +10,8 @@ class ClimaController extends Controller
     public function showTemperature()
     {
         // Coordenadas de tu ciudad, reemplaza con la latitud y longitud correctas
-        $latitude = -30.69;  
-        $longitude = -70.95;
+        $latitude = -30.69833;  
+        $longitude = -70.95778;
 
         // Llamar a la API de Open-Meteo
         $response = Http::get('https://api.open-meteo.com/v1/forecast', [
