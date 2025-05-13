@@ -4,18 +4,20 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="mb-4 text-center">Lista de Alumnos</h1>
+    <h1 class="mb-4 text-center display-5 fw-bold text-primary">🎓 Lista de Alumnos</h1>
 
-    <div class="d-flex justify-content-between mb-3">
-        <a href="{{ url('anotaciones') }}" class="btn btn-primary">Ir a Anotaciones</a>
-        <a href="{{ url('marcaralmuerzo') }}" class="btn btn-primary">Marcar Almuerzo</a>
+    <div class="d-flex justify-content-between mb-4">
+        <a href="{{ url('anotaciones') }}" class="btn btn-outline-primary shadow-sm">
+            📝 Ir a Anotaciones
+        </a>
+        <a href="{{ url('marcaralmuerzo') }}" class="btn btn-outline-success shadow-sm">
+            🍽️ Marcar Almuerzo
+        </a>
     </div>
 
-    <form method="get" action="{{ url('alumnoscasino') }}" class="row g-3 mb-4 align-items-center">
-        <div class="col-auto">
-            <label for="curso" class="col-form-label">Filtrar por curso:</label>
-        </div>
-        <div class="col-auto">
+    <form method="get" action="{{ url('alumnoscasino') }}" class="row g-3 mb-4 align-items-center bg-white p-3 rounded shadow-sm">
+        <div class="col-md-3">
+            <label for="curso" class="form-label">📚 Filtrar por curso:</label>
             <select name="curso" id="curso" class="form-select" onchange="this.form.submit()">
                 <option value="">-- Todos los cursos --</option>
                 @foreach ($cursos as $curso)
@@ -25,17 +27,15 @@
                 @endforeach
             </select>
         </div>
-        <div class="col-auto">
-            <label for="fecha" class="col-form-label">Filtrar por fecha:</label>
-        </div>
-        <div class="col-auto">
+        <div class="col-md-3">
+            <label for="fecha" class="form-label">📅 Filtrar por fecha:</label>
             <input type="date" id="fecha" name="fecha" class="form-control" value="{{ $fechaSeleccionada }}" onchange="this.form.submit()">
         </div>
     </form>
 
-    <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-            <thead class="table-dark">
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-striped table-hover align-middle">
+            <thead class="table-primary text-center">
                 <tr>
                     <th>Nombres</th>
                     <th>Apellido Paterno</th>
@@ -43,7 +43,7 @@
                     <th>Rut</th>
                     <th>Digito Ver</th>
                     <th>Curso</th>
-                    <th>Almorzó</th>
+                    <th>🍽️ Almorzó</th>
                 </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@
                         <td>{{ $row->Run }}</td>
                         <td>{{ $row->DigitoVer }}</td>
                         <td>{{ $row->Curso }}</td>
-                        <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success' : 'text-danger' }}">
+                        <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
                             {{ $row->almorzo_por_fecha }}
                         </td>
                     </tr>
@@ -65,39 +65,52 @@
     </div>
 </div>
 
+{{-- Estilos personalizados --}}
 <style>
     body {
-        background-color: #f8f9fa;
+        background: linear-gradient(to right, #e0f7fa, #f1f8e9);
     }
+
     h1 {
-        color: #343a40;
-        font-weight: 700;
+        font-family: 'Segoe UI', sans-serif;
     }
-    .btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
+
+    .form-label {
+        font-weight: 600;
     }
-    .btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #0056b3;
+
+    .btn-outline-primary,
+    .btn-outline-success {
+        font-weight: 600;
+        font-size: 16px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: 0.3s ease;
     }
+
+    .btn-outline-primary:hover {
+        background-color: #0d6efd;
+        color: white;
+    }
+
+    .btn-outline-success:hover {
+        background-color: #198754;
+        color: white;
+    }
+
     .table {
-        background-color: #ffffff;
+        background-color: #fff;
         border-radius: 0.5rem;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
     }
-    .table th {
-        background-color: #343a40;
-        color: #ffffff;
+
+    thead.table-primary {
+        background-color: #0d6efd;
+        color: white;
     }
-    .table td {
-        vertical-align: middle;
-    }
-    .text-success {
-        color: #28a745 !important;
-    }
-    .text-danger {
-        color: #dc3545 !important;
+
+    tbody tr:hover {
+        background-color: #f0f8ff;
     }
 </style>
 @endsection
