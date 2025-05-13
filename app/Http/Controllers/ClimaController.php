@@ -13,7 +13,7 @@ class ClimaController extends Controller
         $latitude = -30.69833;  
         $longitude = -70.95778;
 
-        // Llamar a la API de Open-Meteo
+        
         $response = Http::get('https://api.open-meteo.com/v1/forecast', [
             'latitude' => $latitude,
             'longitude' => $longitude,
