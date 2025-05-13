@@ -18,8 +18,9 @@ class FuncionarioController extends Controller
     public function import(Request $request)
 {
     $request->validate([
-        'file' => 'required|mimes:xlsx,xls',
-    ]);
+    'file' => 'required|mimes:xlsx,xls,csv',
+]);
+
 
     // VERIFICACIÓN TEMPORAL
     dd($request->file('file'));
