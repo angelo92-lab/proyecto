@@ -3,18 +3,15 @@
 namespace App\Imports;
 
 use App\Models\Funcionario;
-use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
+use Illuminate\Support\Collection;
 
-class FuncionariosImport implements ToModel, WithHeadingRow
+class FuncionariosImport implements ToCollection, WithHeadingRow
 {
-    public function model(array $row)
+    public function collection(Collection $rows)
     {
-        dd($row); // <-- Esto nos dirá si Laravel está leyendo bien el Excel
-        return new Funcionario([
-            'rut' => $row['rut'],
-            'nombre' => $row['nombre']
-        ]);
+        // Aquí mostramos la colección de datos leída del archivo Excel
+        dd($rows); // Esto nos ayudará a verificar si Laravel está leyendo bien los datos del archivo
     }
 }
-
