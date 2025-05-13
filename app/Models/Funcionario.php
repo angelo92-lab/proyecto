@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Funcionario extends Model
 {
     use HasFactory;
+
+    // Esto permite que se puedan guardar datos en estas columnas al importar
+    protected $fillable = ['rut', 'nombre'];
 }

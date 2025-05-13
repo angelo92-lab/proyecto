@@ -45,6 +45,7 @@ use App\Http\Controllers\ReportsController;
        
 use App\Http\Controllers\FuncionarioController;
 
-Route::get('importar-funcionarios', [FuncionarioController::class, 'showImportForm'])->name('funcionarios.import.form');
-Route::post('importar-funcionarios', [FuncionarioController::class, 'import'])->name('funcionarios.import');
+Route::get('/importar-funcionarios', [FuncionarioController::class, 'showImportForm'])->name('funcionarios.import.form');
+Route::post('/importar-funcionarios', [FuncionarioController::class, 'import'])->name('funcionarios.import');
+
 

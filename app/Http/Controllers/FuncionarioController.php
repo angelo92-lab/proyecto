@@ -17,10 +17,17 @@ class FuncionarioController extends Controller
     // Procesar el archivo Excel y hacer la importación
     public function import(Request $request)
 {
-    // Validar que se haya subido un archivo
     $request->validate([
         'file' => 'required|mimes:xlsx,xls',
     ]);
+
+    // VERIFICACIÓN TEMPORAL
+    dd($request->file('file'));
+
+    Excel::import(new FuncionariosImport, $request->file('file'));
+
+    return redirect()->route('funcionarios.import.form')->with('success', 'Funcionarios importados con éxito.');
+
 
     try {
         // Importar el archivo
