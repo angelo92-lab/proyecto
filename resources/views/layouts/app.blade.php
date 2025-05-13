@@ -29,7 +29,7 @@
                     <li class="nav-item"><a href="{{ url('agregaranotacion') }}" class="nav-link">Agregar Anotación</a></li>
                     <li class="nav-item"><a href="{{ url('anotaciones') }}" class="nav-link">Anotaciones</a></li>
                     <li class="nav-item"><a href="{{ route('reportes.index') }}" class="nav-link">Reportes</a></li> <!-- Enlace a la página de reportes -->
-                    <li><a href="{{ route('clima') }}">Tiempo</a></li>
+                    <li class="nav-item"><a href="{{ route('clima') }}" class="nav-link">Tiempo</a></li> <!-- Asegúrate de que la ruta 'clima' esté definida -->
                 </ul>
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
                     @csrf
