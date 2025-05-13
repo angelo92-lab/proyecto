@@ -26,9 +26,9 @@ class ClimaController extends Controller
             $temperature = $weatherData['current_weather']['temperature'] ?? 'N/A';
             $windSpeed = $weatherData['current_weather']['windspeed'] ?? 'N/A';
 
-            return view('tiempo', compact('temperature', 'windSpeed'));
+            return view('clima', compact('temperature', 'windSpeed'));
         } else {
-            return view('tiempo')->with('error', 'No se pudo obtener el clima');
+            return view('clima')->with('error', 'No se pudo obtener el clima');
         }
     }
 }
