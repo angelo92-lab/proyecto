@@ -5,14 +5,30 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
-class ClimaController extends Controller
+class WeatherController extends Controller
 {
-    public function mostrarClima()
+    public function showTemperature()
     {
-        $respuesta = Http::get('URL_DE_LA_API_DEL_CLIMA');
-        $datosClima = $respuesta->json();
+        // Coordenadas de tu ciudad, reemplaza con la latitud y longitud correctas
+        $latitude = -30.69;  
+        $longitude = -70.95;
 
-        return view('clima', compact('datosClima'));
+        // Llamar a la API de Open-Meteo
+        $response = Http::get('https://api.open-meteo.com/v1/forecast', [
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'current_weather' => 'true',
+            'temperature_unit' => 'celsius',
+        ]);
+
+        if ($response->successful()) {
+            $weatherData = $response->json();
+            $temperature = $weatherData['current_weather']['temperature'] ?? 'N/A';
+            $windSpeed = $weatherData['current_weather']['windspeed'] ?? 'N/A';
+
+            return view('tiempo', compact('temperature', 'windSpeed'));
+        } else {
+            return view('tiempo')->with('error', 'No se pudo obtener el clima');
+        }
     }
 }
-
