@@ -75,3 +75,4 @@ Route::post('/reporte/exportar', [RelojControlController::class, 'exportarReport
 Route::get('/reporte/exportar/todos', [RelojControlController::class, 'exportarTodosReportes'])->name('reporte.exportar.todos');
 
 
+

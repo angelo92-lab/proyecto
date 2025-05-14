@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte de Asistencia Completo</title>
+    <title>Reporte de Asistencia</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,12 +33,16 @@
 <body>
 
     <div class="header">
-        <h2>Reporte Completo de Asistencia</h2>
-        <p>Reporte generado el {{ \Carbon\Carbon::now()->format('d/m/Y H:i') }}</p>
+        <h2>Reporte de Asistencia</h2>
+        @isset($fechaInicio) 
+            <p>Del {{ $fechaInicio->format('d/m/Y') }} al {{ $fechaFin->format('d/m/Y') }}</p>
+        @else
+            <p>Reporte Completo de Asistencia</p>
+        @endisset
     </div>
 
     @if($marcas->isEmpty())
-        <p>No hay marcas de asistencia.</p>
+        <p>No hay marcas de asistencia para el periodo seleccionado.</p>
     @else
         <table>
             <thead>
