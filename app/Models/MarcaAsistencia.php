@@ -1,33 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Models;
 
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 use App\Models\Funcionario;
-use App\Models\MarcaAsistencia;
-use Carbon\Carbon;
 
-class RelojControlController extends Controller
+class MarcaAsistencia extends Model
 {
-    public function vistaMarcar()
+    protected $fillable = ['funcionario_id', 'tipo', 'fecha_hora'];
+
+    public function funcionario()
     {
-        $funcionarios = Funcionario::all();
-        return view('reloj.marcar', compact('funcionarios'));
-    }
-
-    public function marcar(Request $request)
-    {
-        $request->validate([
-            'funcionario_id' => 'required|exists:funcionarios,id',
-            'tipo' => 'required|in:entrada,salida',
-        ]);
-
-        MarcaAsistencia::create([
-            'funcionario_id' => $request->funcionario_id,
-            'tipo' => $request->tipo,
-            'fecha_hora' => Carbon::now(),
-        ]);
-
-        return redirect()->back()->with('success', 'Marca registrada correctamente');
+        return $this->belongsTo(Funcionario::class);
     }
 }
