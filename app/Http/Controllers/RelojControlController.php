@@ -17,25 +17,23 @@ class RelojControlController extends Controller
     }
 
     public function marcar(Request $request)
-{
-    $request->validate([
-        'funcionario_id' => 'required|exists:funcionarios,id',
-        'tipo' => 'required|in:entrada,salida',
-    ]);
+    {
+        $request->validate([
+            'funcionario_id' => 'required|exists:funcionarios,id',
+            'tipo' => 'required|in:entrada,salida',
+        ]);
 
-    $funcionario = Funcionario::find($request->funcionario_id);
+        $funcionario = Funcionario::find($request->funcionario_id);
 
-    MarcaAsistencia::create([
-        'funcionario_id' => $funcionario->id,
-        'tipo' => $request->tipo,
-        'fecha_hora' => Carbon::now(),
-    ]);
+        MarcaAsistencia::create([
+            'funcionario_id' => $funcionario->id,
+            'tipo' => $request->tipo,
+            'fecha_hora' => Carbon::now(),
+        ]);
 
-    return redirect()->back()->with('success', 'Marca registrada correctamente');
-}
+        return redirect()->back()->with('success', 'Marca registrada correctamente');
+    }
 
-
-    // ✅ NUEVO MÉTODO: Mostrar funcionarios activos e inactivos hoy
     public function estadoFuncionarios()
     {
         $hoy = Carbon::now()->toDateString();
@@ -52,54 +50,55 @@ class RelojControlController extends Controller
     }
 
     public function estadoDiario()
-{
-    $hoy = now()->toDateString();
+    {
+        $hoy = Carbon::now()->toDateString();
 
-    $activos = Funcionario::whereHas('marcaAsistencias', function ($query) use ($hoy) {
-        $query->whereDate('fecha_hora', $hoy);
-    })->get();
+        $activos = Funcionario::whereHas('marcaAsistencias', function ($query) use ($hoy) {
+            $query->whereDate('fecha_hora', $hoy);
+        })->get();
 
-    $inactivos = Funcionario::whereDoesntHave('marcaAsistencias', function ($query) use ($hoy) {
-        $query->whereDate('fecha_hora', $hoy);
-    })->get();
+        $inactivos = Funcionario::whereDoesntHave('marcaAsistencias', function ($query) use ($hoy) {
+            $query->whereDate('fecha_hora', $hoy);
+        })->get();
 
-    return view('reloj.estado', compact('activos', 'inactivos'));
-}
+        return view('reloj.estado', compact('activos', 'inactivos'));
+    }
 
-public function verReporte(Request $request)
-{
-    // Obtener la fecha o rango de fechas, si es que lo enviamos desde el formulario.
-    $fechaInicio = $request->input('fecha_inicio', now()->startOfMonth());
-    $fechaFin = $request->input('fecha_fin', now()->endOfMonth());
+    public function verReporte(Request $request)
+    {
+        $fechaInicio = $request->input('fecha_inicio') 
+            ? Carbon::parse($request->input('fecha_inicio')) 
+            : Carbon::now()->startOfMonth();
 
-    // Obtener las marcas de asistencia entre el rango de fechas.
-    $marcas = MarcaAsistencia::with('funcionario')
-        ->whereBetween('fecha_hora', [$fechaInicio, $fechaFin])
-        ->orderBy('fecha_hora', 'asc')
-        ->get();
+        $fechaFin = $request->input('fecha_fin') 
+            ? Carbon::parse($request->input('fecha_fin')) 
+            : Carbon::now()->endOfMonth();
 
-    return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
-}
-    
+        $marcas = MarcaAsistencia::with('funcionario')
+            ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+            ->orderBy('fecha_hora', 'asc')
+            ->get();
 
-public function exportarReportePDF(Request $request)
-{
-    // Obtener la fecha o rango de fechas desde el formulario (si no se envía, tomar por defecto el mes actual).
-    $fechaInicio = $request->input('fecha_inicio', now()->startOfMonth());
-    $fechaFin = $request->input('fecha_fin', now()->endOfMonth());
+        return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
+    }
 
-    // Obtener las marcas de asistencia entre el rango de fechas
-    $marcas = MarcaAsistencia::with('funcionario')
-        ->whereBetween('fecha_hora', [$fechaInicio, $fechaFin])
-        ->orderBy('fecha_hora', 'asc')
-        ->get();
+    public function exportarReportePDF(Request $request)
+    {
+        $fechaInicio = $request->input('fecha_inicio') 
+            ? Carbon::parse($request->input('fecha_inicio')) 
+            : Carbon::now()->startOfMonth();
 
-    // Generar el PDF
-    $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
+        $fechaFin = $request->input('fecha_fin') 
+            ? Carbon::parse($request->input('fecha_fin')) 
+            : Carbon::now()->endOfMonth();
 
-    // Descargar el archivo PDF
-    return $pdf->download('reporte_asistencia.pdf');
-}
+        $marcas = MarcaAsistencia::with('funcionario')
+            ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+            ->orderBy('fecha_hora', 'asc')
+            ->get();
 
+        $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
 
+        return $pdf->download('reporte_asistencia.pdf');
+    }
 }
