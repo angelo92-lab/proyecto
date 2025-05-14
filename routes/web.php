@@ -50,7 +50,7 @@ Route::post('/importar-funcionarios', [FuncionarioController::class, 'importar']
 
 use App\Http\Controllers\RelojControlController;
 
-Route::get('/reloj-control', [RelojControlController::class, 'vistaMarcar']);
+Route::get('/marcar', [RelojControlController::class, 'vistaMarcar'])->name('vistaMarcar');
 Route::post('/reloj-control', [RelojControlController::class, 'marcar']);
 
 Route::get('/reloj/estado', [RelojControlController::class, 'estadoFuncionarios'])->name('reloj.estado');
