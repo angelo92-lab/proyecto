@@ -29,8 +29,8 @@
     <li class="nav-item"><a href="{{ url('marcaralmuerzo') }}" class="nav-link">Marcar Almuerzo</a></li>
     <li class="nav-item"><a href="{{ url('agregaranotacion') }}" class="nav-link">Agregar Anotación</a></li>
     <li class="nav-item"><a href="{{ url('anotaciones') }}" class="nav-link">Anotaciones</a></li>
-    <li class="nav-item"><a href="{{ route('reloj.marcar') }}" class="nav-link">Marcar Asistencia</a></li>
-    <li class="nav-item"><a href="{{ route('reloj.estado') }}" class="nav-link">Estado Diario</a></li>
+    <li class="nav-item"><a href="{{ url('reloj-control') }}" class="nav-link">🕒 Marcar Asistencia</a></li>
+    <li class="nav-item"><a href="{{ route('reloj.estado') }}" class="nav-link">📋 Estado Diario</a></li>
     <li class="nav-item"><a href="{{ route('reporte.asistencia') }}" class="nav-link">Generar Reporte</a></li>
     <li class="nav-item"><a href="{{ route('clima') }}" class="nav-link">Tiempo</a></li>
 </ul>

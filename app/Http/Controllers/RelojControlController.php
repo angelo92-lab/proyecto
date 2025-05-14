@@ -80,7 +80,7 @@ public function verReporte(Request $request)
 
     return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
 }
-   
+    
 
 public function exportarReportePDF(Request $request)
 {
