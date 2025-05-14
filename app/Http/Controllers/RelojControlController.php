@@ -101,4 +101,21 @@ class RelojControlController extends Controller
 
         return $pdf->download('reporte_asistencia.pdf');
     }
+
+    public function exportarTodosReportes()
+{
+    // Obtener todas las marcas de asistencia
+    $marcas = MarcaAsistencia::with('funcionario')
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+    // Crear el PDF
+    $pdf = PDF::loadView('reporte.pdf', compact('marcas'))
+        ->setPaper('a4', 'landscape');
+
+    // Descargar el archivo PDF
+    return $pdf->download('reporte_asistencia_completo.pdf');
+
+    
+}
 }

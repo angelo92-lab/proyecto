@@ -46,6 +46,13 @@
                     @endforeach
                 </tbody>
             </table>
+            <!-- Botón para descargar todos los reportes -->
+<div class="mt-4">
+    <a href="{{ route('reporte.exportar.todos') }}" class="btn btn-danger">
+        Descargar Todos los Reportes
+    </a>
+</div>
+
 
             <!-- Botón para exportar a PDF -->
             <a href="{{ route('reporte.exportar', ['fecha_inicio' => $fechaInicio->format('Y-m-d'), 'fecha_fin' => $fechaFin->format('Y-m-d')]) }}" class="btn btn-danger mt-4" target="_blank">
