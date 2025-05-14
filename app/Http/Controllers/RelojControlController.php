@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class RelojControlController extends Controller
