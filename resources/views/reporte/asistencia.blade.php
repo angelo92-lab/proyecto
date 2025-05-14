@@ -1,11 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container mt-4">
     <h2>Reporte de Asistencia</h2>
 
     <!-- Formulario para seleccionar rango de fechas -->
     <form method="GET" action="{{ route('reporte.asistencia') }}">
+        @csrf
         <div class="row">
             <div class="col">
                 <label for="fecha_inicio" class="form-label">Fecha de Inicio</label>
@@ -47,7 +48,7 @@
             </table>
 
             <!-- Botón para exportar a PDF -->
-            <a href="{{ route('reporte.exportar.pdf', ['fecha_inicio' => $fechaInicio->format('Y-m-d'), 'fecha_fin' => $fechaFin->format('Y-m-d')]) }}" class="btn btn-danger mt-4">
+            <a href="{{ route('reporte.exportar', ['fecha_inicio' => $fechaInicio->format('Y-m-d'), 'fecha_fin' => $fechaFin->format('Y-m-d')]) }}" class="btn btn-danger mt-4" target="_blank">
                 Exportar a PDF
             </a>
         @endif

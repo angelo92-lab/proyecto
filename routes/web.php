@@ -71,5 +71,6 @@ Route::get('/buscar-funcionario/{rut}', function ($rut) {
 });
 
 Route::get('/reporte-asistencia', [RelojControlController::class, 'verReporte'])->name('reporte.asistencia');
-Route::get('/reporte/exportar', [RelojControlController::class, 'exportarReportePDF'])->name('reporte.exportar');
+Route::post('/reporte/exportar', [RelojControlController::class, 'exportarReportePDF'])->name('reporte.exportar');
+
 
