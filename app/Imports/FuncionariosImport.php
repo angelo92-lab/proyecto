@@ -1,27 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Imports;
 
-use Illuminate\Http\Request;
-use App\Imports\FuncionariosImport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Models\Funcionario;
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class FuncionarioController extends Controller
+class FuncionariosImport implements ToModel, WithHeadingRow
 {
-    public function formImportar()
+    public function model(array $row)
     {
-        return view('funcionarios.importar');
-    }
-
-    public function importar(Request $request)
-    {
-        $request->validate([
-            'archivo' => 'required|mimes:xlsx,csv,xls'
+        return new Funcionario([
+            'rut'    => $row['rut'],
+            'nombre' => $row['nombre'],
         ]);
-
-        Excel::import(new FuncionariosImport, $request->file('archivo'));
-
-        return redirect()->back()->with('success', '¡Funcionarios importados correctamente!');
     }
 }
 
