@@ -48,3 +48,7 @@ use App\Http\Controllers\FuncionarioController;
 Route::get('/importar-funcionarios', [FuncionarioController::class, 'formImportar']);
 Route::post('/importar-funcionarios', [FuncionarioController::class, 'importar']);
 
+use App\Http\Controllers\RelojControlController;
+
+Route::get('/reloj-control', [RelojControlController::class, 'vistaMarcar']);
+Route::post('/reloj-control', [RelojControlController::class, 'marcar']);
