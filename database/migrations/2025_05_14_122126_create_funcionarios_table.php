@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up()
-{
-    Schema::create('funcionarios', function (Blueprint $table) {
-        $table->id();
-        $table->string('rut')->unique();
-        $table->string('nombre');
-        $table->timestamps();
-    });
-}
+   //public function up()
+//{
+    //Schema::create('funcionarios', function (Blueprint $table) {
+        //$table->id();
+        //$table->string('rut')->unique();
+        //$table->string('nombre');
+        //$table->timestamps();
+    //});
+//}
 
 
     /**
