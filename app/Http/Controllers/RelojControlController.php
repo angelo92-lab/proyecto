@@ -8,6 +8,7 @@ use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
 use Barryvdh\DomPDF\Facade as PDF;
 
+
 class RelojControlController extends Controller
 {
     public function vistaMarcar()
