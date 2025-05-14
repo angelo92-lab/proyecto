@@ -9,15 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
-    {
-        Schema::create('funcionarios', function (Blueprint $table) {
+   public function up()
+{
+    Schema::create('funcionarios', function (Blueprint $table) {
         $table->id();
-        $table->string('rut')->unique();    // RUT único
-        $table->string('nombre');           // Nombre completo
-        $table->timestamps();               // created_at, updated_at
+        $table->string('rut')->unique();
+        $table->string('nombre');
+        $table->timestamps();
     });
 }
+
 
     /**
      * Reverse the migrations.

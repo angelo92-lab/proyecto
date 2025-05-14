@@ -1,17 +1,27 @@
 <?php
 
-namespace App\Imports;
+namespace App\Http\Controllers;
 
-use App\Models\Funcionario;
-use Maatwebsite\Excel\Concerns\ToCollection;
-use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use App\Imports\FuncionariosImport;
+use Maatwebsite\Excel\Facades\Excel;
 
-class FuncionariosImport implements ToCollection, WithHeadingRow
+class FuncionarioController extends Controller
 {
-    public function collection(Collection $rows)
+    public function formImportar()
     {
-        // Aquí mostramos la colección de datos leída del archivo Excel
-        dd($rows); // Esto nos ayudará a verificar si Laravel está leyendo bien los datos del archivo
+        return view('funcionarios.importar');
+    }
+
+    public function importar(Request $request)
+    {
+        $request->validate([
+            'archivo' => 'required|mimes:xlsx,csv,xls'
+        ]);
+
+        Excel::import(new FuncionariosImport, $request->file('archivo'));
+
+        return redirect()->back()->with('success', '¡Funcionarios importados correctamente!');
     }
 }
+
