@@ -157,4 +157,46 @@ class RelojControlController extends Controller
 
     return view('reporte.horas', compact('resumen', 'fechaInicio', 'fechaFin'));
 }
+use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de tener esta línea arriba
+
+public function exportarHorasPDF(Request $request)
+{
+    $fechaInicio = $request->input('fecha_inicio') 
+        ? Carbon::parse($request->input('fecha_inicio')) 
+        : Carbon::now()->startOfMonth();
+
+    $fechaFin = $request->input('fecha_fin') 
+        ? Carbon::parse($request->input('fecha_fin')) 
+        : Carbon::now()->endOfMonth();
+
+    $funcionarios = Funcionario::with(['marcaAsistencias' => function($query) use ($fechaInicio, $fechaFin) {
+        $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+              ->orderBy('fecha_hora');
+    }])->get();
+
+    $resumen = [];
+
+    foreach ($funcionarios as $funcionario) {
+        $horasTrabajadas = 0;
+        $marcas = $funcionario->marcaAsistencias;
+
+        for ($i = 0; $i < $marcas->count(); $i++) {
+            if ($marcas[$i]->tipo == 'entrada' && isset($marcas[$i + 1]) && $marcas[$i + 1]->tipo == 'salida') {
+                $entrada = Carbon::parse($marcas[$i]->fecha_hora);
+                $salida = Carbon::parse($marcas[$i + 1]->fecha_hora);
+                $horasTrabajadas += $entrada->diffInMinutes($salida) / 60;
+                $i++;
+            }
+        }
+
+        $resumen[] = [
+            'funcionario' => $funcionario->nombre,
+            'horas_trabajadas' => round($horasTrabajadas, 2)
+        ];
+    }
+
+    $pdf = Pdf::loadView('reporte.horas_pdf', compact('resumen', 'fechaInicio', 'fechaFin'));
+    return $pdf->download('reporte_horas_trabajadas.pdf');
+}
+
 }

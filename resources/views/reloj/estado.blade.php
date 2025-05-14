@@ -4,10 +4,30 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Estado de Asistencia de Funcionarios – {{ \Carbon\Carbon::now()->format('d/m/Y') }}</h2>
+        <h3 class="mt-4">Ver Horas Trabajadas por Fecha</h3>
+<form method="GET" action="{{ route('reporte.horas') }}" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label for="fecha_inicio" class="form-label">Fecha Inicio</label>
+        <input type="date" name="fecha_inicio" id="fecha_inicio" class="form-control" required>
+    </div>
+    <div class="col-md-4">
+        <label for="fecha_fin" class="form-label">Fecha Fin</label>
+        <input type="date" name="fecha_fin" id="fecha_fin" class="form-control" required>
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-success">Ver Horas Trabajadas</button>
+    </div>
+</form>
+
         <div>
             <a href="{{ route('reporte.horas') }}" class="btn btn-success mb-3">
     Ver Horas Trabajadas
             </a>    
+            <!-- Botón para ver reporte de horas trabajadas -->
+<a href="{{ route('reporte.horas') }}" class="btn btn-secondary mb-3">
+    Ver Horas Trabajadas
+</a>
+
             <a href="{{ route('reporte.asistencia') }}" class="btn btn-outline-primary me-2">
                 Generar Reporte
             </a>

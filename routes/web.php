@@ -76,3 +76,4 @@ Route::get('/reporte/exportar/todos', [RelojControlController::class, 'exportarT
 
 Route::get('/reporte/horas', [RelojControlController::class, 'reporteHorasTrabajadas'])->name('reporte.horas');
 
+Route::get('/reporte/horas/pdf', [RelojControlController::class, 'exportarHorasPDF'])->name('reporte.horas.pdf');
