@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Imports\FuncionariosImport;
+use App\Models\Funcionario;
 use Maatwebsite\Excel\Facades\Excel;
 
 class FuncionarioController extends Controller
