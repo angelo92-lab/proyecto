@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class RelojControlController extends Controller
 {
@@ -64,5 +65,41 @@ class RelojControlController extends Controller
 
     return view('reloj.estado', compact('activos', 'inactivos'));
 }
+
+public function verReporte(Request $request)
+{
+    // Obtener la fecha o rango de fechas, si es que lo enviamos desde el formulario.
+    $fechaInicio = $request->input('fecha_inicio', now()->startOfMonth());
+    $fechaFin = $request->input('fecha_fin', now()->endOfMonth());
+
+    // Obtener las marcas de asistencia entre el rango de fechas.
+    $marcas = MarcaAsistencia::with('funcionario')
+        ->whereBetween('fecha_hora', [$fechaInicio, $fechaFin])
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+    return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
+}
+   
+
+public function exportarReportePDF(Request $request)
+{
+    // Obtener la fecha o rango de fechas desde el formulario (si no se envía, tomar por defecto el mes actual).
+    $fechaInicio = $request->input('fecha_inicio', now()->startOfMonth());
+    $fechaFin = $request->input('fecha_fin', now()->endOfMonth());
+
+    // Obtener las marcas de asistencia entre el rango de fechas
+    $marcas = MarcaAsistencia::with('funcionario')
+        ->whereBetween('fecha_hora', [$fechaInicio, $fechaFin])
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+    // Generar el PDF
+    $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
+
+    // Descargar el archivo PDF
+    return $pdf->download('reporte_asistencia.pdf');
+}
+
 
 }

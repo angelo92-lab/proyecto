@@ -2,7 +2,17 @@
 
 @section('content')
 <div class="container mt-4">
-    <h2 class="mb-4 text-center">Estado de Asistencia de Funcionarios – {{ \Carbon\Carbon::now()->format('d/m/Y') }}</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">Estado de Asistencia de Funcionarios – {{ \Carbon\Carbon::now()->format('d/m/Y') }}</h2>
+        <div>
+            <a href="{{ route('reporte.asistencia') }}" class="btn btn-outline-primary me-2">
+                Generar Reporte
+            </a>
+            <a href="{{ url('/reloj-control') }}" class="btn btn-outline-secondary">
+                Marcar Entrada/Salida
+            </a>
+        </div>
+    </div>
 
     <div class="row">
         <!-- Activos -->
