@@ -54,3 +54,17 @@ Route::get('/reloj-control', [RelojControlController::class, 'vistaMarcar']);
 Route::post('/reloj-control', [RelojControlController::class, 'marcar']);
 
 Route::get('/reloj/estado', [RelojControlController::class, 'estadoFuncionarios'])->name('reloj.estado');
+ 
+
+
+use App\Models\Funcionario;
+
+Route::get('/buscar-funcionario/{rut}', function ($rut) {
+    $funcionario = Funcionario::where('rut', $rut)->first();
+
+    if ($funcionario) {
+        return response()->json(['success' => true, 'funcionario' => $funcionario]);
+    } else {
+        return response()->json(['success' => false]);
+    }
+});
