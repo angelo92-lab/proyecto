@@ -111,7 +111,7 @@ class RelojControlController extends Controller
         ->get();
 
     // Crear el PDF
-    $pdf = PDF::loadView('reporte.pdf', compact('marcas'))
+    $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'))
         ->setPaper('a4', 'landscape');
 
     // Descargar el archivo PDF
