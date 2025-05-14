@@ -10,4 +10,10 @@ class Funcionario extends Model
     use HasFactory;
 
     protected $fillable = ['rut', 'nombre'];
+
+    // ✅ Relación con la tabla de asistencias
+    public function marcaAsistencias()
+    {
+        return $this->hasMany(MarcaAsistencia::class);
+    }
 }

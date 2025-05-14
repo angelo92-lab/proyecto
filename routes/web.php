@@ -52,3 +52,5 @@ use App\Http\Controllers\RelojControlController;
 
 Route::get('/reloj-control', [RelojControlController::class, 'vistaMarcar']);
 Route::post('/reloj-control', [RelojControlController::class, 'marcar']);
+
+Route::get('/reloj/estado', [RelojControlController::class, 'estadoFuncionarios'])->name('reloj.estado');

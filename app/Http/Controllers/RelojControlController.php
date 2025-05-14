@@ -30,5 +30,20 @@ class RelojControlController extends Controller
 
         return redirect()->back()->with('success', 'Marca registrada correctamente');
     }
-}
 
+    // ✅ NUEVO MÉTODO: Mostrar funcionarios activos e inactivos hoy
+    public function estadoFuncionarios()
+    {
+        $hoy = Carbon::now()->toDateString();
+
+        $activos = Funcionario::whereHas('marcaAsistencias', function ($query) use ($hoy) {
+            $query->whereDate('fecha_hora', $hoy);
+        })->get();
+
+        $inactivos = Funcionario::whereDoesntHave('marcaAsistencias', function ($query) use ($hoy) {
+            $query->whereDate('fecha_hora', $hoy);
+        })->get();
+
+        return view('reloj.estado', compact('activos', 'inactivos'));
+    }
+}
