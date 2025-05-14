@@ -5,6 +5,9 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="mb-0">Estado de Asistencia de Funcionarios – {{ \Carbon\Carbon::now()->format('d/m/Y') }}</h2>
         <div>
+            <a href="{{ route('reporte.horas') }}" class="btn btn-success mb-3">
+    Ver Horas Trabajadas
+            </a>    
             <a href="{{ route('reporte.asistencia') }}" class="btn btn-outline-primary me-2">
                 Generar Reporte
             </a>
