@@ -16,20 +16,23 @@ class RelojControlController extends Controller
     }
 
     public function marcar(Request $request)
-    {
-        $request->validate([
-            'funcionario_id' => 'required|exists:funcionarios,id',
-            'tipo' => 'required|in:entrada,salida',
-        ]);
+{
+    $request->validate([
+        'funcionario_id' => 'required|exists:funcionarios,id',
+        'tipo' => 'required|in:entrada,salida',
+    ]);
 
-        MarcaAsistencia::create([
-            'funcionario_id' => $request->funcionario_id,
-            'tipo' => $request->tipo,
-            'fecha_hora' => Carbon::now(),
-        ]);
+    $funcionario = Funcionario::find($request->funcionario_id);
 
-        return redirect()->back()->with('success', 'Marca registrada correctamente');
-    }
+    MarcaAsistencia::create([
+        'funcionario_id' => $funcionario->id,
+        'tipo' => $request->tipo,
+        'fecha_hora' => Carbon::now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Marca registrada correctamente');
+}
+
 
     // ✅ NUEVO MÉTODO: Mostrar funcionarios activos e inactivos hoy
     public function estadoFuncionarios()

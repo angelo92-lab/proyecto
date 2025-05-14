@@ -8,12 +8,7 @@
         @csrf
         <div class="mb-3">
             <label for="funcionario_id" class="form-label">Funcionario</label>
-            <select name="funcionario_id" id="funcionario_id" class="form-control" required>
-                <option value="">Seleccione un funcionario</option>
-                @foreach ($funcionarios as $funcionario)
-                    <option value="{{ $funcionario->id }}">{{ $funcionario->nombre }}</option>
-                @endforeach
-            </select>
+            <input type="text" id="funcionario_id" class="form-control" placeholder="Escanea el código de barras del funcionario (RUT)" readonly>
         </div>
 
         <div class="mb-3">
@@ -26,57 +21,32 @@
 
         <!-- Campo para Código de Barra -->
         <div class="mb-3">
-            <label for="barcode" class="form-label">Escanear Código de Barra</label>
-            <input type="text" id="barcode" class="form-control" placeholder="Escanea el código de barras" required>
-        </div>
-
-        <!-- Contenedor del Escáner -->
-        <div class="mb-3">
-            <button type="button" class="btn btn-secondary" id="startScanner">Iniciar Escáner</button>
+            <label for="barcode" class="form-label">Escanear Código de Barra (RUT)</label>
+            <input type="text" id="barcode" class="form-control" placeholder="Escanea el RUT del funcionario" required>
         </div>
 
         <button type="submit" class="btn btn-primary">Registrar Marca</button>
     </form>
 
-    <!-- Contenedor para la vista de la cámara -->
-    <div id="scanner-container" style="display:none;">
-        <div id="scanner" style="width: 100%; height: 300px;"></div>
-    </div>
+    <script>
+        // Detectar cuando se escanea un código de barras
+        document.getElementById('barcode').addEventListener('input', function () {
+            var rutEscaneado = this.value;
+
+            // Si el RUT está en el campo, buscamos el funcionario
+            if (rutEscaneado.length >= 7) { // Asumimos que el RUT tiene al menos 7 caracteres
+                fetch(`/buscar-funcionario/${rutEscaneado}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Completar el nombre del funcionario
+                            document.getElementById('funcionario_id').value = data.funcionario.nombre;
+                        } else {
+                            alert('Funcionario no encontrado');
+                        }
+                    });
+            }
+        });
+    </script>
 </div>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
-
-<script>
-    // Inicializar el escáner
-    document.getElementById('startScanner').addEventListener('click', function() {
-        document.getElementById('scanner-container').style.display = 'block';
-
-        Quagga.init({
-            inputStream: {
-                type: 'LiveStream',
-                target: document.querySelector('#scanner'), // Div donde se mostrará la cámara
-                constraints: {
-                    facingMode: "environment" // Usa la cámara trasera
-                }
-            },
-            decoder: {
-                readers: ["code_128_reader", "ean_reader", "ean_13_reader", "upc_reader"] // Tipos de códigos de barra a leer
-            }
-        }, function(err) {
-            if (err) {
-                console.log(err);
-                return;
-            }
-            Quagga.start();
-        });
-
-        // Cuando se detecte un código de barras
-        Quagga.onDetected(function(data) {
-            let barcode = data.codeResult.code;
-            document.getElementById('barcode').value = barcode; // Poner el código en el input
-            Quagga.stop(); // Detener el escáner
-            document.getElementById('scanner-container').style.display = 'none'; // Ocultar la cámara
-        });
-    });
-</script>
 @endsection

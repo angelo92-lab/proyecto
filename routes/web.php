@@ -59,6 +59,7 @@ Route::get('/reloj/estado', [RelojControlController::class, 'estadoFuncionarios'
 
 use App\Models\Funcionario;
 
+
 Route::get('/buscar-funcionario/{rut}', function ($rut) {
     $funcionario = Funcionario::where('rut', $rut)->first();
 
