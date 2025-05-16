@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
-use Pdf; // Esto es lo que quieres, solo usa Pdf
+use PDF; // Esto es lo que quieres, solo usa Pdf
 
 
 class RelojControlController extends Controller
