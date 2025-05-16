@@ -21,32 +21,35 @@ class RelojControlController extends Controller
     }
 
     public function marcar(Request $request)
-{
-    $request->validate([
-        'rut' => 'required',  // Aseguramos que el campo 'rut' esté presente
-        'tipo' => 'required|in:entrada,salida',  // Validamos que el tipo de asistencia sea correcto
-    ]);
+    {
+        // Validación de los datos del formulario
+        $request->validate([
+            'rut' => 'required',
+            'tipo' => 'required|in:entrada,salida',
+        ]);
 
-    // Normalizamos el RUT ingresado
-    $rutIngresado = $this->formatearRut($request->input('rut'));
+        // Normalizamos el RUT ingresado, eliminando puntos y guion
+        $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
 
-    // Buscamos el funcionario por el RUT formateado
-    $funcionario = Funcionario::where('rut', $rutIngresado)->first();
+        // Buscamos el funcionario en la base de datos por el RUT formateado, pero sin puntos ni guion
+        $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-    // Verificamos si se encontró al funcionario
-    if (!$funcionario) {
-        return redirect()->back()->with('error', 'Funcionario no encontrado.');
+        // Si no se encuentra el funcionario, se muestra un mensaje de error
+        if (!$funcionario) {
+            return redirect()->back()->with('error', 'Funcionario no encontrado.');
+        }
+
+        // Registramos la marca de asistencia (entrada o salida)
+        MarcaAsistencia::create([
+            'funcionario_id' => $funcionario->id,
+            'tipo' => $request->tipo,  // Entrada o salida
+            'fecha_hora' => Carbon::now(),  // Fecha y hora actuales
+        ]);
+
+        // Redirige de vuelta con un mensaje de éxito
+        return redirect()->back()->with('success', 'Marca registrada correctamente');
     }
 
-    // Registramos la marca de asistencia
-    MarcaAsistencia::create([
-        'funcionario_id' => $funcionario->id,
-        'tipo' => $request->tipo,
-        'fecha_hora' => Carbon::now(),
-    ]);
-
-    return redirect()->back()->with('success', 'Marca registrada correctamente');
-}
 
 
     public function estadoFuncionarios()
@@ -288,20 +291,21 @@ public function exportarDetalleMensualPDF(Request $request)
 }
 
 private function formatearRut($rut)
-{
-    // Elimina los caracteres que no sean números ni la letra del RUT
-    $rut = preg_replace('/[^0-9kK]/', '', $rut);
-    
-    // Separa el número del RUT y el dígito verificador
-    $cuerpoRut = substr($rut, 0, -1);  // El número del RUT
-    $dv = substr($rut, -1);  // El dígito verificador
-    
-    // Agrega puntos y guion
-    $rutFormateado = number_format($cuerpoRut, 0, '', '.');  // Añade los puntos
-    $rutFormateado .= '-' . strtoupper($dv);  // Añade el guion y el dígito verificador
+    {
+        // Elimina los caracteres que no sean números ni la letra del RUT
+        $rut = preg_replace('/[^0-9kK]/', '', $rut);
+        
+        // Separa el número del RUT y el dígito verificador
+        $cuerpoRut = substr($rut, 0, -1);  // El número del RUT
+        $dv = substr($rut, -1);  // El dígito verificador
+        
+        // Agrega puntos y guion
+        $rutFormateado = number_format($cuerpoRut, 0, '', '.');  // Añade los puntos
+        $rutFormateado .= '-' . strtoupper($dv);  // Añade el guion y el dígito verificador
 
-    return $rutFormateado;
-}
+        return $rutFormateado;
+    }
+
 
 
 
