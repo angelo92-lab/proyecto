@@ -86,7 +86,9 @@ class RelojControlController extends Controller
         return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
     }
 
-    public function exportarReportePDF(Request $request)
+    use Barryvdh\DomPDF\Facade\Pdf;  // Asegúrate de importar correctamente el Facade
+
+public function exportarReportePDF(Request $request)
 {
     $fechaInicio = $request->input('fecha_inicio') 
         ? Carbon::parse($request->input('fecha_inicio')) 
@@ -101,9 +103,10 @@ class RelojControlController extends Controller
         ->orderBy('fecha_hora', 'asc')
         ->get();
 
-    // Usando el Facade Pdf correctamente
+    // Generando el PDF
     $pdf = Pdf::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
 
+    // Descarga el PDF generado
     return $pdf->download('reporte_asistencia.pdf');
 }
 
