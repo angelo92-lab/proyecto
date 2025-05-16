@@ -21,16 +21,17 @@
             </div>
         </form>
 
-        <!-- Elimina los dos botones de "Ver Horas Trabajadas" -->
-        <!-- <a href="{{ route('reporte.horas') }}" class="btn btn-success mb-3">Ver Horas Trabajadas</a> -->
-        <!-- <a href="{{ route('reporte.horas') }}" class="btn btn-secondary mb-3">Ver Horas Trabajadas</a> -->
 
         <a href="{{ route('reporte.asistencia') }}" class="btn btn-outline-primary me-2">
             Generar Reporte
         </a>
-        <a href="{{ url('/reloj-control') }}" class="btn btn-outline-secondary">
-            Marcar Entrada/Salida
-        </a>
+<form method="POST" action="{{ route('reloj.control') }}">
+    @csrf  <!-- Esto es necesario para evitar el ataque CSRF -->
+    <button type="submit" class="btn btn-outline-secondary">
+        Marcar Entrada/Salida
+    </button>
+</form>
+
     </div>
 
     <div class="row">
