@@ -86,7 +86,7 @@ class RelojControlController extends Controller
         return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
     }
 
-    use Barryvdh\DomPDF\Facade\Pdf;  // Asegúrate de importar correctamente el Facade
+
 
 public function exportarReportePDF(Request $request)
 {
@@ -164,7 +164,7 @@ public function exportarReportePDF(Request $request)
 
     return view('reporte.horas', compact('resumen', 'fechaInicio', 'fechaFin'));
 }
-use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de tener esta línea arriba
+
 
 public function exportarHorasPDF(Request $request)
 {
