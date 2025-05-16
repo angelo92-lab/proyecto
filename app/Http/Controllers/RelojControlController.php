@@ -21,22 +21,33 @@ class RelojControlController extends Controller
     }
 
     public function marcar(Request $request)
-    {
-        $request->validate([
-            'funcionario_id' => 'required|exists:funcionarios,id',
-            'tipo' => 'required|in:entrada,salida',
-        ]);
+{
+    $request->validate([
+        'rut' => 'required',  // Aseguramos que el campo 'rut' esté presente
+        'tipo' => 'required|in:entrada,salida',  // Validamos que el tipo de asistencia sea correcto
+    ]);
 
-        $funcionario = Funcionario::find($request->funcionario_id);
+    // Normalizamos el RUT ingresado
+    $rutIngresado = $this->formatearRut($request->input('rut'));
 
-        MarcaAsistencia::create([
-            'funcionario_id' => $funcionario->id,
-            'tipo' => $request->tipo,
-            'fecha_hora' => Carbon::now(),
-        ]);
+    // Buscamos el funcionario por el RUT formateado
+    $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-        return redirect()->back()->with('success', 'Marca registrada correctamente');
+    // Verificamos si se encontró al funcionario
+    if (!$funcionario) {
+        return redirect()->back()->with('error', 'Funcionario no encontrado.');
     }
+
+    // Registramos la marca de asistencia
+    MarcaAsistencia::create([
+        'funcionario_id' => $funcionario->id,
+        'tipo' => $request->tipo,
+        'fecha_hora' => Carbon::now(),
+    ]);
+
+    return redirect()->back()->with('success', 'Marca registrada correctamente');
+}
+
 
     public function estadoFuncionarios()
     {
@@ -275,6 +286,23 @@ public function exportarDetalleMensualPDF(Request $request)
 
     return $pdf->download('reporte_detalle_mensual.pdf');
 }
+
+private function formatearRut($rut)
+{
+    // Elimina los caracteres que no sean números ni la letra del RUT
+    $rut = preg_replace('/[^0-9kK]/', '', $rut);
+    
+    // Separa el número del RUT y el dígito verificador
+    $cuerpoRut = substr($rut, 0, -1);  // El número del RUT
+    $dv = substr($rut, -1);  // El dígito verificador
+    
+    // Agrega puntos y guion
+    $rutFormateado = number_format($cuerpoRut, 0, '', '.');  // Añade los puntos
+    $rutFormateado .= '-' . strtoupper($dv);  // Añade el guion y el dígito verificador
+
+    return $rutFormateado;
+}
+
 
 
 }
