@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
-use PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class RelojControlController extends Controller
@@ -105,20 +105,19 @@ class RelojControlController extends Controller
 
     public function exportarTodosReportes()
 {
-    // Obtener todas las marcas de asistencia
     $marcas = MarcaAsistencia::with('funcionario')
         ->orderBy('fecha_hora', 'asc')
         ->get();
 
-    // Crear el PDF
+    $fechaInicio = $marcas->first()?->fecha_hora ?? Carbon::now();
+    $fechaFin = $marcas->last()?->fecha_hora ?? Carbon::now();
+
     $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'))
         ->setPaper('a4', 'landscape');
 
-    // Descargar el archivo PDF
     return $pdf->download('reporte_asistencia_completo.pdf');
-
-    
 }
+
     public function reporteHorasTrabajadas(Request $request)
 {
     $fechaInicio = $request->input('fecha_inicio') 
@@ -198,5 +197,76 @@ public function exportarHorasPDF(Request $request)
     $pdf = Pdf::loadView('reporte.horas_pdf', compact('resumen', 'fechaInicio', 'fechaFin'));
     return $pdf->download('reporte_horas_trabajadas.pdf');
 }
+
+public function exportarDetalleMensualPDF(Request $request)
+{
+    $fechaInicio = $request->input('fecha_inicio') 
+        ? Carbon::parse($request->input('fecha_inicio'))->startOfMonth()
+        : Carbon::now()->startOfMonth();
+
+    $fechaFin = $request->input('fecha_fin') 
+        ? Carbon::parse($request->input('fecha_fin'))->endOfMonth()
+        : Carbon::now()->endOfMonth();
+
+    $diasDelMes = collect();
+    $periodo = new \DatePeriod($fechaInicio, new \DateInterval('P1D'), $fechaFin->copy()->addDay());
+    foreach ($periodo as $fecha) {
+        $diasDelMes->push($fecha->format('Y-m-d'));
+    }
+
+    $funcionarios = Funcionario::with(['marcaAsistencias' => function($query) use ($fechaInicio, $fechaFin) {
+        $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()]);
+    }])->get();
+
+    $reporte = [];
+
+    foreach ($funcionarios as $funcionario) {
+        $dias = [];
+
+        foreach ($diasDelMes as $dia) {
+            $marcasDelDia = $funcionario->marcaAsistencias->filter(function ($marca) use ($dia) {
+                return Carbon::parse($marca->fecha_hora)->format('Y-m-d') === $dia;
+            });
+
+            $asistio = $marcasDelDia->isNotEmpty();
+
+            $horas = 0;
+            $marcasOrdenadas = $marcasDelDia->sortBy('fecha_hora')->values();
+
+            for ($i = 0; $i < $marcasOrdenadas->count(); $i++) {
+                if (
+                    $marcasOrdenadas[$i]->tipo == 'entrada' &&
+                    isset($marcasOrdenadas[$i + 1]) &&
+                    $marcasOrdenadas[$i + 1]->tipo == 'salida'
+                ) {
+                    $entrada = Carbon::parse($marcasOrdenadas[$i]->fecha_hora);
+                    $salida = Carbon::parse($marcasOrdenadas[$i + 1]->fecha_hora);
+                    $horas += $entrada->diffInMinutes($salida) / 60;
+                    $i++;
+                }
+            }
+
+            $dias[$dia] = [
+                'asistio' => $asistio,
+                'horas' => round($horas, 2)
+            ];
+        }
+
+        $reporte[] = [
+            'nombre' => $funcionario->nombre,
+            'dias' => $dias,
+        ];
+    }
+
+    $pdf = Pdf::loadView('reporte.detalle_mensual', [
+        'reporte' => $reporte,
+        'diasDelMes' => $diasDelMes,
+        'fechaInicio' => $fechaInicio,
+        'fechaFin' => $fechaFin
+    ])->setPaper('a4', 'landscape');
+
+    return $pdf->download('reporte_detalle_mensual.pdf');
+}
+
 
 }
