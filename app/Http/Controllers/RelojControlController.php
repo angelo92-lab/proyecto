@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
-use Barryvdh\DomPDF\Facade\Pdf;  // Importa el Facade correctamente
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -86,24 +87,26 @@ class RelojControlController extends Controller
     }
 
     public function exportarReportePDF(Request $request)
-    {
-        $fechaInicio = $request->input('fecha_inicio') 
-            ? Carbon::parse($request->input('fecha_inicio')) 
-            : Carbon::now()->startOfMonth();
+{
+    $fechaInicio = $request->input('fecha_inicio') 
+        ? Carbon::parse($request->input('fecha_inicio')) 
+        : Carbon::now()->startOfMonth();
 
-        $fechaFin = $request->input('fecha_fin') 
-            ? Carbon::parse($request->input('fecha_fin')) 
-            : Carbon::now()->endOfMonth();
+    $fechaFin = $request->input('fecha_fin') 
+        ? Carbon::parse($request->input('fecha_fin')) 
+        : Carbon::now()->endOfMonth();
 
-        $marcas = MarcaAsistencia::with('funcionario')
-            ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
-            ->orderBy('fecha_hora', 'asc')
-            ->get();
+    $marcas = MarcaAsistencia::with('funcionario')
+        ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
 
-        $pdf = PDF::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
+    // Usando el Facade Pdf correctamente
+    $pdf = Pdf::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
 
-        return $pdf->download('reporte_asistencia.pdf');
-    }
+    return $pdf->download('reporte_asistencia.pdf');
+}
+
 
     public function exportarTodosReportes()
 {
