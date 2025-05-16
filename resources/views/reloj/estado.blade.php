@@ -25,7 +25,7 @@
         <a href="{{ route('reporte.asistencia') }}" class="btn btn-outline-primary me-2">
             Generar Reporte
         </a>
-<form method="POST" action="{{ route('reloj.control') }}">
+<form method="POST" action="{{ route('reloj-control') }}">
     @csrf  <!-- Esto es necesario para evitar el ataque CSRF -->
     <button type="submit" class="btn btn-outline-secondary">
         Marcar Entrada/Salida
