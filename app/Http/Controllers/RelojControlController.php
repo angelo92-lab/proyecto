@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Funcionario;
 use App\Models\MarcaAsistencia;
 use Carbon\Carbon;
-use PDF; // Esto es lo que quieres, solo usa Pdf
+use Barryvdh\DomPDF\Facade\Pdf;  // Importa el Facade correctamente
+
 
 
 class RelojControlController extends Controller
