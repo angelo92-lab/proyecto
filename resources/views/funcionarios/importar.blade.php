@@ -1,23 +1,24 @@
-<x-app-layout>
-    <div class="max-w-xl mx-auto py-8">
-        <h1 class="text-2xl font-bold mb-6">Importar notas desde Excel</h1>
+@extends('layouts.app') {{-- Asegúrate de tener layouts.app configurado --}}
 
-        @if (session('success'))
-            <div class="bg-green-100 text-green-700 p-3 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+@section('content')
+<div class="container">
+    <h2>Importar Funcionarios desde CSV o Excel</h2>
 
-        <form method="POST" action="{{ route('notas.importar.store') }}" enctype="multipart/form-data" class="space-y-4">
-            @csrf
-            <div>
-                <label class="block font-semibold mb-1" for="archivo">Archivo Excel (.xlsx o .xls)</label>
-                <input type="file" name="archivo" id="archivo" required class="border rounded p-2 w-full">
-                @error('archivo')
-                    <p class="text-red-600 text-sm mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-            <button class="bg-blue-600 text-white px-4 py-2 rounded">Subir y procesar</button>
-        </form>
-    </div>
-</x-app-layout>
+    @if(session('success'))
+        <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+
+    @if($errors->any())
+        <div class="alert alert-danger">{{ $errors->first() }}</div>
+    @endif
+
+    <form action="{{ url('/importar-funcionarios') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <div class="mb-3">
+            <label for="archivo" class="form-label">Selecciona el archivo (.csv o .xlsx)</label>
+            <input type="file" name="archivo" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Importar</button>
+    </form>
+</div>
+@endsection

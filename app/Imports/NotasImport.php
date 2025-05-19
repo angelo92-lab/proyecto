@@ -25,7 +25,7 @@ class NotasImport implements ToModel, WithHeadingRow, WithValidation
         // 3. Guardar / actualizar la nota
         return Nota::updateOrCreate(
             [
-                'alumno_id'  => $alumno->id,
+                'alumno'  => $alumno->id,
                 'curso'      => trim($row['curso']),
                 'asignatura' => trim($row['asignatura']),
                 'semestre'   => $sem,
