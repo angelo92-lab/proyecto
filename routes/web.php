@@ -60,15 +60,7 @@ Route::get('/reloj/estado', [RelojControlController::class, 'estadoFuncionarios'
 use App\Models\Funcionario;
 
 
-Route::get('/buscar-funcionario/{rut}', function ($rut) {
-    $funcionario = Funcionario::where('rut', $rut)->first();
-
-    if ($funcionario) {
-        return response()->json(['success' => true, 'funcionario' => $funcionario]);
-    } else {
-        return response()->json(['success' => false]);
-    }
-});
+Route::get('/buscar-funcionario/{rut}', [FuncionarioController::class, 'buscarFuncionario']);
 
 Route::get('/reporte-asistencia', [RelojControlController::class, 'verReporte'])->name('reporte.asistencia');
 Route::post('/reporte/exportar', [RelojControlController::class, 'exportarReportePDF'])->name('reporte.exportar');
