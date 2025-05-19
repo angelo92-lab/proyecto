@@ -34,6 +34,9 @@
     <li class="nav-item"><a href="{{ route('reloj.estado') }}" class="nav-link">Estado Diario</a></li>
     <li class="nav-item"><a href="{{ route('reporte.asistencia') }}" class="nav-link">Generar Reporte</a></li>
     <li class="nav-item"><a href="{{ route('clima') }}" class="nav-link">Tiempo</a></li>
+    <li class="nav-item"><a class="nav-link" href="{{ route('portal.funcionarios') }}">Portal Funcionarios</a>
+</li>
+
 </ul>
 
 

@@ -73,4 +73,7 @@ Route::get('/reporte/horas/pdf', [RelojControlController::class, 'exportarHorasP
 
 Route::get('/reporte/funcionarios/detalle-mensual', [RelojControlController::class, 'exportarDetalleMensualPDF'])->name('funcionarios.reporte.detalle_mensual');
 
+use App\Http\Controllers\FuncionarioPortalController;
+
+Route::get('/portal-funcionarios', [FuncionarioPortalController::class, 'index'])->name('portal.funcionarios');
 
