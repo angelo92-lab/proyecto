@@ -11,7 +11,7 @@
     @endif
 
     <!-- Formulario para marcar la asistencia -->
-    <form id="form-marca" action="{{ url('/reloj-control') }}" method="POST">
+    <form id="form-marca" action="{{ route('reloj-control.marcar') }}" method="POST">
         @csrf
         <div class="mb-3">
             <label for="rut" class="form-label">Escanea el RUT</label>
