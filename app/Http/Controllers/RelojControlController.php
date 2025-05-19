@@ -19,36 +19,31 @@ class RelojControlController extends Controller
 
     // Método para registrar entrada o salida
     public function marcar(Request $request)
-    {
-        $request->validate([
-            'rut' => 'required',
-        ]);
+{
+    $request->validate([
+        'rut' => 'required',
+    ]);
 
-        // Limpiar el RUT
-        $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+    $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+    $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-        // Buscar al funcionario por su RUT
-        $funcionario = Funcionario::where('rut', $rutIngresado)->first();
-
-        // Verificar si el funcionario existe
-        if (!$funcionario) {
-            return response()->json(['success' => false, 'message' => 'Funcionario no encontrado'], 404);
-        }
-
-        // Determinar el tipo de marca según la hora actual
-        $horaActual = Carbon::now()->format('H'); // Obtiene la hora actual en formato 24 horas
-
-        $tipoMarca = ($horaActual >= 6 && $horaActual < 12) ? 'entrada' : 'salida'; // Si es antes de las 12 es entrada, sino salida
-
-        // Registrar la marca de asistencia
-        MarcaAsistencia::create([
-            'funcionario_id' => $funcionario->id,
-            'tipo' => $tipoMarca,
-            'fecha_hora' => now(),
-        ]);
-
-        return response()->json(['success' => true, 'message' => 'Marca registrada como ' . $tipoMarca]);
+    if (!$funcionario) {
+        return redirect()->back()->with('error', 'Funcionario no encontrado');
     }
+
+    // Determinar entrada o salida según la hora
+    $hora = now()->hour;
+    $tipo = ($hora >= 6 && $hora < 12) ? 'entrada' : 'salida';
+
+    MarcaAsistencia::create([
+        'funcionario_id' => $funcionario->id,
+        'tipo' => $tipo,
+        'fecha_hora' => now(),
+    ]);
+
+    return redirect()->back()->with('success', "Marca de {$tipo} registrada correctamente.");
+}
+
 
 
     // Método para mostrar el estado de los funcionarios (activos e inactivos)

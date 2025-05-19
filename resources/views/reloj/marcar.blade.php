@@ -4,45 +4,48 @@
 <div class="container">
     <h2>Marcar Entrada / Salida</h2>
 
-    <meta name="csrf-token" content="{{ csrf_token() }}"> {{-- CSRF para AJAX --}}
+    <!-- Token CSRF para seguridad en fetch POST -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Formulario visual -->
+    <!-- Formulario visual (solo para escanear el RUT) -->
     <form id="formulario-marca" onsubmit="return false;">
-        <!-- Campo para mostrar el nombre del funcionario -->
         <div class="mb-3">
             <label for="funcionario_nombre" class="form-label">Funcionario</label>
-            <input type="text" id="funcionario_nombre" class="form-control" placeholder="Nombre del funcionario" readonly>
+            <input type="text" id="funcionario_nombre" class="form-control" readonly placeholder="Nombre del funcionario">
         </div>
 
-        <!-- Campo para escanear el RUT -->
         <div class="mb-3">
             <label for="barcode" class="form-label">Escanear Código de Barra (RUT)</label>
-            <input type="text" id="barcode" class="form-control" placeholder="Escanea el RUT del funcionario" autofocus>
+            <input type="text" id="barcode" class="form-control" placeholder="Escanea el RUT" autofocus>
         </div>
     </form>
 
-    <!-- Alertas -->
+    <!-- Mensaje de estado -->
     <div id="mensaje" class="alert mt-3 d-none"></div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', () => {
             const barcodeInput = document.getElementById('barcode');
             const nombreInput = document.getElementById('funcionario_nombre');
             const mensajeDiv = document.getElementById('mensaje');
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             let timeout;
-            barcodeInput.addEventListener('input', function () {
+
+            barcodeInput.addEventListener('input', () => {
                 const rut = barcodeInput.value.trim();
 
                 if (rut.length >= 7) {
                     clearTimeout(timeout);
 
-                    timeout = setTimeout(function () {
+                    timeout = setTimeout(() => {
                         mostrarMensaje('🔄 Buscando funcionario...', 'info');
 
-                        // Buscar funcionario por RUT
                         fetch(`/buscar-funcionario/${rut}`)
-                            .then(res => res.json())
+                            .then(res => {
+                                if (!res.ok) throw new Error("No se pudo buscar el funcionario");
+                                return res.json();
+                            })
                             .then(data => {
                                 if (data.success) {
                                     nombreInput.value = data.funcionario.nombre;
@@ -52,17 +55,16 @@
                                     nombreInput.value = '';
                                 }
                             })
-                            .catch(err => {
-                                console.error(err);
+                            .catch(() => {
                                 mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
                             });
 
-                        // Limpiar input después de unos segundos
+                        // Limpiar inputs tras 4 segundos
                         setTimeout(() => {
                             barcodeInput.value = '';
                             nombreInput.value = '';
-                        }, 3000);
-                    }, 500);
+                        }, 4000);
+                    }, 400); // Espera breve por si el lector aún no termina
                 }
             });
 
@@ -71,20 +73,22 @@
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        'X-CSRF-TOKEN': csrfToken
                     },
                     body: JSON.stringify({ rut: rut })
                 })
-                .then(res => res.json())
+                .then(res => {
+                    if (!res.ok) throw new Error("Error al registrar");
+                    return res.json();
+                })
                 .then(data => {
                     if (data.success) {
-                        mostrarMensaje(`✅ Marca registrada como ${data.message}`, 'success');
+                        mostrarMensaje(`✅ Marca registrada como ${data.message}.`, 'success');
                     } else {
-                        mostrarMensaje('❌ ' + (data.message || 'Error desconocido'), 'danger');
+                        mostrarMensaje(`❌ ${data.message || 'Error desconocido'}`, 'danger');
                     }
                 })
-                .catch(err => {
-                    console.error(err);
+                .catch(() => {
                     mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
                 });
             }
@@ -93,7 +97,7 @@
                 mensajeDiv.className = `alert alert-${tipo} mt-3`;
                 mensajeDiv.textContent = texto;
                 mensajeDiv.classList.remove('d-none');
-                setTimeout(() => mensajeDiv.classList.add('d-none'), 3000);
+                setTimeout(() => mensajeDiv.classList.add('d-none'), 4000);
             }
         });
     </script>
