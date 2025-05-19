@@ -20,46 +20,44 @@ class RelojControlController extends Controller
     // Método para registrar entrada o salida
    public function marcar(Request $request)
 {
-    // Validar que el RUT no esté vacío
     $request->validate([
         'rut' => 'required',
     ]);
 
-    // Limpiar el RUT (en caso de que tenga caracteres no numéricos o la 'k' al final)
     $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
-
-    // Buscar al funcionario en la base de datos usando el RUT
     $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-    // Si no se encuentra el funcionario, mostrar error
     if (!$funcionario) {
         return back()->with('error', 'Funcionario no encontrado.');
     }
 
-    // Obtener la hora actual
-    $hora = now()->format('H:i'); // Hora en formato 24 horas
+    // Hora actual
+    $ahora = Carbon::now();
 
-    // Determinar si es entrada o salida según la hora
-    if ($hora >= '06:00' && $hora <= '12:00') {
-        $tipo = 'entrada'; // Entre las 6 AM y 12 PM es una entrada
-    } elseif ($hora > '12:00' && $hora <= '20:00') {
-        $tipo = 'salida'; // Entre las 12:01 PM y 8 PM es una salida
+    // Rango para ENTRADA: 06:00 - 12:00 (inclusive)
+    $inicioEntrada = Carbon::createFromTime(6, 0);
+    $finEntrada = Carbon::createFromTime(12, 0, 0); // Hasta exactamente las 12:00:00
+
+    // Rango para SALIDA: 12:01 - 20:00 (inclusive)
+    $inicioSalida = Carbon::createFromTime(12, 1, 0);
+    $finSalida = Carbon::createFromTime(20, 0, 0);
+
+    if ($ahora->betweenIncluded($inicioEntrada, $finEntrada)) {
+        $tipo = 'entrada';
+    } elseif ($ahora->betweenIncluded($inicioSalida, $finSalida)) {
+        $tipo = 'salida';
     } else {
         return back()->with('error', 'Fuera del horario permitido para marcar.');
     }
 
-    // Crear la marca de asistencia
     MarcaAsistencia::create([
         'funcionario_id' => $funcionario->id,
         'tipo' => $tipo,
-        'fecha_hora' => now(),
+        'fecha_hora' => $ahora,
     ]);
 
-    // Mostrar mensaje de éxito
     return back()->with('success', "Marca registrada como $tipo para {$funcionario->nombre}");
 }
-
-
 
     // Método para mostrar el estado de los funcionarios (activos e inactivos)
     public function estadoFuncionarios()
