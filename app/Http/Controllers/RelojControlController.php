@@ -269,7 +269,7 @@ class RelojControlController extends Controller
     }
 
     // Pasamos las variables a la vista
-    return view('reporte.horas_trabajadas', compact('resumen', 'fechaInicio', 'fechaFin'));
+    return view('reporte.horas', compact('resumen', 'fechaInicio', 'fechaFin'));
 }
 
 }
