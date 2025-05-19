@@ -81,3 +81,11 @@ Route::get('/notas', [FuncionarioPortalController::class, 'verNotas'])->name('no
 Route::get('/notas/nt1', [FuncionarioPortalController::class, 'notasNT1'])->name('notas.nt1');
 Route::get('/notas/nt2', [FuncionarioPortalController::class, 'notasNT2'])->name('notas.nt2');
 Route::get('/notas/media', [FuncionarioPortalController::class, 'notasMedia'])->name('notas.media');
+
+use App\Http\Controllers\NotaImportController;
+
+Route::get('/notas/importar', [NotaImportController::class, 'form'])
+     ->name('notas.importar.form');
+
+Route::post('/notas/importar', [NotaImportController::class, 'store'])
+     ->name('notas.importar.store');
