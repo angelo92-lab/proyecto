@@ -58,23 +58,30 @@ class RelojControlController extends Controller
     }
 
     // Función para ver los reportes de asistencia por fecha
-    public function verReporte(Request $request)
-    {
-        $fechaInicio = $request->input('fecha_inicio') 
-            ? Carbon::parse($request->input('fecha_inicio')) 
-            : Carbon::now()->startOfMonth();
+    use Carbon\Carbon;
 
-        $fechaFin = $request->input('fecha_fin') 
-            ? Carbon::parse($request->input('fecha_fin')) 
-            : Carbon::now()->endOfMonth();
+public function verReporte(Request $request)
+{
+    $fechaInicio = $request->input('fecha_inicio');
+    $fechaFin = $request->input('fecha_fin');
 
-        $marcas = MarcaAsistencia::with('funcionario')
-            ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
-            ->orderBy('fecha_hora', 'asc')
-            ->get();
-
-        return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
+    // Convertir a objetos Carbon si vienen como string
+    if (!$fechaInicio instanceof Carbon) {
+        $fechaInicio = $fechaInicio ? Carbon::parse($fechaInicio) : Carbon::now()->startOfMonth();
     }
+
+    if (!$fechaFin instanceof Carbon) {
+        $fechaFin = $fechaFin ? Carbon::parse($fechaFin) : Carbon::now()->endOfMonth();
+    }
+
+    $marcas = MarcaAsistencia::with('funcionario')
+        ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+        ->orderBy('fecha_hora', 'asc')
+        ->get();
+
+    return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
+}
+
 
     // Función para exportar reporte de asistencia a PDF
     public function exportarReportePDF(Request $request)
