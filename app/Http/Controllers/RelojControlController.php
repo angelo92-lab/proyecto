@@ -22,12 +22,11 @@ class RelojControlController extends Controller
     {
         $request->validate([
             'rut' => 'required',
-            'tipo' => 'required|in:entrada,salida',
         ]);
 
         // Limpiar el RUT
         $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
-        
+
         // Buscar al funcionario por su RUT
         $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
@@ -36,15 +35,21 @@ class RelojControlController extends Controller
             return response()->json(['success' => false, 'message' => 'Funcionario no encontrado'], 404);
         }
 
-        // Registrar la marca de asistencia (entrada o salida)
+        // Determinar el tipo de marca según la hora actual
+        $horaActual = Carbon::now()->format('H'); // Obtiene la hora actual en formato 24 horas
+
+        $tipoMarca = ($horaActual >= 6 && $horaActual < 12) ? 'entrada' : 'salida'; // Si es antes de las 12 es entrada, sino salida
+
+        // Registrar la marca de asistencia
         MarcaAsistencia::create([
             'funcionario_id' => $funcionario->id,
-            'tipo' => $request->tipo,
+            'tipo' => $tipoMarca,
             'fecha_hora' => now(),
         ]);
 
-        return response()->json(['success' => true]);
+        return response()->json(['success' => true, 'message' => 'Marca registrada como ' . $tipoMarca]);
     }
+
 
     // Método para mostrar el estado de los funcionarios (activos e inactivos)
     public function estadoFuncionarios()

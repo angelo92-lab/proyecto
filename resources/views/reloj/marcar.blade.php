@@ -6,24 +6,12 @@
 
     <meta name="csrf-token" content="{{ csrf_token() }}"> {{-- CSRF para AJAX --}}
 
-    <!-- Formulario visual (no se usará el submit) -->
+    <!-- Formulario visual -->
     <form id="formulario-marca" onsubmit="return false;">
         <!-- Campo para mostrar el nombre del funcionario -->
         <div class="mb-3">
             <label for="funcionario_nombre" class="form-label">Funcionario</label>
             <input type="text" id="funcionario_nombre" class="form-control" placeholder="Nombre del funcionario" readonly>
-        </div>
-
-        <!-- Campo oculto para guardar el ID del funcionario -->
-        <input type="hidden" id="funcionario_id">
-
-        <!-- Tipo de marca -->
-        <div class="mb-3">
-            <label for="tipo" class="form-label">Tipo de Marca</label>
-            <select id="tipo" class="form-control" required>
-                <option value="entrada">Entrada</option>
-                <option value="salida">Salida</option>
-            </select>
         </div>
 
         <!-- Campo para escanear el RUT -->
@@ -38,74 +26,76 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-    const barcodeInput = document.getElementById('barcode');
-    const nombreInput = document.getElementById('funcionario_nombre');
-    const tipoSelect = document.getElementById('tipo');
-    const mensajeDiv = document.getElementById('mensaje');
+            const barcodeInput = document.getElementById('barcode');
+            const nombreInput = document.getElementById('funcionario_nombre');
+            const mensajeDiv = document.getElementById('mensaje');
 
-    let timeout;
-    barcodeInput.addEventListener('input', function () {
-        const rut = barcodeInput.value.trim();
+            let timeout;
+            barcodeInput.addEventListener('input', function () {
+                const rut = barcodeInput.value.trim();
 
-        if (rut.length >= 7) {
-            clearTimeout(timeout); // Limpiar cualquier retraso previo
+                if (rut.length >= 7) {
+                    clearTimeout(timeout);
 
-            timeout = setTimeout(function () {
-                // Mostrar mensaje de carga mientras se busca
-                mostrarMensaje('🔄 Buscando funcionario...', 'info');
+                    timeout = setTimeout(function () {
+                        mostrarMensaje('🔄 Buscando funcionario...', 'info');
 
-                // Buscar funcionario por RUT
-                fetch(`/buscar-funcionario/${rut}`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if (data.success) {
-                            nombreInput.value = data.funcionario.nombre;
-                            registrarMarca(rut, tipoSelect.value);
-                        } else {
-                            mostrarMensaje('❌ Funcionario no encontrado.', 'danger');
-                        }
-                    })
-                    .catch(err => {
-                        console.error(err);
-                        mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
-                    });
-            }, 500); // Retraso de 500ms antes de hacer la búsqueda
-        }
-    });
+                        // Buscar funcionario por RUT
+                        fetch(`/buscar-funcionario/${rut}`)
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.success) {
+                                    nombreInput.value = data.funcionario.nombre;
+                                    registrarMarca(rut);
+                                } else {
+                                    mostrarMensaje('❌ Funcionario no encontrado.', 'danger');
+                                    nombreInput.value = '';
+                                }
+                            })
+                            .catch(err => {
+                                console.error(err);
+                                mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
+                            });
 
-    function registrarMarca(rut, tipo) {
-        fetch('/reloj-control', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({
-                rut: rut,
-                tipo: tipo
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                mostrarMensaje('✅ Marca registrada correctamente.', 'success');
-            } else {
-                mostrarMensaje('❌ Error al registrar: ' + (data.message || 'desconocido.'), 'danger');
+                        // Limpiar input después de unos segundos
+                        setTimeout(() => {
+                            barcodeInput.value = '';
+                            nombreInput.value = '';
+                        }, 3000);
+                    }, 500);
+                }
+            });
+
+            function registrarMarca(rut) {
+                fetch('/reloj-control', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ rut: rut })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        mostrarMensaje(`✅ Marca registrada como ${data.message}`, 'success');
+                    } else {
+                        mostrarMensaje('❌ ' + (data.message || 'Error desconocido'), 'danger');
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
+                });
             }
-        })
-        .catch(err => {
-            console.error(err);
-            mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
-        });
-    }
 
-    function mostrarMensaje(texto, tipo) {
-        mensajeDiv.className = `alert alert-${tipo} mt-3`;
-        mensajeDiv.textContent = texto;
-        mensajeDiv.classList.remove('d-none');
-        setTimeout(() => mensajeDiv.classList.add('d-none'), 3000);
-    }
-});
+            function mostrarMensaje(texto, tipo) {
+                mensajeDiv.className = `alert alert-${tipo} mt-3`;
+                mensajeDiv.textContent = texto;
+                mensajeDiv.classList.remove('d-none');
+                setTimeout(() => mensajeDiv.classList.add('d-none'), 3000);
+            }
+        });
     </script>
 </div>
 @endsection
