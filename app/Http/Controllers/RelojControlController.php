@@ -57,9 +57,7 @@ class RelojControlController extends Controller
         return view('reloj.estado', compact('activos', 'inactivos'));
     }
 
-    // Función para ver los reportes de asistencia por fecha
-    use Carbon\Carbon;
-
+    
 public function verReporte(Request $request)
 {
     $fechaInicio = $request->input('fecha_inicio');
