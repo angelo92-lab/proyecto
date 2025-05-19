@@ -26,7 +26,7 @@
 
     <div class="mb-3">
         <label for="barcode" class="form-label">Escanear Código de Barra (RUT)</label>
-        <input type="text" id="barcode" class="form-control" placeholder="Escanea el RUT del funcionario" required>
+        <input type="text" id="barcode" name="rut" class="form-control" placeholder="Escanea el RUT del funcionario" required>
     </div>
 
     <button type="submit" class="btn btn-primary">Registrar Marca</button>

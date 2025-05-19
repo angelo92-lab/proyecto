@@ -10,17 +10,17 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class RelojControlController extends Controller
 {
-    // Vista para marcar la entrada/salida
+    
     public function vistaMarcar()
     {
         $funcionarios = Funcionario::all();
         return view('reloj.marcar', compact('funcionarios'));
     }
 
-    // Función para marcar la entrada o salida del funcionario
+    
     public function marcar(Request $request)
     {
-        // Validación de los datos del formulario
+        
         $request->validate([
             'rut' => 'required',
             'tipo' => 'required|in:entrada,salida',
