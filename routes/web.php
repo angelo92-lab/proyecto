@@ -77,3 +77,7 @@ use App\Http\Controllers\FuncionarioPortalController;
 
 Route::get('/portal-funcionarios', [FuncionarioPortalController::class, 'index'])->name('portal.funcionarios');
 Route::get('/notas', [FuncionarioPortalController::class, 'verNotas'])->name('notas.alumnos');
+Route::get('/notas', [FuncionarioPortalController::class, 'verNotas'])->name('notas.alumnos');
+Route::get('/notas/nt1', [FuncionarioPortalController::class, 'notasNT1'])->name('notas.nt1');
+Route::get('/notas/nt2', [FuncionarioPortalController::class, 'notasNT2'])->name('notas.nt2');
+Route::get('/notas/media', [FuncionarioPortalController::class, 'notasMedia'])->name('notas.media');

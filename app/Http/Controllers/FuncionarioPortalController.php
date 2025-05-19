@@ -16,5 +16,21 @@ class FuncionarioPortalController extends Controller
     return view('funcionarios.notas');
 }
 
+public function notasNT1()
+{
+    return view('funcionarios.notas_nt1');
+}
+
+public function notasNT2()
+{
+    return view('funcionarios.notas_nt2');
+}
+
+public function notasMedia()
+{
+    return view('funcionarios.notas_media');
+}
+
+
 }
 
