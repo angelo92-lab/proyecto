@@ -10,4 +10,11 @@ class FuncionarioPortalController extends Controller
     {
         return view('funcionarios.portal');
     }
+
+    public function verNotas()
+{
+    return view('funcionarios.notas');
 }
+
+}
+

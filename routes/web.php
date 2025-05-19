@@ -76,4 +76,4 @@ Route::get('/reporte/funcionarios/detalle-mensual', [RelojControlController::cla
 use App\Http\Controllers\FuncionarioPortalController;
 
 Route::get('/portal-funcionarios', [FuncionarioPortalController::class, 'index'])->name('portal.funcionarios');
-
+Route::get('/notas', [FuncionarioPortalController::class, 'verNotas'])->name('notas.alumnos');
