@@ -234,4 +234,42 @@ class RelojControlController extends Controller
 
         return $rutFormateado;
     }
+
+    public function reporteHorasTrabajadas(Request $request)
+{
+    // Obtener las fechas de inicio y fin del formulario, o usar las fechas por defecto
+    $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
+    $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
+
+    // Obtener los funcionarios con las marcas de asistencia entre las fechas seleccionadas
+    $funcionarios = Funcionario::with(['marcaAsistencias' => function ($query) use ($fechaInicio, $fechaFin) {
+        $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()]);
+    }])->get();
+
+    // Resumen de horas trabajadas
+    $resumen = [];
+    
+    foreach ($funcionarios as $funcionario) {
+        $horasTrabajadas = 0;
+        $marcas = $funcionario->marcaAsistencias;
+
+        for ($i = 0; $i < $marcas->count(); $i++) {
+            if ($marcas[$i]->tipo == 'entrada' && isset($marcas[$i + 1]) && $marcas[$i + 1]->tipo == 'salida') {
+                $entrada = Carbon::parse($marcas[$i]->fecha_hora);
+                $salida = Carbon::parse($marcas[$i + 1]->fecha_hora);
+                $horasTrabajadas += $entrada->diffInMinutes($salida) / 60;
+                $i++;
+            }
+        }
+
+        $resumen[] = [
+            'funcionario' => $funcionario->nombre,
+            'horas_trabajadas' => round($horasTrabajadas, 2),
+        ];
+    }
+
+    // Pasamos las variables a la vista
+    return view('reporte.horas_trabajadas', compact('resumen', 'fechaInicio', 'fechaFin'));
+}
+
 }
