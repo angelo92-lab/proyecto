@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class MarcaAsistencia extends Model
 {
@@ -11,9 +12,8 @@ class MarcaAsistencia extends Model
 
     protected $fillable = ['funcionario_id', 'tipo', 'fecha_hora'];
 
-    // Relación inversa
-    public function funcionario()
-    {
-        return $this->belongsTo(Funcionario::class);
-    }
+    // Convierte automáticamente fecha_hora a un objeto Carbon
+    protected $casts = [
+        'fecha_hora' => 'datetime',
+    ];
 }

@@ -47,7 +47,8 @@
                         <tr>
                             <td>{{ $marca->funcionario->nombre }}</td>
                             <td>{{ ucfirst($marca->tipo) }}</td>
-                            <td>{{ $marca->fecha_hora->format('d/m/Y H:i') }}</td>
+                            <td>{{ \Carbon\Carbon::parse($marca->fecha_hora)->format('d/m/Y H:i') }}</td>
+
                         </tr>
                     @endforeach
                 </tbody>
