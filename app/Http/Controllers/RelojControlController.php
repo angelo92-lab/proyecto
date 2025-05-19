@@ -10,38 +10,43 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class RelojControlController extends Controller
 {
-    
+    // Vista para marcar entrada o salida
     public function vistaMarcar()
     {
         $funcionarios = Funcionario::all();
         return view('reloj.marcar', compact('funcionarios'));
     }
 
-    
+    // Método para registrar entrada o salida
     public function marcar(Request $request)
-{
-    $request->validate([
-        'rut' => 'required',
-        'tipo' => 'required|in:entrada,salida',
-    ]);
+    {
+        $request->validate([
+            'rut' => 'required',
+            'tipo' => 'required|in:entrada,salida',
+        ]);
 
-    $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
-    $funcionario = Funcionario::where('rut', $rutIngresado)->first();
+        // Limpiar el RUT
+        $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+        
+        // Buscar al funcionario por su RUT
+        $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-    if (!$funcionario) {
-        return response()->json(['success' => false, 'message' => 'Funcionario no encontrado'], 404);
+        // Verificar si el funcionario existe
+        if (!$funcionario) {
+            return response()->json(['success' => false, 'message' => 'Funcionario no encontrado'], 404);
+        }
+
+        // Registrar la marca de asistencia (entrada o salida)
+        MarcaAsistencia::create([
+            'funcionario_id' => $funcionario->id,
+            'tipo' => $request->tipo,
+            'fecha_hora' => now(),
+        ]);
+
+        return response()->json(['success' => true]);
     }
 
-    MarcaAsistencia::create([
-        'funcionario_id' => $funcionario->id,
-        'tipo' => $request->tipo,
-        'fecha_hora' => now(),
-    ]);
-
-    return response()->json(['success' => true]);
-}
-
-    // Función para ver el estado de los funcionarios (activos e inactivos)
+    // Método para mostrar el estado de los funcionarios (activos e inactivos)
     public function estadoFuncionarios()
     {
         $hoy = Carbon::now()->toDateString();
@@ -57,80 +62,62 @@ class RelojControlController extends Controller
         return view('reloj.estado', compact('activos', 'inactivos'));
     }
 
-    
-public function verReporte(Request $request)
-{
-    $fechaInicio = $request->input('fecha_inicio');
-    $fechaFin = $request->input('fecha_fin');
-
-    // Si no vienen en el request, usamos fechas por defecto
-    $fechaInicio = $fechaInicio ? Carbon::parse($fechaInicio) : Carbon::now()->startOfMonth();
-    $fechaFin = $fechaFin ? Carbon::parse($fechaFin) : Carbon::now()->endOfMonth();
-
-    // Nos aseguramos de que sí son objetos Carbon
-    if (is_string($fechaInicio)) {
-        $fechaInicio = Carbon::parse($fechaInicio);
-    }
-
-    if (is_string($fechaFin)) {
-        $fechaFin = Carbon::parse($fechaFin);
-    }
-
-    $marcas = MarcaAsistencia::with('funcionario')
-        ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
-        ->orderBy('fecha_hora', 'asc')
-        ->get();
-
-    return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
-}
-
-
-    // Función para exportar reporte de asistencia a PDF
-    public function exportarReportePDF(Request $request)
+    // Método para ver reporte de asistencia en un rango de fechas
+    public function verReporte(Request $request)
     {
-        $fechaInicio = $request->input('fecha_inicio') 
-            ? Carbon::parse($request->input('fecha_inicio')) 
-            : Carbon::now()->startOfMonth();
-
-        $fechaFin = $request->input('fecha_fin') 
-            ? Carbon::parse($request->input('fecha_fin')) 
-            : Carbon::now()->endOfMonth();
+        // Obtener las fechas de inicio y fin o usar las fechas por defecto
+        $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
+        $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
 
         $marcas = MarcaAsistencia::with('funcionario')
             ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
             ->orderBy('fecha_hora', 'asc')
             ->get();
 
-        // Formateamos los RUTs para que aparezcan con puntos y guion
+        return view('reporte.asistencia', compact('marcas', 'fechaInicio', 'fechaFin'));
+    }
+
+    // Método para exportar el reporte de asistencia a PDF
+    public function exportarReportePDF(Request $request)
+    {
+        // Obtener las fechas de inicio y fin o usar las fechas por defecto
+        $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
+        $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
+
+        // Obtener las marcas de asistencia en el rango de fechas
+        $marcas = MarcaAsistencia::with('funcionario')
+            ->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
+            ->orderBy('fecha_hora', 'asc')
+            ->get();
+
+        // Formatear los RUTs de los funcionarios
         foreach ($marcas as $marca) {
             $marca->funcionario->rut = $this->formatearRut($marca->funcionario->rut);
         }
 
-        // Generando el PDF
+        // Generar el PDF
         $pdf = Pdf::loadView('reporte.pdf', compact('marcas', 'fechaInicio', 'fechaFin'));
 
-        // Descarga el PDF generado
+        // Descargar el PDF generado
         return $pdf->download('reporte_asistencia.pdf');
     }
 
-    // Función para exportar reporte de horas trabajadas a PDF
+    // Método para exportar reporte de horas trabajadas a PDF
     public function exportarHorasPDF(Request $request)
     {
-        $fechaInicio = $request->input('fecha_inicio') 
-            ? Carbon::parse($request->input('fecha_inicio')) 
-            : Carbon::now()->startOfMonth();
+        // Obtener las fechas de inicio y fin o usar las fechas por defecto
+        $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
+        $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
 
-        $fechaFin = $request->input('fecha_fin') 
-            ? Carbon::parse($request->input('fecha_fin')) 
-            : Carbon::now()->endOfMonth();
-
-        $funcionarios = Funcionario::with(['marcaAsistencias' => function($query) use ($fechaInicio, $fechaFin) {
+        // Obtener los funcionarios y sus marcas de asistencia
+        $funcionarios = Funcionario::with(['marcaAsistencias' => function ($query) use ($fechaInicio, $fechaFin) {
             $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()])
                   ->orderBy('fecha_hora');
         }])->get();
 
         $resumen = [];
 
+        // Calcular las horas trabajadas de cada funcionario
         foreach ($funcionarios as $funcionario) {
             $horasTrabajadas = 0;
             $marcas = $funcionario->marcaAsistencias;
@@ -150,135 +137,65 @@ public function verReporte(Request $request)
             ];
         }
 
-        // Formateamos los RUTs para que aparezcan con puntos y guion
-        foreach ($resumen as $key => $value) {
-            $resumen[$key]['rut'] = $this->formatearRut($value['funcionario']->rut);
-        }
-
+        // Generar el PDF
         $pdf = Pdf::loadView('reporte.horas_pdf', compact('resumen', 'fechaInicio', 'fechaFin'));
+
+        // Descargar el PDF generado
         return $pdf->download('reporte_horas_trabajadas.pdf');
-    }
-
-    // Función para exportar reporte detallado mensual a PDF
-    public function exportarDetalleMensualPDF(Request $request)
-    {
-        $fechaInicio = $request->input('fecha_inicio') 
-            ? Carbon::parse($request->input('fecha_inicio'))->startOfMonth()
-            : Carbon::now()->startOfMonth();
-
-        $fechaFin = $request->input('fecha_fin') 
-            ? Carbon::parse($request->input('fecha_fin'))->endOfMonth()
-            : Carbon::now()->endOfMonth();
-
-        $diasDelMes = collect();
-        $periodo = new \DatePeriod($fechaInicio, new \DateInterval('P1D'), $fechaFin->copy()->addDay());
-        foreach ($periodo as $fecha) {
-            $diasDelMes->push($fecha->format('Y-m-d'));
-        }
-
-        $funcionarios = Funcionario::with(['marcaAsistencias' => function($query) use ($fechaInicio, $fechaFin) {
-            $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()]);
-        }])->get();
-
-        $reporte = [];
-
-        foreach ($funcionarios as $funcionario) {
-            $dias = [];
-
-            foreach ($diasDelMes as $dia) {
-                $marcasDelDia = $funcionario->marcaAsistencias->filter(function ($marca) use ($dia) {
-                    return Carbon::parse($marca->fecha_hora)->format('Y-m-d') === $dia;
-                });
-
-                $asistio = $marcasDelDia->isNotEmpty();
-
-                $horas = 0;
-                $marcasOrdenadas = $marcasDelDia->sortBy('fecha_hora')->values();
-
-                for ($i = 0; $i < $marcasOrdenadas->count(); $i++) {
-                    if (
-                        $marcasOrdenadas[$i]->tipo == 'entrada' &&
-                        isset($marcasOrdenadas[$i + 1]) &&
-                        $marcasOrdenadas[$i + 1]->tipo == 'salida'
-                    ) {
-                        $entrada = Carbon::parse($marcasOrdenadas[$i]->fecha_hora);
-                        $salida = Carbon::parse($marcasOrdenadas[$i + 1]->fecha_hora);
-                        $horas += $entrada->diffInMinutes($salida) / 60;
-                        $i++;
-                    }
-                }
-
-                $dias[] = [
-                    'dia' => $dia,
-                    'asistio' => $asistio,
-                    'horas' => round($horas, 2)
-                ];
-            }
-
-            $reporte[] = [
-                'nombre' => $funcionario->nombre,
-                'rut' => $this->formatearRut($funcionario->rut),
-                'dias' => $dias,
-            ];
-        }
-
-        // Generamos el PDF
-        $pdf = Pdf::loadView('reporte.detalle_mensual', compact('reporte', 'fechaInicio', 'fechaFin'));
-        return $pdf->download('reporte_detalle_mensual.pdf');
     }
 
     // Función para formatear el RUT con puntos y guion
     private function formatearRut($rut)
     {
-        // Elimina los caracteres que no sean números ni la letra del RUT
+        // Eliminar caracteres no numéricos ni la letra del RUT
         $rut = preg_replace('/[^0-9kK]/', '', $rut);
 
-        // Separa el número del RUT y el dígito verificador
+        // Separar el número del RUT y el dígito verificador
         $cuerpoRut = substr($rut, 0, -1);  // El número del RUT
         $dv = substr($rut, -1);  // El dígito verificador
 
-        // Agrega puntos y guion
-        $rutFormateado = number_format($cuerpoRut, 0, '', '.');  // Añade los puntos
-        $rutFormateado .= '-' . strtoupper($dv);  // Añade el guion y el dígito verificador
+        // Agregar puntos y guion
+        $rutFormateado = number_format($cuerpoRut, 0, '', '.');  // Añadir puntos
+        $rutFormateado .= '-' . strtoupper($dv);  // Añadir el guion y el dígito verificador
 
         return $rutFormateado;
     }
 
+    // Método para reporte de horas trabajadas
     public function reporteHorasTrabajadas(Request $request)
-{
-    // Obtener las fechas de inicio y fin del formulario, o usar las fechas por defecto
-    $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
-    $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
+    {
+        // Obtener fechas o usar las fechas por defecto
+        $fechaInicio = $request->input('fecha_inicio') ? Carbon::parse($request->input('fecha_inicio')) : Carbon::now()->startOfMonth();
+        $fechaFin = $request->input('fecha_fin') ? Carbon::parse($request->input('fecha_fin')) : Carbon::now()->endOfMonth();
 
-    // Obtener los funcionarios con las marcas de asistencia entre las fechas seleccionadas
-    $funcionarios = Funcionario::with(['marcaAsistencias' => function ($query) use ($fechaInicio, $fechaFin) {
-        $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()]);
-    }])->get();
+        // Obtener los funcionarios y sus marcas de asistencia
+        $funcionarios = Funcionario::with(['marcaAsistencias' => function ($query) use ($fechaInicio, $fechaFin) {
+            $query->whereBetween('fecha_hora', [$fechaInicio->startOfDay(), $fechaFin->endOfDay()]);
+        }])->get();
 
-    // Resumen de horas trabajadas
-    $resumen = [];
-    
-    foreach ($funcionarios as $funcionario) {
-        $horasTrabajadas = 0;
-        $marcas = $funcionario->marcaAsistencias;
+        // Resumen de horas trabajadas
+        $resumen = [];
 
-        for ($i = 0; $i < $marcas->count(); $i++) {
-            if ($marcas[$i]->tipo == 'entrada' && isset($marcas[$i + 1]) && $marcas[$i + 1]->tipo == 'salida') {
-                $entrada = Carbon::parse($marcas[$i]->fecha_hora);
-                $salida = Carbon::parse($marcas[$i + 1]->fecha_hora);
-                $horasTrabajadas += $entrada->diffInMinutes($salida) / 60;
-                $i++;
+        foreach ($funcionarios as $funcionario) {
+            $horasTrabajadas = 0;
+            $marcas = $funcionario->marcaAsistencias;
+
+            for ($i = 0; $i < $marcas->count(); $i++) {
+                if ($marcas[$i]->tipo == 'entrada' && isset($marcas[$i + 1]) && $marcas[$i + 1]->tipo == 'salida') {
+                    $entrada = Carbon::parse($marcas[$i]->fecha_hora);
+                    $salida = Carbon::parse($marcas[$i + 1]->fecha_hora);
+                    $horasTrabajadas += $entrada->diffInMinutes($salida) / 60;
+                    $i++;
+                }
             }
+
+            $resumen[] = [
+                'funcionario' => $funcionario->nombre,
+                'horas_trabajadas' => round($horasTrabajadas, 2),
+            ];
         }
 
-        $resumen[] = [
-            'funcionario' => $funcionario->nombre,
-            'horas_trabajadas' => round($horasTrabajadas, 2),
-        ];
+        // Pasamos las variables a la vista
+        return view('reporte.horas', compact('resumen', 'fechaInicio', 'fechaFin'));
     }
-
-    // Pasamos las variables a la vista
-    return view('reporte.horas', compact('resumen', 'fechaInicio', 'fechaFin'));
-}
-
 }
