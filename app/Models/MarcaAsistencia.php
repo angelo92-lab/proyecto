@@ -16,4 +16,10 @@ class MarcaAsistencia extends Model
     protected $casts = [
         'fecha_hora' => 'datetime',
     ];
+
+    // Relación inversa con Funcionario
+    public function funcionario()
+    {
+        return $this->belongsTo(Funcionario::class);
+    }
 }
