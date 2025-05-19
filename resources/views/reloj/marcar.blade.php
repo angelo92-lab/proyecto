@@ -10,15 +10,15 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('reloj.marcar') }}" method="POST">
+    <form action="{{ url('/reloj-control') }}" method="POST">
         @csrf
 
         <div class="mb-3">
-            <label for="rut" class="form-label">Escanear RUT</label>
-            <input type="text" id="rut" name="rut" class="form-control" placeholder="Escanea el RUT" required autofocus>
+            <label for="rut" class="form-label">Escanea el RUT</label>
+            <input type="text" id="rut" name="rut" class="form-control" placeholder="Ej: 12345678K" required autofocus>
         </div>
 
-        <button type="submit" class="btn btn-primary">Marcar</button>
+        <button type="submit" class="btn btn-primary">Marcar Asistencia</button>
     </form>
 </div>
 @endsection
