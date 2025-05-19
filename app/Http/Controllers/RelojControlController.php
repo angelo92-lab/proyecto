@@ -19,34 +19,27 @@ class RelojControlController extends Controller
 
     
     public function marcar(Request $request)
-    {
-        
-        $request->validate([
-            'rut' => 'required',
-            'tipo' => 'required|in:entrada,salida',
-        ]);
+{
+    $request->validate([
+        'rut' => 'required',
+        'tipo' => 'required|in:entrada,salida',
+    ]);
 
-        // Normalizamos el RUT ingresado, eliminando puntos y guion
-        $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+    $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+    $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
-        // Buscamos el funcionario en la base de datos por el RUT formateado, pero sin puntos ni guion
-        $funcionario = Funcionario::where('rut', $rutIngresado)->first();
-
-        // Si no se encuentra el funcionario, se muestra un mensaje de error
-        if (!$funcionario) {
-            return redirect()->back()->with('error', 'Funcionario no encontrado.');
-        }
-
-        // Registramos la marca de asistencia (entrada o salida)
-        MarcaAsistencia::create([
-            'funcionario_id' => $funcionario->id,
-            'tipo' => $request->tipo,  // Entrada o salida
-            'fecha_hora' => Carbon::now(),  // Fecha y hora actuales
-        ]);
-
-        // Redirige de vuelta con un mensaje de éxito
-        return redirect()->back()->with('success', 'Marca registrada correctamente');
+    if (!$funcionario) {
+        return response()->json(['success' => false, 'message' => 'Funcionario no encontrado'], 404);
     }
+
+    MarcaAsistencia::create([
+        'funcionario_id' => $funcionario->id,
+        'tipo' => $request->tipo,
+        'fecha_hora' => now(),
+    ]);
+
+    return response()->json(['success' => true]);
+}
 
     // Función para ver el estado de los funcionarios (activos e inactivos)
     public function estadoFuncionarios()
