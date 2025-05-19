@@ -60,16 +60,20 @@ class RelojControlController extends Controller
     
 public function verReporte(Request $request)
 {
-    $fechaInicio = $request->input('fecha_inicio');
-    $fechaFin = $request->input('fecha_fin');
+    $fechaInicioInput = $request->input('fecha_inicio');
+    $fechaFinInput = $request->input('fecha_fin');
 
-    // Convertir a objetos Carbon si vienen como string
-    if (!$fechaInicio instanceof Carbon) {
-        $fechaInicio = $fechaInicio ? Carbon::parse($fechaInicio) : Carbon::now()->startOfMonth();
+    // Asegúrate de que ambos sean objetos Carbon
+    $fechaInicio = $fechaInicioInput ? Carbon::parse($fechaInicioInput) : Carbon::now()->startOfMonth();
+    $fechaFin = $fechaFinInput ? Carbon::parse($fechaFinInput) : Carbon::now()->endOfMonth();
+
+    // Verificamos que ambos sean objetos Carbon
+    if (!($fechaInicio instanceof Carbon)) {
+        $fechaInicio = Carbon::parse($fechaInicio);
     }
 
-    if (!$fechaFin instanceof Carbon) {
-        $fechaFin = $fechaFin ? Carbon::parse($fechaFin) : Carbon::now()->endOfMonth();
+    if (!($fechaFin instanceof Carbon)) {
+        $fechaFin = Carbon::parse($fechaFin);
     }
 
     $marcas = MarcaAsistencia::with('funcionario')
