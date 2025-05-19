@@ -36,13 +36,14 @@ class RelojControlController extends Controller
         return back()->with('error', 'Funcionario no encontrado.');
     }
 
-    // Detectar si es entrada o salida según la hora actual
+    // Obtener la hora actual
     $hora = now()->format('H:i'); // Hora en formato 24 horas
 
+    // Determinar si es entrada o salida según la hora
     if ($hora >= '06:00' && $hora <= '12:00') {
         $tipo = 'entrada'; // Entre las 6 AM y 12 PM es una entrada
     } elseif ($hora > '12:00' && $hora <= '20:00') {
-        $tipo = 'salida'; // Entre las 12 PM y 8 PM es una salida
+        $tipo = 'salida'; // Entre las 12:01 PM y 8 PM es una salida
     } else {
         return back()->with('error', 'Fuera del horario permitido para marcar.');
     }
