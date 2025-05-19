@@ -20,37 +20,43 @@ class RelojControlController extends Controller
     // Método para registrar entrada o salida
    public function marcar(Request $request)
 {
+    // Validar que el RUT no esté vacío
     $request->validate([
         'rut' => 'required',
     ]);
 
+    // Limpiar el RUT (en caso de que tenga caracteres no numéricos o la 'k' al final)
     $rutIngresado = preg_replace('/[^0-9kK]/', '', $request->input('rut'));
+
+    // Buscar al funcionario en la base de datos usando el RUT
     $funcionario = Funcionario::where('rut', $rutIngresado)->first();
 
+    // Si no se encuentra el funcionario, mostrar error
     if (!$funcionario) {
         return back()->with('error', 'Funcionario no encontrado.');
     }
 
-    // Detectar tipo de marca según hora
-    $hora = now()->format('H:i');
+    // Detectar si es entrada o salida según la hora actual
+    $hora = now()->format('H:i'); // Hora en formato 24 horas
 
     if ($hora >= '06:00' && $hora <= '12:00') {
-        $tipo = 'entrada';
+        $tipo = 'entrada'; // Entre las 6 AM y 12 PM es una entrada
     } elseif ($hora > '12:00' && $hora <= '20:00') {
-        $tipo = 'salida';
+        $tipo = 'salida'; // Entre las 12 PM y 8 PM es una salida
     } else {
         return back()->with('error', 'Fuera del horario permitido para marcar.');
     }
 
+    // Crear la marca de asistencia
     MarcaAsistencia::create([
         'funcionario_id' => $funcionario->id,
         'tipo' => $tipo,
         'fecha_hora' => now(),
     ]);
 
+    // Mostrar mensaje de éxito
     return back()->with('success', "Marca registrada como $tipo para {$funcionario->nombre}");
 }
-
 
 
 
