@@ -80,3 +80,4 @@ Route::get('/reporte/horas/pdf', [RelojControlController::class, 'exportarHorasP
 
 Route::get('/reporte/funcionarios/detalle-mensual', [RelojControlController::class, 'exportarDetalleMensualPDF'])->name('funcionarios.reporte.detalle_mensual');
 
+Route::post('/reloj-control', [RelojControlController::class, 'registrarMarca']);

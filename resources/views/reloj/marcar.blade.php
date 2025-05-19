@@ -38,68 +38,74 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const barcodeInput = document.getElementById('barcode');
-            const nombreInput = document.getElementById('funcionario_nombre');
-            const tipoSelect = document.getElementById('tipo');
-            const mensajeDiv = document.getElementById('mensaje');
+    const barcodeInput = document.getElementById('barcode');
+    const nombreInput = document.getElementById('funcionario_nombre');
+    const tipoSelect = document.getElementById('tipo');
+    const mensajeDiv = document.getElementById('mensaje');
 
-            barcodeInput.addEventListener('input', function () {
-                const rut = barcodeInput.value.trim();
+    let timeout;
+    barcodeInput.addEventListener('input', function () {
+        const rut = barcodeInput.value.trim();
 
-                if (rut.length >= 7) {
-                    // Buscar funcionario por RUT
-                    fetch(`/buscar-funcionario/${rut}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data.success) {
-                                nombreInput.value = data.funcionario.nombre;
-                                registrarMarca(rut, tipoSelect.value);
-                            } else {
-                                mostrarMensaje('❌ Funcionario no encontrado.', 'danger');
-                            }
-                        });
+        if (rut.length >= 7) {
+            clearTimeout(timeout); // Limpiar cualquier retraso previo
 
-                    // Limpiar campos después de unos segundos
-                    setTimeout(() => {
-                        barcodeInput.value = '';
-                        nombreInput.value = '';
-                    }, 3000);
-                }
-            });
+            timeout = setTimeout(function () {
+                // Mostrar mensaje de carga mientras se busca
+                mostrarMensaje('🔄 Buscando funcionario...', 'info');
 
-            function registrarMarca(rut, tipo) {
-                fetch('/reloj-control', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: JSON.stringify({
-                        rut: rut,
-                        tipo: tipo
+                // Buscar funcionario por RUT
+                fetch(`/buscar-funcionario/${rut}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            nombreInput.value = data.funcionario.nombre;
+                            registrarMarca(rut, tipoSelect.value);
+                        } else {
+                            mostrarMensaje('❌ Funcionario no encontrado.', 'danger');
+                        }
                     })
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        mostrarMensaje('✅ Marca registrada correctamente.', 'success');
-                    } else {
-                        mostrarMensaje('❌ Error al registrar: ' + (data.message || 'desconocido.'), 'danger');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
-                });
-            }
+                    .catch(err => {
+                        console.error(err);
+                        mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
+                    });
+            }, 500); // Retraso de 500ms antes de hacer la búsqueda
+        }
+    });
 
-            function mostrarMensaje(texto, tipo) {
-                mensajeDiv.className = `alert alert-${tipo} mt-3`;
-                mensajeDiv.textContent = texto;
-                mensajeDiv.classList.remove('d-none');
-                setTimeout(() => mensajeDiv.classList.add('d-none'), 3000);
+    function registrarMarca(rut, tipo) {
+        fetch('/reloj-control', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({
+                rut: rut,
+                tipo: tipo
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                mostrarMensaje('✅ Marca registrada correctamente.', 'success');
+            } else {
+                mostrarMensaje('❌ Error al registrar: ' + (data.message || 'desconocido.'), 'danger');
             }
+        })
+        .catch(err => {
+            console.error(err);
+            mostrarMensaje('❌ Error de conexión con el servidor.', 'danger');
         });
+    }
+
+    function mostrarMensaje(texto, tipo) {
+        mensajeDiv.className = `alert alert-${tipo} mt-3`;
+        mensajeDiv.textContent = texto;
+        mensajeDiv.classList.remove('d-none');
+        setTimeout(() => mensajeDiv.classList.add('d-none'), 3000);
+    }
+});
     </script>
 </div>
 @endsection
