@@ -89,3 +89,8 @@ Route::get('/notas/importar', [NotaImportController::class, 'form'])
 
 Route::post('/notas/importar', [NotaImportController::class, 'store'])
      ->name('notas.importar.store');
+
+
+Route::middleware(['auth', 'role:funcionario'])->group(function () {
+    Route::get('/funcionarios/planes-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('funcionarios.planes');
+});
