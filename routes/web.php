@@ -99,3 +99,12 @@ Route::get('/plan/importar', function () {
 })->name('plan.import.view');
 
 Route::post('/plan/import', [PlanAcompanamientoController::class, 'import'])->name('plan.import');
+
+
+Route::get('/apoyo-psico-social', [App\Http\Controllers\ApoyoPsicoSocialController::class, 'index'])->name('apoyo.index');
+Route::get('/capacitaciones', [App\Http\Controllers\CapacitacionesController::class, 'index'])->name('capacitaciones.index');
+Route::get('/encuestas', [App\Http\Controllers\EncuestasController::class, 'index'])->name('encuestas.index');
+Route::get('/listados', [App\Http\Controllers\ListadosController::class, 'index'])->name('listados.index');
+Route::get('/movimiento-financiero-sep', [App\Http\Controllers\MovimientoFinancieroSepController::class, 'index'])->name('sep.index');
+Route::get('/planes-normativos', [App\Http\Controllers\PlanesNormativosController::class, 'index'])->name('normativos.index');
+Route::get('/unidad-tecnica-pedagogica', [App\Http\Controllers\UnidadTecnicaPedagogicaController::class, 'index'])->name('utp.index');
