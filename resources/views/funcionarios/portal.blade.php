@@ -9,16 +9,16 @@
         @php
             $secciones = [
                 ['route' => '#', 'icon' => '🧾', 'label' => 'Información del Colegio'],
-                ['route' => route('notas.alumnos'), 'icon' => '📝', 'label' => 'Notas de Alumnos'],
+                ['route' => '#', 'icon' => '📝', 'label' => 'Notas de Alumnos'],
                 ['route' => '#', 'icon' => '📂', 'label' => 'Otros Documentos'],
-                ['route' => route('planes.index'), 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
-                ['route' => route('apoyo.index'), 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
-                ['route' => route('capacitaciones.index'), 'icon' => '🎓', 'label' => 'Capacitaciones'],
-                ['route' => route('encuestas.index'), 'icon' => '📊', 'label' => 'Encuestas'],
-                ['route' => route('listados.index'), 'icon' => '📋', 'label' => 'Listados'],
-                ['route' => route('sep.index'), 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
-                ['route' => route('normativos.index'), 'icon' => '🧾', 'label' => 'Planes Normativos'],
-                ['route' => route('utp.index'), 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica'],
+                ['route' => '#', 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
+                ['route' => '#', 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
+                ['route' => '#', 'icon' => '🎓', 'label' => 'Capacitaciones'],
+                ['route' => '#', 'icon' => '📊', 'label' => 'Encuestas'],
+                ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
+                ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
+                ['route' => '#', 'icon' => '🧾', 'label' => 'Planes Normativos'],
+                ['route' => '#', 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica'],
             ];
         @endphp
 
@@ -37,3 +37,4 @@
     </div>
 </div>
 @endsection
+
