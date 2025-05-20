@@ -17,8 +17,31 @@
             📂 Otros Documentos
         </a>
         <a href="{{ route('planes.index') }}" class="list-group-item list-group-item-action">
-    📘 Planes de Acompañamiento
-</a>
+            📘 Planes de Acompañamiento
+        </a>
+
+        {{-- Nuevas secciones --}}
+        <a href="#" class="list-group-item list-group-item-action">
+            🧠 Apoyo Psico Social
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            🎓 Capacitaciones
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            📊 Encuestas
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            📋 Listados
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            💰 Movimiento Financiero SEP
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            🧾 Planes Normativos
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            🧑‍🏫 Unidad Técnica Pedagógica
+        </a>
     </div>
 </div>
 @endsection
