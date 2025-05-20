@@ -15,6 +15,7 @@ class PlanAcompanamientoImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
     {
+        dd($row); // Esto detiene la ejecución y te muestra la fila leída
         return new PlanAcompanamiento([
             'curso' => $row['curso'],
             'nombre' => $row['nombre'],
