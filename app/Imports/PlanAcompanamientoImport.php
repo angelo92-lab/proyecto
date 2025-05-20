@@ -14,16 +14,20 @@ class PlanAcompanamientoImport implements ToModel, WithHeadingRow
     }
 
     public function model(array $row)
-    {
-        dd($row); // Esto detiene la ejecución y te muestra la fila leída
-        return new PlanAcompanamiento([
-            'curso' => $row['curso'],
-            'nombre' => $row['nombre'],
-            'procedencia' => $row['procedencia'],
-            'asignatura' => $row['asignatura'],
-            'asistencia' => $row['asistencia'],
-            'acompanamiento' => $row['acompanamiento'],
-        ]);
+{
+    // Ignorar filas que no tengan valores esenciales
+    if (empty($row['curso']) || empty($row['nombre'])) {
+        return null;
     }
+
+    return new PlanAcompanamiento([
+        'curso' => $row['curso'],
+        'nombre' => $row['nombre'],
+        'procedencia' => $row['procedencia'] ?? null,
+        'asignatura' => $row['asignatura'],
+        'asistencia' => $row['asistencia'] ?? null,
+        'acompanamiento' => $row['acompanamiento'],
+    ]);
+}
 }
 
