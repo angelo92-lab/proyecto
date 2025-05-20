@@ -91,6 +91,11 @@ Route::post('/notas/importar', [NotaImportController::class, 'store'])
      ->name('notas.importar.store');
 
 
-Route::middleware(['auth', 'role:funcionario'])->group(function () {
-    Route::get('/funcionarios/planes-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('funcionarios.planes');
-});
+
+
+
+Route::get('/plan/importar', function () {
+    return view('plan.import');
+})->name('plan.import.view');
+
+Route::post('/plan/import', [PlanAcompanamientoController::class, 'import'])->name('plan.import');

@@ -1,16 +1,30 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use App\Models\PlanAcompanamiento;
+use App\Imports\PlanAcompanamientoImport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class PlanAcompanamientoController extends Controller
 {
     public function index()
+    {
+        $planes = PlanAcompanamiento::all();
+        return view('funcionarios.planes', compact('planes'));
+    }
+
+    use Illuminate\Http\Request;
+use App\Imports\PlanAcompanamientoImport;
+use Maatwebsite\Excel\Facades\Excel;
+
+public function import(Request $request)
 {
-    return view('funcionarios.planes');
+    $request->validate([
+        'file' => 'required|file|mimes:xlsx,csv,xls',
+    ]);
+
+    Excel::import(new PlanAcompanamientoImport, $request->file('file'));
+
+    return back()->with('success', 'Archivo importado correctamente.');
 }
 
 }
-
-
