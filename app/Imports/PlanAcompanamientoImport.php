@@ -2,34 +2,26 @@
 
 namespace App\Imports;
 
-use App\Models\PlanAcompanamiento;
-use Maatwebsite\Excel\Row;
-use Maatwebsite\Excel\Concerns\OnEachRow;
+use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
-class PlanAcompanamientoImport implements OnEachRow, WithHeadingRow
+class PlanAcompanamientoImport implements ToModel, WithHeadingRow
 {
     public function headingRow(): int
     {
-        return 3; // Encabezados están en la fila 3
+        return 3; // Los encabezados están en la fila 3
     }
 
-    public function onRow(Row $row)
-{
-    $r = $row->toArray();
-
-    dd($r); // 🔍 Esto imprimirá la primera fila de datos y detendrá el proceso
-
-    if (empty($r['curso']) || empty($r['nombre'])) return;
-
-    PlanAcompanamiento::create([
-        'curso'         => $r['curso'] ?? '',
-        'nombre'        => $r['nombre'] ?? '',
-        'procedencia'   => $r['procedencia'] ?? '',
-        'asignatura'    => $r['asignatura'] ?? '',
-        'asistencia'    => is_numeric($r['asistencia']) ? intval($r['asistencia']) : null,
-        'acompanamiento'=> $r['acompanamiento'] ?? '',
-    ]);
-}
-
+    public function model(array $row)
+    {
+        // Aquí deben coincidir los nombres con los encabezados (en minúsculas, sin tildes ni espacios)
+        return new PlanAcompanamiento([
+            'curso'         => $row['curso'],
+            'nombre'        => $row['nombre'],
+            'procedencia'   => $row['procedencia'],
+            'asignatura'    => $row['asignatura'],
+            'asistencia'    => $row['asistencia'],
+            'acompanamiento'=> $row['acompanamiento'],
+        ]);
+    }
 }
