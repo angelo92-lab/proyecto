@@ -16,38 +16,80 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet" />
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url('/') }}">Casino</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-              aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-               <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-               <ul class="navbar-nav me-auto">
-    <li class="nav-item"><a href="{{ url('alumnoscasino') }}" class="nav-link">Lista de Alumnos</a></li>
-    <li class="nav-item"><a href="{{ url('marcaralmuerzo') }}" class="nav-link">Marcar Almuerzo</a></li>
-    <li class="nav-item"><a href="{{ route('reportes.index') }}" class="nav-link">Reportes</a></li>
-    <li class="nav-item"><a href="{{ url('agregaranotacion') }}" class="nav-link">Agregar Anotación</a></li>
-    <li class="nav-item"><a href="{{ url('anotaciones') }}" class="nav-link">Anotaciones</a></li>
-    <li class="nav-item"><a href="{{ route('vistaMarcar') }}" class="nav-link">Marcar Asistencia</a></li>
-    <li class="nav-item"><a href="{{ route('reloj.estado') }}" class="nav-link">Estado Diario</a></li>
-    <li class="nav-item"><a href="{{ route('reporte.asistencia') }}" class="nav-link">Generar Reporte</a></li>
-    <li class="nav-item"><a href="{{ route('clima') }}" class="nav-link">Tiempo</a></li>
-    <li class="nav-item"><a class="nav-link" href="{{ route('portal.funcionarios') }}">Portal Funcionarios</a>
-</li>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ url('/') }}">
+            🎲 Casino Escolar
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-</ul>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a href="{{ url('alumnoscasino') }}" class="nav-link">
+                        <i class="bi bi-people-fill"></i> Lista de Alumnos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('marcaralmuerzo') }}" class="nav-link">
+                        <i class="bi bi-check-square"></i> Marcar Almuerzo
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('reportes.index') }}" class="nav-link">
+                        <i class="bi bi-bar-chart-line-fill"></i> Reportes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('agregaranotacion') }}" class="nav-link">
+                        <i class="bi bi-pencil-square"></i> Agregar Anotación
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url('anotaciones') }}" class="nav-link">
+                        <i class="bi bi-journal-text"></i> Anotaciones
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('vistaMarcar') }}" class="nav-link">
+                        <i class="bi bi-person-check-fill"></i> Marcar Asistencia
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('reloj.estado') }}" class="nav-link">
+                        <i class="bi bi-clock-history"></i> Estado Diario
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('reporte.asistencia') }}" class="nav-link">
+                        <i class="bi bi-file-earmark-bar-graph"></i> Generar Reporte
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('clima') }}" class="nav-link">
+                        <i class="bi bi-cloud-sun"></i> Tiempo
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('portal.funcionarios') }}" class="nav-link">
+                        <i class="bi bi-person-badge-fill"></i> Portal Funcionarios
+                    </a>
+                </li>
+            </ul>
 
-
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-inline">
-                    @csrf
-                    <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
-                </form>
-            </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-flex">
+                @csrf
+                <button type="submit" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                </button>
+            </form>
         </div>
-    </nav>
+    </div>
+</nav>
+
     <main class="container my-4">
         @yield('content')
     </main>

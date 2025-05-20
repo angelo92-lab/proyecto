@@ -35,15 +35,5 @@
             </div>
         @endforeach
     </div>
-</div> ['route' => '#', 'icon' => '🧾', 'label' => 'Información del Colegio'],
-           ['route' => route('notas.alumnos'), 'icon' => '📝', 'label' => 'Notas de Alumnos'],
-                ['route' => '#', 'icon' => '📂', 'label' => 'Otros Documentos'],
-                ['route' => '#', 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
-                ['route' => '#', 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
-                ['route' => '#', 'icon' => '🎓', 'label' => 'Capacitaciones'],
-                ['route' => '#', 'icon' => '📊', 'label' => 'Encuestas'],
-                ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
-                ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
-                ['route' => '#', 'icon' => '🧾', 'label' => 'Planes Normativos'],
-                ['route' => '#', 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica']
+</div>
 @endsection
