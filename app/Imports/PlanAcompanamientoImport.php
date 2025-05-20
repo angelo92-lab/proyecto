@@ -15,18 +15,21 @@ class PlanAcompanamientoImport implements OnEachRow, WithHeadingRow
     }
 
     public function onRow(Row $row)
-    {
-        $r = $row->toArray();
+{
+    $r = $row->toArray();
 
-        if (empty($r['curso']) || empty($r['nombre'])) return;
+    dd($r); // 🔍 Esto imprimirá la primera fila de datos y detendrá el proceso
 
-        PlanAcompanamiento::create([
-            'curso'         => $r['curso'] ?? '',
-            'nombre'        => $r['nombre'] ?? '',
-            'procedencia'   => $r['procedencia'] ?? '',
-            'asignatura'    => $r['asignatura'] ?? '',
-            'asistencia'    => is_numeric($r['asistencia']) ? intval($r['asistencia']) : null,
-            'acompanamiento'=> $r['acompanamiento'] ?? '',
-        ]);
-    }
+    if (empty($r['curso']) || empty($r['nombre'])) return;
+
+    PlanAcompanamiento::create([
+        'curso'         => $r['curso'] ?? '',
+        'nombre'        => $r['nombre'] ?? '',
+        'procedencia'   => $r['procedencia'] ?? '',
+        'asignatura'    => $r['asignatura'] ?? '',
+        'asistencia'    => is_numeric($r['asistencia']) ? intval($r['asistencia']) : null,
+        'acompanamiento'=> $r['acompanamiento'] ?? '',
+    ]);
+}
+
 }
