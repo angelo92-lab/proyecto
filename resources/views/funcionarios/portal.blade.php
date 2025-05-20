@@ -16,11 +16,9 @@
         <a href="#" class="list-group-item list-group-item-action">
             📂 Otros Documentos
         </a>
-        <a href="{{ route('funcionarios.planes') }}" class="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
-            Planes de Acompañamiento
+        <a href="{{ route('funcionarios.planes') }}" class="list-group-item list-group-item-action">
+            📘 Planes de Acompañamiento
         </a>
-
-        
     </div>
 </div>
 @endsection
