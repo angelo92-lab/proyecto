@@ -6,13 +6,12 @@ use App\Models\PlanAcompanamiento;
 use Maatwebsite\Excel\Row;
 use Maatwebsite\Excel\Concerns\OnEachRow;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Maatwebsite\Excel\Concerns\WithStartRow;
 
-class PlanAcompanamientoImport implements OnEachRow, WithHeadingRow, WithStartRow
+class PlanAcompanamientoImport implements OnEachRow, WithHeadingRow
 {
-    public function startRow(): int
+    public function headingRow(): int
     {
-        return 3; // <-- Encabezados en fila 3
+        return 3; // Encabezados están en la fila 3
     }
 
     public function onRow(Row $row)
