@@ -15,19 +15,20 @@ class PlanAcompanamientoImport implements ToModel, WithHeadingRow
 
     public function model(array $row)
 {
-    // Ignorar filas que no tengan valores esenciales
-    if (empty($row['curso']) || empty($row['nombre'])) {
-        return null;
+    // Validar que curso, nombre y asignatura existan
+    if (empty($row['curso']) || empty($row['nombre']) || empty($row['asignatura'])) {
+        return null; // Ignora filas incompletas
     }
 
     return new PlanAcompanamiento([
-        'curso' => $row['curso'],
-        'nombre' => $row['nombre'],
-        'procedencia' => $row['procedencia'] ?? null,
-        'asignatura' => $row['asignatura'],
-        'asistencia' => $row['asistencia'] ?? null,
-        'acompanamiento' => $row['acompanamiento'],
+        'curso'          => $row['curso'],
+        'nombre'         => $row['nombre'],
+        'procedencia'    => $row['procedencia'] ?? null,
+        'asignatura'     => $row['asignatura'],
+        'asistencia'     => $row['asistencia'] ?? null,
+        'acompanamiento' => $row['acompanamiento'] ?? null,
     ]);
 }
+
 }
 
