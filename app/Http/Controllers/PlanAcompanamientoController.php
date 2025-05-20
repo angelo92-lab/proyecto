@@ -12,10 +12,6 @@ class PlanAcompanamientoController extends Controller
         return view('funcionarios.planes', compact('planes'));
     }
 
-    use Illuminate\Http\Request;
-use App\Imports\PlanAcompanamientoImport;
-use Maatwebsite\Excel\Facades\Excel;
-
 public function import(Request $request)
 {
     $request->validate([
