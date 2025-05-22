@@ -69,7 +69,7 @@
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
            Plan Formacion Ciudadana Word
-            <a href="{{ asset('documentos/PLAN DE FORMACION CIUDADANA 2025') }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
+            <a href="{{ asset('documentos/PLAN DE FORMACION CIUDADANA 2025.docx') }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
         </li>
     </ul>
 </div>
