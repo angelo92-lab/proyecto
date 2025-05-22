@@ -155,8 +155,8 @@ Route::get('/funcionarios/utp/resultados/diagnostico', function () {
     $rutaBase = public_path('documentos/utp/resultados_diagnostico');
 
     $archivosGenerales = collect(File::files($rutaBase))
-        ->filter(fn($file) => $file->isFile())
-        ->pluck('basename');
+    ->map(fn($file) => $file->getFilename());
+
 
         
     dd($archivosGenerales->all());
