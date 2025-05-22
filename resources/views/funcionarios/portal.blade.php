@@ -17,7 +17,7 @@
                 ['route' => route('funcionarios.encuestas'), 'icon' => '📊', 'label' => 'Encuestas'],
                 ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
                 ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
-                ['route' => '#', 'icon' => '🧾', 'label' => 'Planes Normativos'],
+                ['route' => route('funcioanrios.planes-normativos'), 'icon' => '🧾', 'label' => 'Planes Normativos'],
                 ['route' => '#', 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica']
             ];
         @endphp

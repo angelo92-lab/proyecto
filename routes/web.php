@@ -118,3 +118,8 @@ Route::get('/funcionarios/informacion', function () {
 Route::get('/funcionarios/encuestas', function () {
     return view('funcionarios.encuestas');
 })->name('funcionarios.encuestas');
+
+
+Route::get('/funcionarios/planes-normativos', function () {
+    return view('funcionarios.planes-normativos');
+})->name('funcionarios.planes-normativos');
