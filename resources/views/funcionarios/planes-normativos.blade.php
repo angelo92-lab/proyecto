@@ -17,7 +17,7 @@
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             Acta Cuentas Financieras 2024
-            <a href="{{ asset('documentos/actacuentasfinancieras2024.pdf') }}" target="_blank" class="btn btn-sm btn-outline-primary">Descargar</a>
+            <a href="{{ asset('documentos/actacuentasfinancieras2024.pdf') }}" target="_blank" class="btn btn-sm btn-outline-primary">Ver</a>
         </li>
         <li class="list-group-item d-flex justify-content-between align-items-center">
             Acta Primer Consejo 2025
