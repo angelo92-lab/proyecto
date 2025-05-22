@@ -159,7 +159,7 @@ Route::get('/funcionarios/utp/resultados/diagnostico', function () {
         ->pluck('basename');
 
         
-    dd($archivosGenerales);
+    dd($archivosGenerales->all());
 
     $carpetas = collect(File::directories($rutaBase))->map(function ($path) {
         return [
