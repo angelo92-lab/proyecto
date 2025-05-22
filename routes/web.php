@@ -123,3 +123,18 @@ Route::get('/funcionarios/encuestas', function () {
 Route::get('/funcionarios/planes-normativos', function () {
     return view('funcionarios.planes-normativos');
 })->name('funcionarios.planes-normativos');
+
+// UTP - menú principal
+Route::get('/funcionarios/utp', function () {
+    return view('funcionarios.utp.index');
+})->name('utp.index');
+
+// UTP - Formatos
+Route::get('/funcionarios/utp/formatos', function () {
+    return view('funcionarios.utp.formatos');
+})->name('utp.formatos');
+
+// UTP - Resultados Evaluaciones
+Route::get('/funcionarios/utp/resultados', function () {
+    return view('funcionarios.utp.resultados');
+})->name('utp.resultados');
