@@ -14,7 +14,7 @@
                 ['route' => '#', 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
                 ['route' => '#', 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
                 ['route' => '#', 'icon' => '🎓', 'label' => 'Capacitaciones'],
-                ['route' => '#', 'icon' => '📊', 'label' => 'Encuestas'],
+                ['route' => route('funcionarios.encuestas'), 'icon' => '📊', 'label' => 'Encuestas'],
                 ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
                 ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
                 ['route' => '#', 'icon' => '🧾', 'label' => 'Planes Normativos'],

@@ -113,3 +113,8 @@ Route::get('/unidad-tecnica-pedagogica', [App\Http\Controllers\UnidadTecnicaPeda
 Route::get('/funcionarios/informacion', function () {
     return view('funcionarios.informacion');
 })->name('funcionarios.informacion');
+
+
+Route::get('/funcionarios/encuestas', function () {
+    return view('funcionarios.encuestas');
+})->name('funcionarios.encuestas');
