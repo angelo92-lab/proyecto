@@ -145,5 +145,5 @@ Route::get('/funcionarios/utp/resultados/diagnostico', function () {
 })->name('utp.resultados.diagnostico');
 
 Route::get('/funcionarios/utp/resultados/parvularia', function () {
-    return view('funcionarios.utp.resultados_parvularia');
+    return view('funcionarios.utp.resultados-parvularia');
 })->name('utp.resultados.parvularia');
