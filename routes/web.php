@@ -151,19 +151,26 @@ Route::get('/funcionarios/utp/lineamientos', function () {
 })->name('utp.lineamientos');
 
 
-Route::get('/funcionarios/utp/resultados/diagnostico', function () {
-    $rutaBase = public_path('documentos/utp/resultados_diagnostico');
+$carpetas = collect(File::directories($rutaBase))->map(function ($path) {
+    $nombreCarpeta = basename($path);
 
-    $archivosGenerales = collect(File::files($rutaBase))
-    ->map(fn($file) => $file->getFilename());
+    // Archivos directamente dentro de la carpeta del curso
+    $archivos = collect(File::files($path))
+        ->filter(fn($file) => $file->isFile())
+        ->map(fn($file) => $file->getFilename());
 
-
-    $carpetas = collect(File::directories($rutaBase))->map(function ($path) {
+    // Subcarpetas (ej: reactivacion de la lectura)
+    $subcarpetas = collect(File::directories($path))->map(function ($subPath) use ($nombreCarpeta) {
         return [
-            'nombre' => basename($path),
-            'archivos' => collect(File::files($path))->map(fn($f) => $f->getFilename()),
+            'nombre' => basename($subPath),
+            'archivos' => collect(File::files($subPath))
+                ->map(fn($file) => $file->getFilename()),
         ];
     });
 
-    return view('funcionarios.utp.resultados_diagnostico', compact('archivosGenerales', 'carpetas'));
-})->name('utp.resultados.diagnostico');
+    return [
+        'nombre' => $nombreCarpeta,
+        'archivos' => $archivos,
+        'subcarpetas' => $subcarpetas,
+    ];
+});

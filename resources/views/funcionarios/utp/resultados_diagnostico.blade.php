@@ -27,29 +27,58 @@
     <h3 class="text-xl font-semibold mt-6 mb-2">📁 Carpetas por Curso</h3>
     @if(count($carpetas) > 0)
         <div class="space-y-4">
-            @foreach($carpetas as $carpeta)
-                <div class="border p-4 rounded shadow-sm">
-                    <h4 class="text-lg font-bold text-gray-800">{{ $carpeta['nombre'] }}</h4>
-                    @if(count($carpeta['archivos']) > 0)
-                        <ul class="list-disc ml-5 mt-2 space-y-1">
-                            @foreach($carpeta['archivos'] as $archivo)
-                                <li>
-                                    <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $archivo) }}"
-                                       target="_blank"
-                                       class="text-blue-600 hover:underline">
-                                        📎 {{ $archivo }}
-                                    </a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        <p class="text-sm text-gray-500 mt-1">Esta carpeta aún no tiene archivos.</p>
-                    @endif
-                </div>
-            @endforeach
-        </div>
-    @else
-        <p class="text-muted">No hay carpetas con resultados aún.</p>
-    @endif
-</div>
-@endsection
+           @foreach($carpetas as $carpeta)
+    <div class="border p-4 rounded shadow-sm mb-4">
+        <h4 class="text-lg font-bold text-gray-800">{{ $carpeta['nombre'] }}</h4>
+
+        {{-- Archivos sueltos --}}
+        @if(count($carpeta['archivos']) > 0)
+            <ul class="list-disc ml-5 mt-2 space-y-1">
+                @foreach($carpeta['archivos'] as $archivo)
+                    <li>
+                        <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $archivo) }}"
+                           target="_blank"
+                           class="text-blue-600 hover:underline">
+                            📎 {{ $archivo }}
+                        </a>
+                    </li>
+                @endforeach
+            </ul>
+        @else
+            <p class="text-sm text-gray-500 mt-1">Esta carpeta no tiene archivos sueltos.</p>
+        @endif
+
+        {{-- Subcarpetas colapsables --}}
+        @if(count($carpeta['subcarpetas']) > 0)
+            <div class="mt-4">
+                <h5 class="font-semibold">📂 Subcarpetas</h5>
+                @foreach($carpeta['subcarpetas'] as $index => $sub)
+                    <div class="accordion" id="accordion-{{ $carpeta['nombre'] }}">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading-{{ $carpeta['nombre'] }}-{{ $index }}">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-{{ $carpeta['nombre'] }}-{{ $index }}" aria-expanded="false" aria-controls="collapse-{{ $carpeta['nombre'] }}-{{ $index }}">
+                                    📁 {{ $sub['nombre'] }}
+                                </button>
+                            </h2>
+                            <div id="collapse-{{ $carpeta['nombre'] }}-{{ $index }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $carpeta['nombre'] }}-{{ $index }}" data-bs-parent="#accordion-{{ $carpeta['nombre'] }}">
+                                <div class="accordion-body">
+                                    <ul class="list-disc ml-4">
+                                        @foreach($sub['archivos'] as $archivo)
+                                            <li>
+                                                <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $sub['nombre'] . '/' . $archivo) }}"
+                                                   target="_blank"
+                                                   class="text-blue-600 hover:underline">
+                                                    📎 {{ $archivo }}
+                                                </a>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+    </div>
+@endforeach
