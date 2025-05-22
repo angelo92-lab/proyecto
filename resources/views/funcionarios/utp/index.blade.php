@@ -11,6 +11,9 @@
         <a href="{{ route('utp.resultados') }}" class="list-group-item list-group-item-action">
             📊 Resultados de Evaluaciones
         </a>
+        <a href="{{ route('utp.lineamientos') }}" class="list-group-item list-group-item-action">
+            📘 Lineamientos
+        </a>
     </div>
 </div>
 @endsection
