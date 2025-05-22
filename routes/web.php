@@ -108,3 +108,8 @@ Route::get('/listados', [App\Http\Controllers\ListadosController::class, 'index'
 Route::get('/movimiento-financiero-sep', [App\Http\Controllers\MovimientoFinancieroSepController::class, 'index'])->name('sep.index');
 Route::get('/planes-normativos', [App\Http\Controllers\PlanesNormativosController::class, 'index'])->name('normativos.index');
 Route::get('/unidad-tecnica-pedagogica', [App\Http\Controllers\UnidadTecnicaPedagogicaController::class, 'index'])->name('utp.index');
+
+
+Route::get('/funcionarios/informacion', function () {
+    return view('funcionarios.informacion');
+})->name('funcionarios.informacion');

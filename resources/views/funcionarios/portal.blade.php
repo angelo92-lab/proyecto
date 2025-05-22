@@ -8,7 +8,7 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
         @php
             $secciones = [
-                ['route' => '#', 'icon' => '🧾', 'label' => 'Información del Colegio'],
+                ['route' => route('funcionarios.informacion'), 'icon' => '🧾', 'label' => 'Información del Colegio'],
                 ['route' => route('notas.alumnos'), 'icon' => '📝', 'label' => 'Notas de Alumnos'],
                 ['route' => '#', 'icon' => '📂', 'label' => 'Otros Documentos'],
                 ['route' => '#', 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
