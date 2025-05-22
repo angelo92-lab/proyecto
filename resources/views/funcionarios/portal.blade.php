@@ -18,7 +18,7 @@
                 ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
                 ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
                 ['route' => route('funcionarios.planes-normativos'), 'icon' => '🧾', 'label' => 'Planes Normativos'],
-                ['route' => '#', 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica']
+                ['route' => route('utp.index'), 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica']
             ];
         @endphp
 
