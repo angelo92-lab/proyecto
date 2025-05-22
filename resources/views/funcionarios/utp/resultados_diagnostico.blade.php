@@ -22,29 +22,30 @@
         </ul>
     @endif
 
-    <h4 class="mt-4">📁 Resultados por Curso</h4>
-    <div class="row row-cols-1 row-cols-md-2 g-3">
-        @foreach ($carpetas as $carpeta)
-        <div class="col">
-            <div class="card shadow-sm h-100">
-                <div class="card-body">
-                    <h5 class="card-title">📁 {{ strtoupper(str_replace('_', ' ', $carpeta['nombre'])) }}</h5>
-                    @if($carpeta['archivos']->isEmpty())
-                        <p class="text-muted">Sin archivos por ahora.</p>
-                    @else
-                        <ul class="list-group">
-                            @foreach ($carpeta['archivos'] as $archivo)
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
+   <h3 class="text-xl font-semibold mt-6 mb-2">📁 Carpetas por Curso</h3>
+@if(count($carpetas) > 0)
+    <div class="space-y-4">
+        @foreach($carpetas as $carpeta)
+            <div class="border p-4 rounded shadow">
+                <h4 class="text-lg font-bold text-gray-800">{{ $carpeta['nombre'] }}</h4>
+                @if(count($carpeta['archivos']) > 0)
+                    <ul class="list-disc ml-5 mt-2 space-y-1">
+                        @foreach($carpeta['archivos'] as $archivo)
+                            <li>
+                                <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $archivo) }}"
+                                   target="_blank"
+                                   class="text-blue-600 hover:underline">
                                     📎 {{ $archivo }}
-                                    <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $archivo) }}" target="_blank" class="btn btn-sm btn-outline-secondary">Ver</a>
-                                </li>
-                            @endforeach
-                        </ul>
-                    @endif
-                </div>
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    <p class="text-sm text-gray-500 mt-1">Esta carpeta aún no tiene archivos.</p>
+                @endif
             </div>
-        </div>
         @endforeach
     </div>
-</div>
-@endsection
+@else
+    <p>No hay carpetas con resultados aún.</p>
+@endif
