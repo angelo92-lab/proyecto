@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\File;
 
 Route::get('/', function () {
     return view('index');
@@ -140,9 +141,6 @@ Route::get('/funcionarios/utp/resultados', function () {
 })->name('utp.resultados');
 
 
-Route::get('/funcionarios/utp/resultados/diagnostico', function () {
-    return view('funcionarios.utp.resultados_diagnostico');
-})->name('utp.resultados.diagnostico');
 
 Route::get('/funcionarios/utp/resultados/parvularia', function () {
     return view('funcionarios.utp.resultados-parvularia');
@@ -152,3 +150,20 @@ Route::get('/funcionarios/utp/lineamientos', function () {
     return view('funcionarios.utp.lineamientos');
 })->name('utp.lineamientos');
 
+
+Route::get('/funcionarios/utp/resultados/diagnostico', function () {
+    $rutaBase = public_path('documentos/utp/resultados_diagnostico');
+
+    $archivosGenerales = collect(File::files($rutaBase))
+        ->filter(fn($file) => $file->isFile())
+        ->pluck('basename');
+
+    $carpetas = collect(File::directories($rutaBase))->map(function ($path) {
+        return [
+            'nombre' => basename($path),
+            'archivos' => collect(File::files($path))->map(fn($f) => $f->getFilename()),
+        ];
+    });
+
+    return view('funcionarios.utp.resultados_diagnostico', compact('archivosGenerales', 'carpetas'));
+})->name('utp.resultados.diagnostico');
