@@ -138,3 +138,12 @@ Route::get('/funcionarios/utp/formatos', function () {
 Route::get('/funcionarios/utp/resultados', function () {
     return view('funcionarios.utp.resultados');
 })->name('utp.resultados');
+
+
+Route::get('/funcionarios/utp/resultados/diagnostico', function () {
+    return view('funcionarios.utp.resultados_diagnostico');
+})->name('utp.resultados.diagnostico');
+
+Route::get('/funcionarios/utp/resultados/parvularia', function () {
+    return view('funcionarios.utp.resultados_parvularia');
+})->name('utp.resultados.parvularia');
