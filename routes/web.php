@@ -200,3 +200,10 @@ $carpetas = collect(File::directories($rutaBase))
     return view('funcionarios.utp.resultados_diagnostico', compact('archivosGenerales', 'carpetas'));
 })->name('utp.resultados.diagnostico');
 
+
+use App\Http\Controllers\UserController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('usuarios.edit');
+    Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
+});

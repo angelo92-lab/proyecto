@@ -15,22 +15,33 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
+{
+    $request->validate([
+        'username' => 'required',
+        'password' => 'required',
+    ]);
+
+    $usuario = DB::table('usuarios')->where('username', $request->username)->first();
+
+    if ($usuario && Hash::check($request->password, $usuario->password)) {
+        if (!$usuario->es_funcionario) {
+            return back()->withErrors(['mensaje' => 'Acceso denegado. Solo funcionarios autorizados.']);
+        }
+
+        // Login correcto
+        session([
+            'usuario_id' => $usuario->id, 
+            'username' => $usuario->username, 
+            'rol' => $usuario->rol,
+            'es_funcionario' => $usuario->es_funcionario,
         ]);
 
-        $usuario = DB::table('usuarios')->where('username', $request->username)->first();
-
-        if ($usuario && Hash::check($request->password, $usuario->password)) {
-            // Login correcto
-            session(['usuario_id' => $usuario->id, 'username' => $usuario->username, 'rol' => $usuario->rol]);
-            return redirect('alumnoscasino');
-        } else {
-            return back()->withErrors(['mensaje' => 'Usuario o contraseña incorrectos']);
-        }
+        return redirect('alumnoscasino');
+    } else {
+        return back()->withErrors(['mensaje' => 'Usuario o contraseña incorrectos']);
     }
+}
+
 
 
     public function logout(Request $request)
