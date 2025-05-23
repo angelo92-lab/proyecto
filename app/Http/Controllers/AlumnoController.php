@@ -3,17 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AlumnoController extends Controller
 {
+    public function __construct()
+    {
+        // Asegura que todas las funciones de este controlador estén protegidas
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
-        // Verificar si el usuario está autenticado
-        if (!session()->has('usuario_id')) {
-            return redirect('login');
-        }
-
         // Obtener cursos
         $cursos = DB::table('colegio20252')->distinct()->pluck('Curso')->sort();
 
