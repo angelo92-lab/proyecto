@@ -3,33 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class MarcarAlmuerzoController extends Controller
 {
+    public function __construct()
+    {
+        // Aplica middleware auth a todas las rutas del controlador
+        $this->middleware('auth');
+    }
+
     public function index()
     {
-        if (!session()->has('usuario_id')) {
-            return redirect('login');
-        }
-
         return view('marcaralmuerzo', ['mensaje' => '']);
     }
 
     public function store(Request $request)
     {
-        if (!session()->has('usuario_id')) {
-            return redirect('login');
-        }
-
         $rut = $request->input('rut', '');
+        $mensaje = '';
 
         if ($rut) {
             $alumno = DB::table('colegio20252')->where('Run', $rut)->first();
 
             if ($alumno) {
                 $fechaHoy = date('Y-m-d');
-                $registro = DB::table('almuerzos')->where('rut_alumno', $rut)->where('fecha', $fechaHoy)->first();
+                $registro = DB::table('almuerzos')
+                    ->where('rut_alumno', $rut)
+                    ->where('fecha', $fechaHoy)
+                    ->first();
 
                 if ($registro) {
                     $mensaje = "El alumno {$alumno->Nombres} ya fue marcado como almorzó hoy.";
@@ -54,7 +57,7 @@ class MarcarAlmuerzoController extends Controller
     // Nueva función para marcar almuerzo desde la máquina lectora
     public function marcar(Request $request)
     {
-        $rut = $request->input('rut'); 
+        $rut = $request->input('rut');
 
         if (!$rut) {
             return response()->json(['error' => 'RUT no proporcionado'], 400);

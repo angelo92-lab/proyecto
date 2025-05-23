@@ -4,32 +4,33 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class AnotacionController extends Controller
 {
+    public function __construct()
+    {
+        // Proteger todas las rutas del controlador con autenticación
+        $this->middleware('auth');
+    }
+
     public function index(Request $request)
     {
-        // Verificar si el usuario está autenticado
-        if (!session()->has('usuario_id')) {
-            return redirect('login');
-        }
-
         $alumno = null;
         $nombreBuscado = $request->input('nombres', '');
         $mensaje = $request->input('guardado', '');
 
         if ($nombreBuscado) {
-            // Recuperar también Dirección y Comuna Residencia
             $alumno = DB::table('colegio20252')
                 ->where('Nombres', 'like', "%$nombreBuscado%")
                 ->first([
-                    'Nombres', 
-                    'Apellido Paterno', 
-                    'Run', 
-                    'Celular', 
-                    'Fecha Nacimiento', 
-                    'Dirección',        // Asegúrate que este nombre coincida con el de tu base de datos
-                    'Comuna Residencia' // Cambiado a 'Comuna Residencia' para evitar el error de sintaxis
+                    'Nombres',
+                    'Apellido Paterno',
+                    'Run',
+                    'Celular',
+                    'Fecha Nacimiento',
+                    'Dirección',
+                    'Comuna Residencia',
                 ]);
         }
 
@@ -47,10 +48,15 @@ class AnotacionController extends Controller
                 'anotacion' => $anotacion,
             ]);
 
-            return redirect()->route('anotacion.index', ['nombres' => $request->input('nombres'), 'guardado' => 1]);
+            return redirect()->route('anotacion.index', [
+                'nombres' => $request->input('nombres'),
+                'guardado' => 1
+            ]);
         } else {
-            return redirect()->route('anotacion.index', ['nombres' => $request->input('nombres'), 'guardado' => 0]);
+            return redirect()->route('anotacion.index', [
+                'nombres' => $request->input('nombres'),
+                'guardado' => 0
+            ]);
         }
     }
 }
-        
