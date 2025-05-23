@@ -1,11 +1,8 @@
+
 @extends('layouts.app')
 
-@section('content')
-<pre>
-    {{ print_r($archivosGenerales, true) }}
-    {{ print_r($carpetas, true) }}
-</pre>
 
+@section('content')
 <div class="container py-4">
     <h1 class="mb-4 text-2xl font-bold">📘 Resultados DIA - Diagnóstico 2025</h1>
 
@@ -88,3 +85,5 @@
     </div>
 @endforeach
 @endif
+@endsection
+
