@@ -154,17 +154,26 @@ Route::get('/funcionarios/utp/lineamientos', function () {
 Route::get('/funcionarios/utp/resultados/diagnostico', function () {
     $rutaBase = public_path('documentos/utp/resultados_diagnostico');
 
+    // Verificar que la carpeta exista
+    if (!File::exists($rutaBase)) {
+        abort(404, "La carpeta de resultados no existe.");
+    }
+
+    // Obtener archivos generales (en la carpeta base)
     $archivosGenerales = collect(File::files($rutaBase))
         ->filter(fn($file) => $file->isFile())
-        ->pluck('basename');
+        ->map(fn($file) => $file->getBasename());
 
+    // Obtener carpetas y dentro sus archivos y subcarpetas
     $carpetas = collect(File::directories($rutaBase))->map(function ($path) {
-        $archivos = collect(File::files($path))->filter(fn($f) => $f->isFile())->pluck('basename');
+        $archivos = collect(File::files($path))
+            ->filter(fn($f) => $f->isFile())
+            ->map(fn($f) => $f->getBasename());
 
         $subcarpetas = collect(File::directories($path))->map(function ($sub) {
             return [
                 'nombre' => basename($sub),
-                'archivos' => collect(File::files($sub))->pluck('basename'),
+                'archivos' => collect(File::files($sub))->map(fn($f) => $f->getBasename()),
             ];
         });
 
@@ -175,10 +184,6 @@ Route::get('/funcionarios/utp/resultados/diagnostico', function () {
         ];
     });
 
-     dd([
-        'archivosGenerales' => $archivosGenerales,
-        'carpetas' => $carpetas,
-    ]);
-
     return view('funcionarios.utp.resultados_diagnostico', compact('archivosGenerales', 'carpetas'));
 })->name('utp.resultados.diagnostico');
+
