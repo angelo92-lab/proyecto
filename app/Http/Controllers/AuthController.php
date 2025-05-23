@@ -16,10 +16,26 @@ class AuthController extends Controller
 
     public function login(Request $request)
 {
-    $request->validate([
-        'username' => 'required',
-        'password' => 'required',
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+
+        $user = Auth::user();
+
+        // Redirigir según si es funcionario o no
+        if ($user->es_funcionario) {
+            return redirect()->route('portal.funcionarios');
+        }
+
+        return redirect()->intended('/'); // o cualquier ruta general
+    }
+
+    return back()->withErrors([
+        'email' => 'Credenciales incorrectas.',
     ]);
+
+
 
     $usuario = DB::table('usuarios')->where('username', $request->username)->first();
 
