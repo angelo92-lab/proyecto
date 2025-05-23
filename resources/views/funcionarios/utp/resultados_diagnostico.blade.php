@@ -19,8 +19,20 @@
     @else
         <ul class="list-group mb-4">
             @foreach ($archivosGenerales as $archivo)
+                @php
+                    $ext = pathinfo($archivo, PATHINFO_EXTENSION);
+                    $icono = match(strtolower($ext)) {
+                        'pdf' => 'bi-file-earmark-pdf text-danger',
+                        'doc', 'docx' => 'bi-file-earmark-word text-primary',
+                        'xls', 'xlsx' => 'bi-file-earmark-excel text-success',
+                        'ppt', 'pptx' => 'bi-file-earmark-slides text-warning',
+                        'zip', 'rar' => 'bi-file-earmark-zip',
+                        'jpg', 'jpeg', 'png', 'gif' => 'bi-file-earmark-image text-info',
+                        default => 'bi-file-earmark'
+                    };
+                @endphp
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <i class="bi bi-file-earmark me-2 text-primary"></i> {{ $archivo }}
+                    <i class="bi {{ $icono }} me-2"></i> {{ $archivo }}
                     <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $archivo) }}" target="_blank" class="btn btn-sm btn-outline-primary">
                         <i class="bi bi-eye"></i> Ver
                     </a>
@@ -45,8 +57,20 @@
                     @if(count($carpeta['archivos']) > 0)
                         <ul class="list-disc ml-5 mt-2 space-y-1">
                             @foreach($carpeta['archivos'] as $archivo)
+                                @php
+                                    $ext = pathinfo($archivo, PATHINFO_EXTENSION);
+                                    $icono = match(strtolower($ext)) {
+                                        'pdf' => 'bi-file-earmark-pdf text-danger',
+                                        'doc', 'docx' => 'bi-file-earmark-word text-primary',
+                                        'xls', 'xlsx' => 'bi-file-earmark-excel text-success',
+                                        'ppt', 'pptx' => 'bi-file-earmark-slides text-warning',
+                                        'zip', 'rar' => 'bi-file-earmark-zip',
+                                        'jpg', 'jpeg', 'png', 'gif' => 'bi-file-earmark-image text-info',
+                                        default => 'bi-file-earmark'
+                                    };
+                                @endphp
                                 <li>
-                                    <i class="bi bi-paperclip me-2 text-secondary"></i>
+                                    <i class="bi {{ $icono }} me-2"></i>
                                     <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $archivo) }}"
                                        target="_blank"
                                        class="text-blue-600 hover:underline">
@@ -77,8 +101,20 @@
                                             <div class="accordion-body">
                                                 <ul class="list-disc ml-4">
                                                     @foreach($sub['archivos'] as $archivo)
+                                                        @php
+                                                            $ext = pathinfo($archivo, PATHINFO_EXTENSION);
+                                                            $icono = match(strtolower($ext)) {
+                                                                'pdf' => 'bi-file-earmark-pdf text-danger',
+                                                                'doc', 'docx' => 'bi-file-earmark-word text-primary',
+                                                                'xls', 'xlsx' => 'bi-file-earmark-excel text-success',
+                                                                'ppt', 'pptx' => 'bi-file-earmark-slides text-warning',
+                                                                'zip', 'rar' => 'bi-file-earmark-zip',
+                                                                'jpg', 'jpeg', 'png', 'gif' => 'bi-file-earmark-image text-info',
+                                                                default => 'bi-file-earmark'
+                                                            };
+                                                        @endphp
                                                         <li>
-                                                            <i class="bi bi-paperclip me-2 text-secondary"></i>
+                                                            <i class="bi {{ $icono }} me-2"></i>
                                                             <a href="{{ asset('documentos/utp/resultados_diagnostico/' . $carpeta['nombre'] . '/' . $sub['nombre'] . '/' . $archivo) }}"
                                                                target="_blank"
                                                                class="text-blue-600 hover:underline">
