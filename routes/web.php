@@ -175,5 +175,7 @@ Route::get('/funcionarios/utp/resultados/diagnostico', function () {
         ];
     });
 
+    dd($archivosGenerales, $carpetas);
+
     return view('funcionarios.utp.resultados_diagnostico', compact('archivosGenerales', 'carpetas'));
 })->name('utp.resultados.diagnostico');
