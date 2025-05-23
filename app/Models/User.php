@@ -2,45 +2,40 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    // Aquí defines el nombre real de la tabla:
+    protected $table = 'usuarios';
+
+    // Define los campos que puedes llenar masivamente
     protected $fillable = [
-        'name',
-        'email',
+        'username',
         'password',
         'es_funcionario',
+        'rol',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+    // Campos ocultos al serializar (ejemplo al convertir a JSON)
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
+    // Castings para atributos específicos
     protected $casts = [
-        'email_verified_at' => 'datetime',
+        'es_funcionario' => 'boolean',
         'password' => 'hashed',
     ];
+
+    // Si usas remember_token, agrega esta propiedad
+    public $timestamps = false; // si tu tabla no tiene columnas created_at, updated_at
+
+    // Puedes agregar aquí métodos personalizados o relaciones si las necesitas
 }
+

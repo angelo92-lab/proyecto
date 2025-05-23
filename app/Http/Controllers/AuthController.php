@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -17,11 +17,10 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'username' => 'required',
-            'password' => 'required',
+            'username' => 'required|string',
+            'password' => 'required|string',
         ]);
 
-        // Buscar usuario por username
         $usuario = User::where('username', $request->username)->first();
 
         if ($usuario && Hash::check($request->password, $usuario->password)) {
@@ -29,7 +28,7 @@ class AuthController extends Controller
                 return back()->withErrors(['mensaje' => 'Acceso denegado. Solo funcionarios autorizados.']);
             }
 
-            // ✅ Iniciar sesión correctamente
+            // Autenticar usuario con Laravel Auth
             Auth::login($usuario);
 
             // Redirigir al portal de funcionarios
@@ -41,10 +40,11 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // Cierra la sesión del usuario autenticado
-        $request->session()->invalidate(); // Invalida la sesión
-        $request->session()->regenerateToken(); // Regenera el token CSRF
+        Auth::logout();
 
-        return redirect()->route('login'); // Redirige a la ruta de login
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }
