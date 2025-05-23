@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -16,26 +15,31 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
-            'username' => 'required|string',
-            'password' => 'required|string',
+        $credentials = $request->validate([
+            'username' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
-        $usuario = User::where('username', $request->username)->first();
+        // Busca el usuario por username
+        $user = User::where('username', $credentials['username'])->first();
 
-        if ($usuario && Hash::check($request->password, $usuario->password)) {
-            if (!$usuario->es_funcionario) {
-                return back()->withErrors(['mensaje' => 'Acceso denegado. Solo funcionarios autorizados.']);
-            }
-
-            // Autenticar usuario con Laravel Auth
-            Auth::login($usuario);
-
-            // Redirigir al portal de funcionarios
-            return redirect()->route('portal.funcionarios');
+        if (!$user) {
+            return back()->withErrors(['mensaje' => 'Usuario no encontrado.']);
         }
 
-        return back()->withErrors(['mensaje' => 'Usuario o contraseña incorrectos']);
+        if (!$user->es_funcionario) {
+            return back()->withErrors(['mensaje' => 'Acceso denegado. Solo funcionarios autorizados.']);
+        }
+
+        // Intenta loguear con las credenciales
+        if (Auth::attempt(['username' => $credentials['username'], 'password' => $credentials['password']])) {
+            $request->session()->regenerate();
+
+            // Redirige a la ruta que quieras para funcionarios
+            return redirect()->intended('/portal-funcionarios');
+        }
+
+        return back()->withErrors(['mensaje' => 'Credenciales incorrectas.']);
     }
 
     public function logout(Request $request)
@@ -43,6 +47,7 @@ class AuthController extends Controller
         Auth::logout();
 
         $request->session()->invalidate();
+
         $request->session()->regenerateToken();
 
         return redirect()->route('login');
