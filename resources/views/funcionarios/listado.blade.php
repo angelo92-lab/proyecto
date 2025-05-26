@@ -13,27 +13,28 @@
         </div>
 
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
+            <table class="min-w-full divide-y divide-gray-200 text-sm text-gray-800">
                 <thead class="bg-gray-100">
-                    <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
+                    <tr>
                         @foreach ($encabezados as $encabezado)
-                            <th class="px-4 py-2 text-left text-sm font-medium text-gray-700 uppercase tracking-wider">
+                            <th class="px-4 py-2 text-left font-semibold uppercase tracking-wide text-gray-700">
                                 {{ $encabezado }}
                             </th>
                         @endforeach
                     </tr>
                 </thead>
-            <tbody class="bg-white divide-y divide-gray-100">
-                 @foreach ($filas as $fila)
-                     <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
-                     <td class="px-4 py-2">{{ $fila['nro'] }}</td>
-                    <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
-                    <td class="px-4 py-2">{{ $fila['desfile'] }}</td>
-                    <td class="px-4 py-2">{{ $fila['banda'] }}</td>
-                    <td class="px-4 py-2">{{ $fila['lugar'] }}</td>
-                    <td class="px-4 py-2">{{ $fila['asiste'] }}</td>
-                     </tr>
-                 @endforeach
+
+                <tbody class="bg-white divide-y divide-gray-100">
+                    @foreach ($filas as $fila)
+                        <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
+                            <td class="px-4 py-2">{{ $fila['nro'] }}</td>
+                            <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
+                            <td class="px-4 py-2">{{ $fila['desfile'] }}</td>
+                            <td class="px-4 py-2">{{ $fila['banda'] }}</td>
+                            <td class="px-4 py-2">{{ $fila['lugar'] }}</td>
+                            <td class="px-4 py-2">{{ $fila['asiste'] }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
