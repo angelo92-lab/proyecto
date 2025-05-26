@@ -29,21 +29,25 @@
                         <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
                             <td class="px-4 py-2">{{ $fila['nro'] }}</td>
                             <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
-                           <td class="px-4 py-2">
-    @if(strtolower($fila['desfile']) === 'si')
-        <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Sí</span>
-    @else
-        <span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">No</span>
-    @endif
-</td>
+
+                            <td class="px-4 py-2">
+                                @if(strtolower(trim($fila['desfile'])) === 'si')
+                                    <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Sí</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">No</span>
+                                @endif
+                            </td>
+
                             <td class="px-4 py-2">{{ $fila['banda'] }}</td>
                             <td class="px-4 py-2">{{ $fila['lugar'] }}</td>
+
                             <td class="px-4 py-2">
-    @if(strtolower($fila['asiste']) === 'si')
-        <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">Sí</span>
-    @else
-        <span class="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-200 rounded-full">No</span>
-    @endif
+                                @if(strtolower(trim($fila['asiste'])) === 'si')
+                                    <span class="px-2 py-1 text-xs font-semibold text-blue-800 bg-blue-200 rounded-full">Sí</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold text-gray-800 bg-gray-200 rounded-full">No</span>
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
