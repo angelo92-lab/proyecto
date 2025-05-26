@@ -8,19 +8,23 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 class ListadoController extends Controller
 {
     public function index()
-    {
-        $rutaArchivo = public_path('documentos/listadoestudiantes.xlsx');
-        $documento = IOFactory::load($rutaArchivo);
-        $hoja = $documento->getActiveSheet();
-        $todasLasFilas = $hoja->toArray();
+{
+    $rutaArchivo = public_path('documentos/listado_21_mayo.xlsx');
+    $documento = \PhpOffice\PhpSpreadsheet\IOFactory::load($rutaArchivo);
+    $hoja = $documento->getActiveSheet();
+    $todasLasFilas = $hoja->toArray();
 
-        // Encabezados en fila 5 → índice 4
-        $encabezados = $todasLasFilas[4];
+    // Solo imprimir primeras 20 filas para no saturar el log
+    $primerasFilas = array_slice($todasLasFilas, 0, 20);
 
-        // Datos desde fila 6 → índice 5 en adelante
-        $datos = array_slice($todasLasFilas, 5);
+    \Log::info('Primeras 20 filas del Excel:', $primerasFilas);
 
-        return view('funcionarios.listado', compact('encabezados', 'datos'));
-    }
+    // Asumiendo que encabezados están en fila 5 (index 4)
+    $encabezados = $todasLasFilas[4]; 
+    $datos = array_slice($todasLasFilas, 5);
+
+    return view('funcionarios.listado', compact('encabezados', 'datos'));
+}
+
 }
 
