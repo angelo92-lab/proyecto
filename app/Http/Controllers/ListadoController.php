@@ -9,7 +9,7 @@ class ListadoController extends Controller
 {
     public function index()
 {
-    $path = public_path('documentos/listado_21_mayo.xlsx');
+    $path = public_path('documentos/listadoestudiantes.xlsx');
 
     // Leer el archivo y convertirlo a un array
     $data = Excel::toArray([], $path)[0]; // Solo la primera hoja
