@@ -15,7 +15,7 @@
                 ['route' => '#', 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
                 ['route' => '#', 'icon' => '🎓', 'label' => 'Capacitaciones'],
                 ['route' => route('funcionarios.encuestas'), 'icon' => '📊', 'label' => 'Encuestas'],
-                ['route' => '#', 'icon' => '📋', 'label' => 'Listados'],
+                ['route' => route('funcionarios.listado'), 'icon' => '📋', 'label' => 'Listados'],
                 ['route' => '#', 'icon' => '💰', 'label' => 'Movimiento Financiero SEP'],
                 ['route' => route('funcionarios.planes-normativos'), 'icon' => '🧾', 'label' => 'Planes Normativos'],
                 ['route' => route('utp.index'), 'icon' => '🧑‍🏫', 'label' => 'Unidad Técnica Pedagógica']
