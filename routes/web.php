@@ -193,5 +193,5 @@ Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('
 
 
 
-Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
+Route::get('funcionarios/plan_acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
 
