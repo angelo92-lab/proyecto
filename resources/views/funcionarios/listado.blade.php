@@ -1,26 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Listado de Estudiantes</title>
-    <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; }
-    </style>
-</head>
-<body>
-    <h1>Listado de Estudiantes</h1>
-
-    <table>
+<table border="1" cellpadding="5" cellspacing="0">
+    <thead>
+        <tr>
+            @foreach ($encabezados as $enc)
+                <th>{{ $enc }}</th>
+            @endforeach
+        </tr>
+    </thead>
+    <tbody>
         @foreach ($filas as $fila)
             <tr>
-                @foreach ($fila as $celda)
-                    <td>{{ $celda }}</td>
-                @endforeach
+                <td>{{ $fila['nro'] }}</td>
+                <td>{{ $fila['nombre'] }}</td>
+                <td>{{ $fila['desfile'] }}</td>
+                <td>{{ $fila['banda'] }}</td>
+                <td>{{ $fila['lugar'] }}</td>
+                <td>{{ $fila['asiste'] }}</td>
             </tr>
         @endforeach
-    </table>
-
-</body>
-</html>
+    </tbody>
+</table>
