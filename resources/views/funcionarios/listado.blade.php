@@ -29,7 +29,7 @@
                     @foreach ($filas as $fila)
                         <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
                             <td class="px-4 py-2">{{ $fila['nro'] }}</td>
-                            <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
+                            <td class="px-4 py-2 text-red-500 font-bold">{{ $fila['nombre'] }}</td>
 
                             <td class="px-4 py-2">
                                 @if(strtolower(trim($fila['desfile'])) === 'si')
