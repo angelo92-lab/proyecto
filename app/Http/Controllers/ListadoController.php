@@ -9,18 +9,13 @@ class ListadoController extends Controller
     public function index()
     {
         $rutaArchivo = public_path('documentos/listadoestudiantes.xlsx');
-        if (!file_exists($rutaArchivo)) {
-    dd("El archivo no existe en: $rutaArchivo");
-} else {
-    dd("Archivo existe y se lee desde: $rutaArchivo");
-}
         
-        $documento = \PhpOffice\PhpSpreadsheet\IOFactory::load($rutaArchivo);
-$hoja = $documento->getActiveSheet();
-$todasLasFilas = $hoja->toArray();
+        $documento = IOFactory::load($rutaArchivo);
+        $hoja = $documento->getActiveSheet();
+        $filas = $hoja->toArray();
 
-dd($todasLasFilas);
-
+        dd($filas);
+    
         // Encabezados están en fila 5 (índice 4)
         $encabezados = $todasLasFilas[4];
 
