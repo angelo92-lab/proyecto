@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use PhpOffice\PhpSpreadsheet\IOFactory;
+
 class ListadoController extends Controller
 {
     public function index()
