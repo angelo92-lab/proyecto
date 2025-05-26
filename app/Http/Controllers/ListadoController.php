@@ -66,3 +66,4 @@ class ListadoController extends Controller
 
     return view('funcionarios.listado', compact('filas', 'encabezados'));
 }
+}
