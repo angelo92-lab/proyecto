@@ -1,18 +1,26 @@
-@extends('layouts.app') {{-- O tu layout base --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listado de Alumnos</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background-color: #eee; }
+    </style>
+</head>
+<body>
+    <h1>Listado de Alumnos - 21 de Mayo</h1>
 
-@section('content')
-    <h1>Listado de Estudiantes que Desfilaron</h1>
-
-    <table border="1" cellpadding="5" cellspacing="0">
+    <table>
         <thead>
             <tr>
-                @foreach ($encabezados as $titulo)
-                    <th>{{ $titulo }}</th>
+                @foreach ($encabezados as $encabezado)
+                    <th>{{ $encabezado }}</th>
                 @endforeach
             </tr>
         </thead>
         <tbody>
-            @foreach ($datos as $fila)
+            @foreach ($datosMostrar as $fila)
                 <tr>
                     @foreach ($fila as $celda)
                         <td>{{ $celda }}</td>
@@ -21,4 +29,5 @@
             @endforeach
         </tbody>
     </table>
-@endsection
+</body>
+</html>

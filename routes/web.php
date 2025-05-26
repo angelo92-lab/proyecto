@@ -194,3 +194,4 @@ Route::middleware(['auth'])->group(function () {
 use App\Http\Controllers\ListadoController;
 
 Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
+
