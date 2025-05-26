@@ -18,6 +18,6 @@ class ListadoController extends Controller
         $data = Excel::toArray([], $path);
         $alumnos = $data[0]; // primera hoja del Excel
 
-        return view('listado', compact('alumnos'));
+        return view('funcionarios.listado', compact('alumnos'));
     }
 }
