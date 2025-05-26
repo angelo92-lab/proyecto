@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class ListadoController extends Controller
 {
     public function index()
-{
-    $path = public_path('documentos/listadoestudiantes.xlsx');
+    {
+        $rutaArchivo = public_path('documentos/listadoestudiantes.xlsx');
 
-    // Leer el archivo y convertirlo a un array
-    $data = Excel::toArray([], $path)[0]; // Solo la primera hoja
+        $documento = IOFactory::load($rutaArchivo);
+        $hoja = $documento->getActiveSheet();
+        $datos = $hoja->toArray();
 
-    return view('funcionarios.listado', compact('data'));
-}
+        return view('funcionarios.listado', compact('datos'));
+    }
 }

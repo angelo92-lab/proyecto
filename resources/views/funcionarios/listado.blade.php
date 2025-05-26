@@ -1,39 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Listado 21 de Mayo</title>
-    <style>
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+@extends('layouts.app') {{-- o el layout que estés usando --}}
 
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-        }
+@section('content')
+    <h1>Listado de Estudiantes que Desfilaron</h1>
 
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
-</head>
-<body>
-    <h1>Listado de Estudiantes - 21 de Mayo</h1>
-
-    <table>
-        @foreach ($data as $index => $fila)
+    <table border="1" cellpadding="5" cellspacing="0">
+        @foreach ($datos as $fila)
             <tr>
                 @foreach ($fila as $celda)
-                    @if ($index === 0)
-                        <th>{{ $celda }}</th>
-                    @else
-                        <td>{{ $celda }}</td>
-                    @endif
+                    <td>{{ $celda }}</td>
                 @endforeach
             </tr>
         @endforeach
     </table>
-</body>
-</html>
+@endsection
