@@ -9,7 +9,7 @@ class ListadoController extends Controller
 {
     public function index()
     {
-        $rutaArchivo = public_path('documentos/listado_21_mayo.xlsx');
+        $rutaArchivo = public_path('documentos/listadoestudiantes.xlsx');
         $documento = IOFactory::load($rutaArchivo);
         $hoja = $documento->getActiveSheet();
         $todasLasFilas = $hoja->toArray();
