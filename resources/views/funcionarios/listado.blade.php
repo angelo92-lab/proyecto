@@ -23,19 +23,18 @@
                         @endforeach
                     </tr>
                 </thead>
-<tbody class="bg-white divide-y divide-gray-100">
-    @foreach ($filas as $fila)
-        <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
-            <td class="px-4 py-2">{{ $fila['nro'] }}</td>
-            <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
-            <td class="px-4 py-2">{{ $fila['desfile'] }}</td>
-            <td class="px-4 py-2">{{ $fila['banda'] }}</td>
-            <td class="px-4 py-2">{{ $fila['lugar'] }}</td>
-            <td class="px-4 py-2">{{ $fila['asiste'] }}</td>
-        </tr>
-    @endforeach
-</tbody>
-
+            <tbody class="bg-white divide-y divide-gray-100">
+                 @foreach ($filas as $fila)
+                     <tr class="{{ $loop->even ? 'bg-gray-50' : 'bg-white' }}">
+                     <td class="px-4 py-2">{{ $fila['nro'] }}</td>
+                    <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
+                    <td class="px-4 py-2">{{ $fila['desfile'] }}</td>
+                    <td class="px-4 py-2">{{ $fila['banda'] }}</td>
+                    <td class="px-4 py-2">{{ $fila['lugar'] }}</td>
+                    <td class="px-4 py-2">{{ $fila['asiste'] }}</td>
+                     </tr>
+                 @endforeach
+                </tbody>
             </table>
         </div>
     </div>
