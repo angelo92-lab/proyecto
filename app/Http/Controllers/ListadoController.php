@@ -9,12 +9,18 @@ class ListadoController extends Controller
 {
     public function index()
     {
-        $rutaArchivo = public_path('documentos/listadoestudiantes.xlsx');
-
+        $rutaArchivo = public_path('documentos/listado_21_mayo.xlsx');
         $documento = IOFactory::load($rutaArchivo);
         $hoja = $documento->getActiveSheet();
-        $datos = $hoja->toArray();
+        $todasLasFilas = $hoja->toArray();
 
-        return view('funcionarios.listado', compact('datos'));
+        // Encabezados en fila 5 → índice 4
+        $encabezados = $todasLasFilas[4];
+
+        // Datos desde fila 6 → índice 5 en adelante
+        $datos = array_slice($todasLasFilas, 5);
+
+        return view('funcionarios.listado', compact('encabezados', 'datos'));
     }
 }
+
