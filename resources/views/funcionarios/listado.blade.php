@@ -1,34 +1,39 @@
-@extends('layouts.app') {{-- Asegúrate de tener tu layout base aquí --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Listado 21 de Mayo</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-@section('content')
-<div class="container">
-    <h2 class="mb-4">Listado de Alumnos que Desfilaron el 21 de Mayo</h2>
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
 
-    @isset($error)
-        <div class="alert alert-danger">{{ $error }}</div>
-    @endisset
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Listado de Estudiantes - 21 de Mayo</h1>
 
-    @if(count($alumnos) > 1)
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    @foreach($alumnos[0] as $columna)
-                        <th>{{ $columna }}</th>
-                    @endforeach
-                </tr>
-            </thead>
-            <tbody>
-                @foreach(array_slice($alumnos, 1) as $fila)
-                    <tr>
-                        @foreach($fila as $celda)
-                            <td>{{ $celda }}</td>
-                        @endforeach
-                    </tr>
+    <table>
+        @foreach ($data as $index => $fila)
+            <tr>
+                @foreach ($fila as $celda)
+                    @if ($index === 0)
+                        <th>{{ $celda }}</th>
+                    @else
+                        <td>{{ $celda }}</td>
+                    @endif
                 @endforeach
-            </tbody>
-        </table>
-    @else
-        <p>No hay datos para mostrar.</p>
-    @endif
-</div>
-@endsection
+            </tr>
+        @endforeach
+    </table>
+</body>
+</html>
