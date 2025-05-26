@@ -11,7 +11,7 @@
                 ['route' => route('funcionarios.informacion'), 'icon' => '🧾', 'label' => 'Información del Colegio'],
                 ['route' => route('notas.alumnos'), 'icon' => '📝', 'label' => 'Notas de Alumnos'],
                 ['route' => '#', 'icon' => '📂', 'label' => 'Otros Documentos'],
-                ['route' => route('plan.acompanamiento'), 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
+                ['route' => route('plan-acompanamiento'), 'icon' => '📘', 'label' => 'Planes de Acompañamiento'],
                 ['route' => '#', 'icon' => '🧠', 'label' => 'Apoyo Psico Social'],
                 ['route' => '#', 'icon' => '🎓', 'label' => 'Capacitaciones'],
                 ['route' => route('funcionarios.encuestas'), 'icon' => '📊', 'label' => 'Encuestas'],
