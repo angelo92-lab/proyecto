@@ -22,7 +22,7 @@
             ];
         @endphp
 
-        @foreach ($secciones as $seccion)
+        @foreach ($secciones as $seccion)   
             <div class="col">
                 <a href="{{ $seccion['route'] }}" class="text-decoration-none text-dark">
                     <div class="card h-100 shadow-sm border-0 text-center">
