@@ -193,4 +193,4 @@ Route::middleware(['auth'])->group(function () {
 
 use App\Http\Controllers\ListadoController;
 
-Route::get('/listado', [ListadoController::class, 'index'])->name('listado.index')->middleware('auth');
+Route::get('/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
