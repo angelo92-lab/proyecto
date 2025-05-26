@@ -3,8 +3,13 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
-        <div class="px-6 py-4 border-b">
+        <div class="px-6 py-4 border-b flex items-center justify-between">
             <h2 class="text-2xl font-semibold text-gray-800">Listado Estudiantes 21 de Mayo</h2>
+
+            <a href="{{ asset('documentos/listadodesfile.xlsx') }}" download
+               class="inline-block bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition">
+                Descargar Excel
+            </a>
         </div>
 
         <div class="overflow-x-auto">
