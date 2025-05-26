@@ -83,12 +83,8 @@ Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 Route::get('/notas/importar', [NotaImportController::class, 'form'])->name('notas.importar.form');
 Route::post('/notas/importar', [NotaImportController::class, 'store'])->name('notas.importar.store');
 
-// Plan acompañamiento
-Route::get('/plan/importar', function () {
-    return view('plan.import');
-})->name('plan.import.view');
 
-Route::post('/plan/import', [PlanAcompanamientoController::class, 'import'])->name('plan.import');
+
 
 // Otras secciones públicas o con rutas sin middleware específico
 Route::get('/apoyo-psico-social', [App\Http\Controllers\ApoyoPsicoSocialController::class, 'index'])->name('apoyo.index');
