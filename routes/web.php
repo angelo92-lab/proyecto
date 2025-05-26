@@ -189,3 +189,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('usuarios.edit');
     Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
 });
+
+
+use App\Http\Controllers\ListadoController;
+
+Route::get('/listado', [ListadoController::class, 'index'])->name('listado.index')->middleware('auth');
