@@ -19,7 +19,7 @@ class ListadoController extends Controller
         $sheet = $spreadsheet->getActiveSheet();
 
         $filas = [];
-        $inicioDatos = 6; // Datos desde fila 6 (encabezados en la 5)
+        $inicioDatos = 2; 
         $ultimaFila = $sheet->getHighestRow();
 
         for ($fila = $inicioDatos; $fila <= $ultimaFila; $fila++) {
@@ -45,15 +45,15 @@ class ListadoController extends Controller
             ];
         }
 
-        // Leer encabezados desde la fila 5
-        $encabezados = [
-            $sheet->getCell('A5')->getValue(),
-            $sheet->getCell('B5')->getValue(),
-            $sheet->getCell('C5')->getValue(),
-            $sheet->getCell('D5')->getValue(),
-            $sheet->getCell('E5')->getValue(),
-            $sheet->getCell('F5')->getValue(),
-        ];
+    $encabezados = [
+    $sheet->getCell('A1')->getValue(),
+    $sheet->getCell('B1')->getValue(),
+    $sheet->getCell('C1')->getValue(),
+    $sheet->getCell('D1')->getValue(),
+    $sheet->getCell('E1')->getValue(),
+    $sheet->getCell('F1')->getValue(),
+    ];
+
 
         return view('funcionarios.listado', compact('filas', 'encabezados'));
     }
