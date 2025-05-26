@@ -9,7 +9,7 @@ class ListadoController extends Controller
 {
     public function index()
     {
-        $rutaArchivo = public_path('documentos/estudiantes21mayo.xlsx');
+        $rutaArchivo = public_path('documentos/estudiantesdesfile.xlsx');
 
         if (!file_exists($rutaArchivo)) {
             abort(404, "Archivo no encontrado en: $rutaArchivo");
@@ -58,3 +58,4 @@ class ListadoController extends Controller
         return view('funcionarios.listado', compact('filas', 'encabezados'));
     }
 }
+    
