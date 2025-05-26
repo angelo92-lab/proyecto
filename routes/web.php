@@ -191,4 +191,7 @@ use App\Http\Controllers\ListadoController;
 
 Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
 
-Route::get('/plan-acompanamiento', [App\Http\Controllers\PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
+
+
+Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
+
