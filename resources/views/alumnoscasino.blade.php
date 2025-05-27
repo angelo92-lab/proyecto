@@ -35,7 +35,7 @@
 
     <div class="table-responsive shadow-sm rounded">
         <table class="table table-bordered table-striped table-hover align-middle">
-           <thead class="table-primary text-center">
+          <thead class="table-primary text-center">
     <tr>
         <th>Nombres</th>
         <th>Apellido Paterno</th>
@@ -44,7 +44,7 @@
         <th>Digito Ver</th>
         <th>Curso</th>
         <th>🍽️ Almorzó</th>
-        <th>📝 Observaciones</th>
+        <th>📚 Historial</th>
     </tr>
 </thead>
 <tbody>
@@ -60,8 +60,8 @@
                 {{ $row->almorzo_por_fecha }}
             </td>
             <td class="text-center">
-                <a href="{{ url('agregaranotacion') }}?rut={{ $row->Run }}" class="btn btn-sm btn-outline-secondary">
-                    Anotar
+                <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
+                    📚 Ver historial
                 </a>
             </td>
         </tr>
