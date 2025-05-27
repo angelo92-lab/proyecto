@@ -15,7 +15,7 @@ use App\Http\Controllers\RelojControlController;
 use App\Http\Controllers\FuncionarioPortalController;
 use App\Http\Controllers\NotaImportController;
 use App\Http\Controllers\PlanAcompanamientoController;
-use App\Http\Controllers\UserController;
+
 
 // Ruta pública principal
 Route::get('/', function () {
@@ -83,17 +83,6 @@ Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 Route::get('/notas/importar', [NotaImportController::class, 'form'])->name('notas.importar.form');
 Route::post('/notas/importar', [NotaImportController::class, 'store'])->name('notas.importar.store');
 
-
-
-
-// Otras secciones públicas o con rutas sin middleware específico
-Route::get('/apoyo-psico-social', [App\Http\Controllers\ApoyoPsicoSocialController::class, 'index'])->name('apoyo.index');
-Route::get('/capacitaciones', [App\Http\Controllers\CapacitacionesController::class, 'index'])->name('capacitaciones.index');
-Route::get('/encuestas', [App\Http\Controllers\EncuestasController::class, 'index'])->name('encuestas.index');
-Route::get('/listados', [App\Http\Controllers\ListadosController::class, 'index'])->name('listados.index');
-Route::get('/movimiento-financiero-sep', [App\Http\Controllers\MovimientoFinancieroSepController::class, 'index'])->name('sep.index');
-Route::get('/planes-normativos', [App\Http\Controllers\PlanesNormativosController::class, 'index'])->name('normativos.index');
-Route::get('/unidad-tecnica-pedagogica', [App\Http\Controllers\UnidadTecnicaPedagogicaController::class, 'index'])->name('utp.index');
 
 Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 
@@ -180,19 +169,11 @@ Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 });
 
 
-// Rutas usuarios protegidas por auth
-Route::middleware(['auth'])->group(function () {
-    Route::get('/usuarios/{user}/editar', [UserController::class, 'edit'])->name('usuarios.edit');
-    Route::put('/usuarios/{user}', [UserController::class, 'update'])->name('usuarios.update');
-});
-
 
 use App\Http\Controllers\ListadoController;
 
 Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
 
-
-
-Route::get('/plan_acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
+Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
 
 

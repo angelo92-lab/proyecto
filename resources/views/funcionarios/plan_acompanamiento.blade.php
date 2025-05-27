@@ -6,8 +6,8 @@
         <div class="px-6 py-4 border-b flex items-center justify-between">
             <h2 class="text-2xl font-semibold text-gray-800">Plan de Acompañamiento</h2>
 
-            <a href="{{ asset('documents/listadoplan.xlsx') }}" download
-               class="inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition">
+            <a href="{{ asset('documentos/listadoplan.xlsx') }}" download
+               class="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
                 Descargar Excel
             </a>
         </div>
@@ -31,7 +31,13 @@
                             <td class="px-4 py-2">{{ $fila['nombre'] }}</td>
                             <td class="px-4 py-2">{{ $fila['procedencia'] }}</td>
                             <td class="px-4 py-2">{{ $fila['asignatura'] }}</td>
-                            <td class="px-4 py-2">{{ $fila['asistencia'] }}</td>
+                            <td class="px-4 py-2">
+                                @if(strtolower($fila['asistencia']) === 'si')
+                                    <span class="px-2 py-1 text-xs font-semibold text-green-800 bg-green-200 rounded-full">Sí</span>
+                                @else
+                                    <span class="px-2 py-1 text-xs font-semibold text-red-800 bg-red-200 rounded-full">No</span>
+                                @endif
+                            </td>
                             <td class="px-4 py-2">{{ $fila['acompanamiento'] }}</td>
                         </tr>
                     @endforeach
