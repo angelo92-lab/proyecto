@@ -10,7 +10,6 @@ class AnotacionController extends Controller
 {
     public function __construct()
     {
-        // Proteger todas las rutas del controlador con autenticación
         $this->middleware('auth');
     }
 
@@ -18,9 +17,23 @@ class AnotacionController extends Controller
     {
         $alumno = null;
         $nombreBuscado = $request->input('nombres', '');
+        $rutBuscado = $request->input('rut', '');
         $mensaje = $request->input('guardado', '');
 
-        if ($nombreBuscado) {
+        // Si viene el RUT desde la URL (por el botón), usarlo como prioridad
+        if ($rutBuscado) {
+            $alumno = DB::table('colegio20252')
+                ->where('Run', $rutBuscado)
+                ->first([
+                    'Nombres',
+                    'Apellido Paterno',
+                    'Run',
+                    'Celular',
+                    'Fecha Nacimiento',
+                    'Dirección',
+                    'Comuna Residencia',
+                ]);
+        } elseif ($nombreBuscado) {
             $alumno = DB::table('colegio20252')
                 ->where('Nombres', 'like', "%$nombreBuscado%")
                 ->first([
