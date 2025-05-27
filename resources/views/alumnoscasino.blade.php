@@ -35,32 +35,39 @@
 
     <div class="table-responsive shadow-sm rounded">
         <table class="table table-bordered table-striped table-hover align-middle">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th>Nombres</th>
-                    <th>Apellido Paterno</th>
-                    <th>Apellido Materno</th>
-                    <th>Rut</th>
-                    <th>Digito Ver</th>
-                    <th>Curso</th>
-                    <th>🍽️ Almorzó</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($alumnos as $row)
-                    <tr>
-                        <td>{{ $row->Nombres }}</td>
-                        <td>{{ $row->ApellidoPaterno }}</td>
-                        <td>{{ $row->ApellidoMaterno }}</td>
-                        <td>{{ $row->Run }}</td>
-                        <td>{{ $row->DigitoVer }}</td>
-                        <td>{{ $row->Curso }}</td>
-                        <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
-                            {{ $row->almorzo_por_fecha }}
-                        </td>
-                    </tr>
-                @endforeach
-            </tbody>
+           <thead class="table-primary text-center">
+    <tr>
+        <th>Nombres</th>
+        <th>Apellido Paterno</th>
+        <th>Apellido Materno</th>
+        <th>Rut</th>
+        <th>Digito Ver</th>
+        <th>Curso</th>
+        <th>🍽️ Almorzó</th>
+        <th>📝 Observaciones</th>
+    </tr>
+</thead>
+<tbody>
+    @foreach ($alumnos as $row)
+        <tr>
+            <td>{{ $row->Nombres }}</td>
+            <td>{{ $row->ApellidoPaterno }}</td>
+            <td>{{ $row->ApellidoMaterno }}</td>
+            <td>{{ $row->Run }}</td>
+            <td>{{ $row->DigitoVer }}</td>
+            <td>{{ $row->Curso }}</td>
+            <td class="{{ $row->almorzo_por_fecha === 'Sí' ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
+                {{ $row->almorzo_por_fecha }}
+            </td>
+            <td class="text-center">
+                <a href="{{ url('agregaranotacion') }}?rut={{ $row->Run }}" class="btn btn-sm btn-outline-secondary">
+                    Anotar
+                </a>
+            </td>
+        </tr>
+    @endforeach
+</tbody>
+
         </table>
     </div>
 </div>
