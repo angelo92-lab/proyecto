@@ -34,7 +34,7 @@ Route::post('cerrarsesion', [AuthController::class, 'logout'])->name('logout');
 // Rutas alumnos y anotaciones
 Route::get('alumnoscasino', [AlumnoController::class, 'index'])->name('alumnos.index');
 Route::get('anotaciones', [AnotacionesController::class, 'index'])->name('anotaciones.index');
-Route::delete('/anotaciones/{id}', [AnotacionController::class, 'destroy'])->name('anotacion.eliminar');
+Route::delete('anotaciones/{id}', [AnotacionesController::class, 'destroy'])->name('anotaciones.destroy');
 
 
 // Rutas marcar almuerzo
