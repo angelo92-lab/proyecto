@@ -14,7 +14,7 @@ use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\RelojControlController;
 use App\Http\Controllers\FuncionarioPortalController;
 use App\Http\Controllers\NotaImportController;
-use App\Http\Controllers\PlanAcompanamientoController;
+
 
 
 // Ruta pública principal
@@ -174,6 +174,7 @@ use App\Http\Controllers\ListadoController;
 
 Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
 
+
+use App\Http\Controllers\PlanAcompanamientoController;
+
 Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
-
-

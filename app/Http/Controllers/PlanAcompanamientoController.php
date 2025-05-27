@@ -2,47 +2,39 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class PlanAcompanamientoController extends Controller
 {
     public function index()
     {
-        $rutaArchivo = public_path('documents/listadoplan.xlsx');
+        $path = public_path('documentos/listadoplan.xlsx');
 
-        if (!file_exists($rutaArchivo)) {
-            abort(404, "Archivo no encontrado en: $rutaArchivo");
+        if (!file_exists($path)) {
+            abort(404, 'El archivo no existe.');
         }
 
-        $spreadsheet = IOFactory::load($rutaArchivo);
+        $spreadsheet = IOFactory::load($path);
         $sheet = $spreadsheet->getActiveSheet();
+        $data = $sheet->toArray();
+
+        $encabezados = $data[2]; // Fila 3 (índice 2)
+        $filasRaw = array_slice($data, 3); // Desde la fila 4 en adelante
 
         $filas = [];
-        $inicioDatos = 2;
-        $ultimaFila = $sheet->getHighestRow();
-
-        for ($fila = $inicioDatos; $fila <= $ultimaFila; $fila++) {
+        foreach ($filasRaw as $fila) {
             $filas[] = [
-                'nro' => $sheet->getCell('A' . $fila)->getValue(),
-                'curso' => $sheet->getCell('B' . $fila)->getValue(),
-                'nombre' => $sheet->getCell('C' . $fila)->getValue(),
-                'procedencia' => $sheet->getCell('D' . $fila)->getValue(),
-                'asignatura' => $sheet->getCell('E' . $fila)->getValue(),
-                'asistencia' => $sheet->getCell('F' . $fila)->getValue(),
-                'acompanamiento' => $sheet->getCell('G' . $fila)->getValue(),
+                'nro' => $fila[0] ?? '',
+                'curso' => $fila[1] ?? '',
+                'nombre' => $fila[2] ?? '',
+                'procedencia' => $fila[3] ?? '',
+                'asignatura' => $fila[4] ?? '',
+                'asistencia' => $fila[5] ?? '',
+                'acompanamiento' => $fila[6] ?? '',
             ];
         }
 
-        $encabezados = [
-            $sheet->getCell('A1')->getValue(),
-            $sheet->getCell('B1')->getValue(),
-            $sheet->getCell('C1')->getValue(),
-            $sheet->getCell('D1')->getValue(),
-            $sheet->getCell('E1')->getValue(),
-            $sheet->getCell('F1')->getValue(),
-            $sheet->getCell('G1')->getValue(),
-        ];
-
-        return view('funcionarios.plan_acompanamiento', compact('filas', 'encabezados'));
+        return view('plan_acompanamiento.index', compact('encabezados', 'filas'));
     }
 }
