@@ -24,4 +24,11 @@ class AnotacionesController extends Controller
 
         return view('Anotaciones', compact('anotaciones'));
     }
+    public function destroy($id)
+{
+    DB::table('anotaciones')->where('id', $id)->delete();
+
+    return redirect()->route('anotaciones.index')->with('success', 'Anotación eliminada correctamente.');
+}
+
 }
