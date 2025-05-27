@@ -15,15 +15,23 @@ class AnotacionesController extends Controller
     }
 
     public function index()
-    {
-        $anotaciones = DB::table('anotaciones as a')
-            ->leftJoin('colegio20252 as al', 'a.rut', '=', 'al.run')
-            ->select('al.nombres', 'al.apellido paterno', 'a.rut', 'a.anotacion', 'a.fecha')
-            ->orderBy('a.fecha', 'DESC')
-            ->get();
+{
+    $anotaciones = DB::table('anotaciones as a')
+        ->leftJoin('colegio20252 as al', 'a.rut', '=', 'al.run')
+        ->select(
+            'a.id',                        // 👈 Asegúrate de incluir el id
+            'al.nombres',
+            'al.apellido paterno',
+            'a.rut',
+            'a.anotacion',
+            'a.fecha'
+        )
+        ->orderBy('a.fecha', 'DESC')
+        ->get();
 
-        return view('Anotaciones', compact('anotaciones'));
-    }
+    return view('Anotaciones', compact('anotaciones'));
+}
+
     public function destroy($id)
 {
     DB::table('anotaciones')->where('id', $id)->delete();

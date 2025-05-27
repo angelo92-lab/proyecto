@@ -9,43 +9,42 @@
     <a href="{{ url('alumnoscasino') }}" class="btn btn-outline-secondary shadow-sm">← Volver a los Alumnos</a>
     <a href="{{ url('agregaranotacion') }}" class="btn btn-primary shadow-sm">➕ Agregar Anotación</a>
 </div>
+
 @if(session('success'))
-    <div class="alert alert-success text-center fw-semibold shadow-sm">
-        ✅ {{ session('success') }}
+    <div class="alert alert-success text-center">
+        {{ session('success') }}
     </div>
 @endif
-
 
 @if ($anotaciones->count() > 0)
     <div class="table-responsive shadow-sm">
         <table class="table table-bordered table-hover bg-white rounded">
             <thead class="table-dark text-center">
-    <tr>
-        <th>👤 Nombre</th>
-        <th>🆔 RUT</th>
-        <th>📝 Anotación</th>
-        <th>📅 Fecha</th>
-        <th>🗑️ Acciones</th> {{-- NUEVA COLUMNA --}}
-    </tr>
-</thead>
-<tbody>
-    @foreach ($anotaciones as $anotacion)
-    <tr>
-        <td>{{ $anotacion->nombres }} {{ $anotacion->{'apellido paterno'} }}</td>
-        <td>{{ $anotacion->rut }}</td>
-        <td>{!! nl2br(e($anotacion->anotacion)) !!}</td>
-        <td>{{ \Carbon\Carbon::parse($anotacion->fecha)->format('d/m/Y') }}</td>
-        <td class="text-center">
-            <form action="{{ route('anotacion.eliminar', $anotacion->id) }}" method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar esta anotación?');">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-sm btn-danger shadow-sm">Eliminar</button>
-            </form>
-        </td>
-    </tr>
-    @endforeach
-</tbody>
-
+                <tr>
+                    <th>👤 Nombre</th>
+                    <th>🆔 RUT</th>
+                    <th>📝 Anotación</th>
+                    <th>📅 Fecha</th>
+                    <th>❌ Eliminar</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($anotaciones as $anotacion)
+                <tr>
+                    <td>{{ $anotacion->nombres }} {{ $anotacion->{'apellido paterno'} }}</td>
+                    <td>{{ $anotacion->rut }}</td>
+                    <td>{!! nl2br(e($anotacion->anotacion)) !!}</td>
+                    <td>{{ \Carbon\Carbon::parse($anotacion->fecha)->format('d/m/Y') }}</td>
+                    <td class="text-center">
+                        <form action="{{ route('anotaciones.destroy', $anotacion->id) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar esta anotación?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
         </table>
     </div>
 @else
