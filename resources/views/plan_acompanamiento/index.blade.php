@@ -3,13 +3,14 @@
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
     <div class="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-200">
-        <div class="flex items-center justify-between px-6 py-4 bg-indigo-600 text-white">
-            <h2 class="text-2xl font-bold">📘 Plan de Acompañamiento</h2>
-            <a href="{{ asset('documentos/listadoplan.xlsx') }}" 
-               class="inline-flex items-center px-4 py-2 bg-white text-indigo-600 font-semibold rounded-md hover:bg-indigo-100 transition">
-                📥 Descargar Excel
-            </a>
-        </div>
+       <div class="flex items-center justify-between px-6 py-4 bg-gray-100 border-b">
+    <h2 class="text-2xl font-bold text-gray-800">📘 Plan de Acompañamiento</h2>
+    <a href="{{ asset('documentos/listadoplan.xlsx') }}" 
+       class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition">
+        📥 Descargar Excel
+    </a>
+</div>
+
 
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-300 text-sm">
