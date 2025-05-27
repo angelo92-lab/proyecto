@@ -39,4 +39,17 @@ class AnotacionesController extends Controller
     return redirect()->route('anotaciones.index')->with('success', 'Anotación eliminada correctamente.');
 }
 
+public function historial($rut)
+{
+    $alumno = DB::table('colegio20252')->where('Run', $rut)->first();
+
+    $anotaciones = DB::table('anotaciones')
+        ->where('rut', $rut)
+        ->orderBy('fecha', 'desc')
+        ->get();
+
+    return view('historial_anotaciones', compact('alumno', 'anotaciones'));
+}
+
+
 }

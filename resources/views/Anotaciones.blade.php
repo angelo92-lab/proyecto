@@ -42,6 +42,12 @@
                             <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
                     </td>
+                    <td>
+                        <a href="{{ route('anotaciones.historial', ['rut' => $anotacion->rut]) }}" class="btn btn-sm btn-outline-info">
+                         📚 Ver historial
+                        </a>
+                    </td>
+
                 </tr>
                 @endforeach
             </tbody>

@@ -35,6 +35,8 @@ Route::post('cerrarsesion', [AuthController::class, 'logout'])->name('logout');
 Route::get('alumnoscasino', [AlumnoController::class, 'index'])->name('alumnos.index');
 Route::get('anotaciones', [AnotacionesController::class, 'index'])->name('anotaciones.index');
 Route::delete('anotaciones/{id}', [AnotacionesController::class, 'destroy'])->name('anotaciones.destroy');
+Route::get('/anotaciones/historial/{rut}', [App\Http\Controllers\AnotacionesController::class, 'historial'])->name('anotaciones.historial');
+
 
 
 // Rutas marcar almuerzo
