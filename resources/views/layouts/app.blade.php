@@ -69,16 +69,21 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('clima') }}" class="nav-link">
-                        <i class="bi bi-cloud-sun"></i> Tiempo
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="{{ route('portal.funcionarios') }}" class="nav-link">
                         <i class="bi bi-person-badge-fill"></i> Portal Funcionarios
                     </a>
                 </li>
-            </ul>
+                </ul>
+                <li class="nav-item">
+                     <a href="{{ route('matricula.create') }}" class="nav-link">
+                         <i class="bi bi-pencil-square"></i> Ingresar Matrícula
+                     </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('matricula.reportes') }}" class="nav-link">
+                 <i class="bi bi-file-earmark-bar-graph"></i> Reportes Matrículas
+                 </a>
+                </li>
 
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-flex">
                 @csrf

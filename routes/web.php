@@ -172,8 +172,6 @@ Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 
 });
 
-
-
 use App\Http\Controllers\ListadoController;
 
 Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('funcionarios.listado');
@@ -182,3 +180,9 @@ Route::get('/funcionarios/listado', [ListadoController::class, 'index'])->name('
 use App\Http\Controllers\PlanAcompanamientoController;
 
 Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/matricula', [MatriculaController::class, 'create'])->name('matricula.create');
+    Route::post('/matricula', [MatriculaController::class, 'store'])->name('matricula.store');
+    Route::get('/matricula/reportes', [MatriculaController::class, 'reportes'])->name('matricula.reportes');
+});
