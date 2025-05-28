@@ -16,6 +16,7 @@ class MatriculaController extends Controller
     {
         $request->validate([
             // Campos del estudiante
+            'curso' => 'required|string|max:100',
             'run' => 'required|string|max:15',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'required|string|max:255',
@@ -72,6 +73,7 @@ class MatriculaController extends Controller
 
         DB::table('matriculas_2026')->insert([
             // Estudiante
+            'curso' => $request->curso,
             'run' => $request->run,
             'apellido_paterno' => $request->apellido_paterno,
             'apellido_materno' => $request->apellido_materno,

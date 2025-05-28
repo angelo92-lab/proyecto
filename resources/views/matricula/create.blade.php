@@ -16,7 +16,13 @@
 
     <h4 class="mb-3 text-success">1️⃣ Datos del Estudiante</h4>
 
+    
+
     <div class="row g-3">
+        <div class="mb-3">
+             <label for="curso" class="form-label">Curso al que se matricula</label>
+            <input type="text" name="curso" id="curso" class="form-control" required>
+        </div>
         <div class="col-md-4">
             <label for="rut" class="form-label">RUT</label>
             <input type="text" name="rut" id="rut" class="form-control" required>
