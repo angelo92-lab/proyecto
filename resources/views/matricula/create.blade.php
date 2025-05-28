@@ -20,8 +20,29 @@
 
     <div class="row g-3">
         <div class="mb-3">
-             <label for="curso" class="form-label">Curso al que se matricula</label>
-            <input type="text" name="curso" id="curso" class="form-control" required>
+            <label for="curso" class="form-label">Curso al que se matricula</label>
+            <select name="curso" id="curso" class="form-select" required>
+                <option value="">Seleccionar curso</option>
+                <option value="Pre-Kínder">Pre-Kínder</option>
+                <option value="Kínder">Kínder</option>
+                <option value="1° Básico">1° Básico</option>
+                <option value="2° Básico">2° Básico</option>
+                <option value="3° Básico">3° Básico</option>
+                <option value="4° Básico">4° Básico</option>
+                <option value="5° Básico">5° Básico</option>
+                <option value="6° Básico">6° Básico</option>
+                <option value="7° Básico">7° Básico A</option>
+                <option value="8° Básico">7° Básico B</option>
+                <option value="8° Básico">8° Básico A</option>
+                <option value="8° Básico">8° Básico B</option>
+                <option value="1° Medio A">8° Básico</option>
+                <option value="1° Medio B">8° Básico</option>
+                <option value="2° Medio A">8° Básico</option>
+                <option value="2° Medio B">8° Básico</option>
+                <option value="3° Medio A">8° Básico</option>
+                <option value="3° Medio B">8° Básico</option>
+                <option value="4° Medio A">8° Básico</option>
+            </select>
         </div>
         <div class="col-md-4">
             <label for="rut" class="form-label">RUT</label>
