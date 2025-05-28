@@ -132,10 +132,6 @@
             <input type="text" name="enfermedades" class="form-control">
         </div>
     </div>
-
-    <div class="mt-4 d-flex justify-content-end">
-        <button type="submit" class="btn btn-success">💾 Guardar Matrícula</button>
-    </div>
     <h4 class="mt-4">Información del Padre, Madre y Tutor Legal</h4>
 
 <div class="mb-3">
@@ -261,6 +257,9 @@
     <label for="responsable_ficha_fecha" class="form-label">Fecha de llenado</label>
     <input type="date" name="responsable_ficha_fecha" class="form-control" value="{{ old('responsable_ficha_fecha') }}">
 </div>
+<div class="mt-4 d-flex justify-content-end">
+        <button type="submit" class="btn btn-success">💾 Guardar Matrícula</button>
+    </div>
 
 </form>
 @endsection
