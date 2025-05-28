@@ -181,6 +181,8 @@ use App\Http\Controllers\PlanAcompanamientoController;
 
 Route::get('/plan-acompanamiento', [PlanAcompanamientoController::class, 'index'])->name('plan.acompanamiento');
 
+use App\Http\Controllers\MatriculaController;
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/matricula', [MatriculaController::class, 'create'])->name('matricula.create');
     Route::post('/matricula', [MatriculaController::class, 'store'])->name('matricula.store');
