@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up(): void
     {
-        Schema::create('matriculas', function (Blueprint $table) {
+        Schema::create('matriculas_2026', function (Blueprint $table) {
             $table->id();
 
             // Datos del estudiante
