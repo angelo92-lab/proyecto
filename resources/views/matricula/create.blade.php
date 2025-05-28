@@ -32,16 +32,16 @@
                 <option value="5° Básico">5° Básico</option>
                 <option value="6° Básico">6° Básico</option>
                 <option value="7° Básico">7° Básico A</option>
-                <option value="8° Básico">7° Básico B</option>
-                <option value="8° Básico">8° Básico A</option>
-                <option value="8° Básico">8° Básico B</option>
-                <option value="1° Medio A">8° Básico</option>
-                <option value="1° Medio B">8° Básico</option>
-                <option value="2° Medio A">8° Básico</option>
-                <option value="2° Medio B">8° Básico</option>
-                <option value="3° Medio A">8° Básico</option>
-                <option value="3° Medio B">8° Básico</option>
-                <option value="4° Medio A">8° Básico</option>
+                <option value="7° Básico B">7° Básico B</option>
+                <option value="8° Básico A">8° Básico A</option>
+                <option value="8° Básico B">8° Básico B</option>
+                <option value="1° Medio A">1° Medio A</option>
+                <option value="1° Medio B">1° Medio B</option>
+                <option value="2° Medio A">2° Medio A</option>
+                <option value="2° Medio B">2° Medio B</option>
+                <option value="3° Medio A">3° Medio A</option>
+                <option value="3° Medio B">3° Medio B</option>
+                <option value="4° Medio A">4° Medio A</option>
             </select>
         </div>
         <div class="col-md-4">
