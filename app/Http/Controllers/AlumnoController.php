@@ -77,14 +77,14 @@ class AlumnoController extends Controller
         $existe = Alumno::where('run', $run)->exists();
         if ($existe) continue;
 
-        Alumno::create([
-            'nombres' => $fila[0],
-            'apellido_paterno' => $fila[1],
-            'apellido_materno' => $fila[2],
-            'run' => $run,
-            'digito_ver' => $digito,
-            'desc_grado' => $fila[5],
-        ]);
+        DB::table('colegio20252')->insert([
+    'Nombres' => $fila[0],
+    'Apellido Paterno' => $fila[1],
+    'Apellido Materno' => $fila[2],
+    'Run' => $run,
+    'Digito Ver' => $digito,
+    'Desc Grado' => $fila[5],
+]);
     }
 
     return redirect()->back()->with('success', 'Alumnos importados correctamente.');
