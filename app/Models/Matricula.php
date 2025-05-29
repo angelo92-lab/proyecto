@@ -9,7 +9,7 @@ class Matricula extends Model
 {
     use HasFactory;
 
-    protected $table = 'matriculas';
+    protected $table = 'matriculas_2026';
 
     protected $fillable = [
         // Datos del estudiante
