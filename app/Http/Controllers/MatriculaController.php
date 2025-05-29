@@ -153,4 +153,31 @@ class MatriculaController extends Controller
     return view('matricula.reportes', compact('matriculas'));
 }
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
+public function exportarPDF(Request $request)
+{
+    $query = Matricula2026::query();
+
+    if ($request->filled('search')) {
+        $query->where(function($q) use ($request) {
+            $q->where('nombres', 'like', '%' . $request->search . '%')
+              ->orWhere('apellido_paterno', 'like', '%' . $request->search . '%')
+              ->orWhere('apellido_materno', 'like', '%' . $request->search . '%')
+              ->orWhere('curso', 'like', '%' . $request->search . '%');
+        });
+    }
+
+    if ($request->filled('curso')) {
+        $query->where('curso', $request->curso);
+    }
+
+    $matriculas = $query->get();
+
+    $pdf = Pdf::loadView('matricula.pdf', compact('matriculas'));
+
+    return $pdf->download('reporte_matriculas.pdf');
+}
+
+
 }

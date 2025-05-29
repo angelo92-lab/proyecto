@@ -45,6 +45,10 @@
         <div class="col-md-2">
             <a href="{{ route('matricula.reportes') }}" class="btn btn-secondary w-100">Limpiar</a>
         </div>
+        <div class="col-md-2">
+    <a href="{{ route('matricula.exportar.pdf', request()->query()) }}" class="btn btn-danger w-100">Exportar PDF</a>
+</div>
+
     </div>
 </form>
 

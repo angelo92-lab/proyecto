@@ -187,4 +187,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matricula', [MatriculaController::class, 'create'])->name('matricula.create');
     Route::post('/matricula', [MatriculaController::class, 'store'])->name('matricula.store');
     Route::get('/matricula/reportes', [MatriculaController::class, 'reportes'])->name('matricula.reportes');
+    Route::get('/matricula/exportar-pdf', [Matricula2026Controller::class, 'exportarPDF'])->name('matricula.exportar.pdf');
+
 });
+
+
