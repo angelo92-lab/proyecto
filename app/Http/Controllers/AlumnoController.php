@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AlumnosNuevosImport;
+use App\Models\Alumno;
 
 class AlumnoController extends Controller
 {
@@ -55,7 +56,7 @@ class AlumnoController extends Controller
     return view('alumnos.importar');
 }
 
-public function importarExcel(Request $request)
+    public function importarExcel(Request $request)
 {
     $request->validate([
         'archivo' => 'required|mimes:xlsx,xls'
