@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class MatriculaController extends Controller
 {
@@ -153,7 +154,6 @@ class MatriculaController extends Controller
     return view('matricula.reportes', compact('matriculas'));
 }
 
-use Barryvdh\DomPDF\Facade\Pdf;
 
 public function exportarPDF(Request $request)
 {
