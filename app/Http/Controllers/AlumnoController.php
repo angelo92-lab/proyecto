@@ -61,7 +61,7 @@ class AlumnoController extends Controller
     $request->validate([
         'archivo' => 'required|mimes:xlsx,xls'
     ]);
-    
+
 $archivo = $request->file('archivo');
 
     $datos = Excel::toArray([], $archivo)[0];
@@ -77,15 +77,14 @@ $archivo = $request->file('archivo');
         if ($existe) continue;
 
         DB::table('colegio20252')->insert([
-            'Nombres' => $fila[0],
-            'Apellido Paterno' => $fila[1],
-            'Apellido Materno' => $fila[2],
-            'Run' => $run,
-            'Digito Ver' => $digito,
-            'Curso' => trim($fila[5]), // Solo usamos "Desc Grado"
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+    'Nombres' => $fila[0],
+    'Apellido Paterno' => $fila[1],
+    'Apellido Materno' => $fila[2],
+    'Run' => $run,
+    'Digito Ver' => $digito,
+    'Curso' => trim($fila[5]),
+]);
+
     }
 
     return redirect()->back()->with('success', 'Alumnos importados correctamente.');
