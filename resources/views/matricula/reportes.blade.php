@@ -85,4 +85,19 @@
     </div>
 @endif
 
+@if(session('success'))
+    <div style="color: green; margin-bottom: 1em;">
+        {{ session('success') }}
+    </div>
+@endif
+
+<form action="{{ route('matricula.importarNuevos') }}" method="POST" enctype="multipart/form-data">
+    @csrf
+
+    <label for="archivo">Importar nuevos alumnos desde Excel:</label>
+    <input type="file" name="archivo" id="archivo" accept=".xlsx,.xls" required>
+
+    <button type="submit">Importar</button>
+</form>
+
 @endsection

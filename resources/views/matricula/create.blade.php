@@ -44,7 +44,7 @@
                 <option value="4° Medio A">4° Medio A</option>
             </select>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4">  
             <label for="rut" class="form-label">RUT</label>
             <input type="text" name="rut" id="rut" class="form-control" required>
         </div>
@@ -287,6 +287,5 @@
 <div class="mt-4 d-flex justify-content-end">
         <button type="submit" class="btn btn-success">💾 Guardar Matrícula</button>
     </div>
-
 </form>
 @endsection

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AlumnosNuevosImport;
 
 class AlumnoController extends Controller
 {
@@ -47,4 +49,45 @@ class AlumnoController extends Controller
 
         return view('alumnoscasino', compact('cursos', 'cursoSeleccionado', 'fechaSeleccionada', 'alumnos'));
     }
+
+    public function mostrarFormularioImportar()
+{
+    return view('alumnos.importar');
+}
+
+public function importarExcel(Request $request)
+{
+    $request->validate([
+        'archivo' => 'required|mimes:xlsx,xls'
+    ]);
+
+    $path = $request->file('archivo')->getRealPath();
+    $datos = Excel::toArray([], $path)[0];
+
+    foreach ($datos as $index => $fila) {
+        // Saltar encabezados (suponiendo que están en la primera fila)
+        if ($index == 0) continue;
+
+        // Asegúrate de tener las columnas en el orden correcto: nombres, apellido_paterno, apellido_materno, run, digito_ver, desc_grado
+        if (count($fila) < 6) continue;
+
+        $run = preg_replace('/[^0-9]/', '', $fila[3]); // limpia el RUN
+        $digito = strtoupper(trim($fila[4]));
+
+        // Verifica si ya existe
+        $existe = Alumno::where('run', $run)->exists();
+        if ($existe) continue;
+
+        Alumno::create([
+            'nombres' => $fila[0],
+            'apellido_paterno' => $fila[1],
+            'apellido_materno' => $fila[2],
+            'run' => $run,
+            'digito_ver' => $digito,
+            'desc_grado' => $fila[5],
+        ]);
+    }
+
+    return redirect()->back()->with('success', 'Alumnos importados correctamente.');
+}
 }

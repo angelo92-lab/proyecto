@@ -88,6 +88,10 @@ Route::get('/notas/importar', [NotaImportController::class, 'form'])->name('nota
 Route::post('/notas/importar', [NotaImportController::class, 'store'])->name('notas.importar.store');
 
 
+Route::get('/alumnos/importar', [AlumnoController::class, 'mostrarFormularioImportar'])->name('alumnos.importar.form');
+Route::post('/alumnos/importar', [AlumnoController::class, 'importarExcel'])->name('alumnos.importar');
+
+
 Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 
     // Funcionario: vistas adicionales

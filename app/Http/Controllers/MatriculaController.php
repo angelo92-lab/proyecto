@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Matricula;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\NuevosMatriculadosImport;
 
 class MatriculaController extends Controller
 {
@@ -179,4 +181,16 @@ public function exportarPDF(Request $request)
 
     return $pdf->download('reporte_matriculas.pdf');
 }
+
+public function importarNuevos(Request $request)
+{
+    $request->validate([
+        'archivo' => 'required|file|mimes:xlsx,xls',
+    ]);
+
+    Excel::import(new NuevosMatriculadosImport, $request->file('archivo'));
+
+    return back()->with('success', 'Alumnos nuevos importados correctamente.');
+}
+
 }
