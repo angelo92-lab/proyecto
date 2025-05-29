@@ -61,20 +61,18 @@ public function importarExcel(Request $request)
         'archivo' => 'required|mimes:xlsx,xls'
     ]);
 
-    $path = $request->file('archivo')->getRealPath();
-    $datos = Excel::toArray([], $path)[0];
+    $archivo = $request->file('archivo');
+
+    $datos = Excel::toArray([], $archivo)[0];
 
     foreach ($datos as $index => $fila) {
-        // Saltar encabezados (suponiendo que están en la primera fila)
         if ($index == 0) continue;
 
-        // Asegúrate de tener las columnas en el orden correcto: nombres, apellido_paterno, apellido_materno, run, digito_ver, desc_grado
         if (count($fila) < 6) continue;
 
-        $run = preg_replace('/[^0-9]/', '', $fila[3]); // limpia el RUN
+        $run = preg_replace('/[^0-9]/', '', $fila[3]);
         $digito = strtoupper(trim($fila[4]));
 
-        // Verifica si ya existe
         $existe = Alumno::where('run', $run)->exists();
         if ($existe) continue;
 
@@ -90,4 +88,5 @@ public function importarExcel(Request $request)
 
     return redirect()->back()->with('success', 'Alumnos importados correctamente.');
 }
+
 }

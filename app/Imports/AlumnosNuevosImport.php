@@ -26,7 +26,7 @@ class AlumnosNuevosImport implements ToCollection, WithHeadingRow
                     'apellido_paterno' => trim($row['apellido_paterno']),
                     'apellido_materno' => trim($row['apellido_materno']),
                     'run' => $run,
-                    'digito_verificador' => $dv,
+                    'digito_ver' => $dv,
                     'curso' => trim($row['desc_grado']),
                 ]);
                 $this->insertados++;
