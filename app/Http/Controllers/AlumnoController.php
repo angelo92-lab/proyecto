@@ -61,9 +61,10 @@ class AlumnoController extends Controller
     $request->validate([
         'archivo' => 'required|mimes:xlsx,xls'
     ]);
+    
+$archivo = $request->file('archivo');
 
-    $path = $request->file('archivo')->getRealPath();
-    $datos = \Maatwebsite\Excel\Facades\Excel::toArray([], $path)[0];
+    $datos = Excel::toArray([], $archivo)[0];
 
     foreach ($datos as $index => $fila) {
         if ($index == 0) continue; // Saltar encabezados
