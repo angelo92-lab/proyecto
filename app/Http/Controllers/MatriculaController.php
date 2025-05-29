@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\Matricula;
 
 class MatriculaController extends Controller
 {
@@ -157,7 +158,7 @@ class MatriculaController extends Controller
 
 public function exportarPDF(Request $request)
 {
-    $query = Matricula2026::query();
+    $query = Matricula::query(); 
 
     if ($request->filled('search')) {
         $query->where(function($q) use ($request) {
@@ -178,6 +179,4 @@ public function exportarPDF(Request $request)
 
     return $pdf->download('reporte_matriculas.pdf');
 }
-
-
 }
