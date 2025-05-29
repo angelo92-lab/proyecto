@@ -62,29 +62,29 @@ class AlumnoController extends Controller
         'archivo' => 'required|mimes:xlsx,xls'
     ]);
 
-    $archivo = $request->file('archivo');
-
-    $datos = Excel::toArray([], $archivo)[0];
+    $path = $request->file('archivo')->getRealPath();
+    $datos = \Maatwebsite\Excel\Facades\Excel::toArray([], $path)[0];
 
     foreach ($datos as $index => $fila) {
-        if ($index == 0) continue;
-
+        if ($index == 0) continue; // Saltar encabezados
         if (count($fila) < 6) continue;
 
         $run = preg_replace('/[^0-9]/', '', $fila[3]);
         $digito = strtoupper(trim($fila[4]));
 
-        $existe = Alumno::where('run', $run)->exists();
+        $existe = DB::table('colegio20252')->where('Run', $run)->exists();
         if ($existe) continue;
 
         DB::table('colegio20252')->insert([
-    'Nombres' => $fila[0],
-    'Apellido Paterno' => $fila[1],
-    'Apellido Materno' => $fila[2],
-    'Run' => $run,
-    'Digito Ver' => $digito,
-    'Desc Grado' => $fila[5],
-]);
+            'Nombres' => $fila[0],
+            'Apellido Paterno' => $fila[1],
+            'Apellido Materno' => $fila[2],
+            'Run' => $run,
+            'Digito Ver' => $digito,
+            'Curso' => trim($fila[5]), // Solo usamos "Desc Grado"
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 
     return redirect()->back()->with('success', 'Alumnos importados correctamente.');

@@ -32,4 +32,4 @@ class NuevosMatriculadosImport implements OnEachRow, WithHeadingRow
         }
     }
 }
-
+    
