@@ -13,67 +13,60 @@ class MatriculaController extends Controller
 {
     public function create()
     {
-        return view('matricula.create');
+        return view('matricula.create'); // Asegúrate de que esta vista exista
     }
 
     public function store(Request $request)
     {
-        $request->validate([
-            // Campos del estudiante
-            'curso' => 'required|string|max:100',
-            'run' => 'required|string|max:15',
+        $validatedData = $request->validate([
+            'nombres' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'required|string|max:255',
-            'nombres' => 'required|string|max:255',
-            'sexo' => 'required|string',
-            'fecha_nacimiento' => 'required|date',
-            'edad_al_31_marzo' => 'required|integer',
-            'nacionalidad' => 'required|string',
-            'direccion' => 'required|string|max:255',
-            'localidad' => 'nullable|string|max:255',
-            'comuna' => 'required|string|max:255',
-            'locomocion_municipal' => 'required|boolean',
-            'pueblos_originarios' => 'nullable|string|max:255',
-            'pertenece_pie' => 'required|boolean',
-            'cursos_repetidos' => 'nullable|string|max:255',
+            'rut' => 'required|string|max:12',
+            'curso' => 'nullable|string|max:50',
+            'sexo' => 'nullable|string|max:10',
+            'fecha_nacimiento' => 'nullable|date',
+            'edad_2026' => 'nullable|integer',
+            'nacionalidad' => 'nullable|string|max:100',
+            'direccion' => 'nullable|string|max:255',
+            'localidad' => 'nullable|string|max:100',
+            'comuna' => 'nullable|string|max:100',
+            'locomocion_municipal' => 'nullable|string|max:10',
+            'pueblos_originarios' => 'nullable|string|max:10',
+            'pueblo_especifico' => 'nullable|string|max:100',
+            'programa_integracion' => 'nullable|string|max:10',
+            'cursos_repetidos' => 'nullable|string|max:100',
             'establecimiento_procedencia' => 'nullable|string|max:255',
-            'alergico_medicamentos' => 'required|boolean',
-            'enfermedad_diagnosticada' => 'nullable|string|max:255',
-
-            // Padres y tutor
+            'alergias' => 'nullable|string|max:255',
+            'enfermedades' => 'nullable|string|max:255',
             'padre_nombre' => 'nullable|string|max:255',
-            'padre_nivel_educacional' => 'nullable|string|max:255',
+            'padre_nivel_educacional' => 'nullable|string|max:100',
             'madre_nombre' => 'nullable|string|max:255',
-            'madre_nivel_educacional' => 'nullable|string|max:255',
+            'madre_nivel_educacional' => 'nullable|string|max:100',
             'tutor_nombre' => 'nullable|string|max:255',
-            'tutor_nivel_educacional' => 'nullable|string|max:255',
-            'personas_con_quien_vive' => 'nullable|string',
-            'tipo_vivienda' => 'nullable|string|in:propia,cedida,arrendada',
-            'posee_luz' => 'required|boolean',
-            'posee_alcantarillado' => 'required|boolean',
-
-            // Apoderado titular
+            'tutor_nivel_educacional' => 'nullable|string|max:100',
+            'personas_con_quien_vive' => 'nullable|string|max:255',
+            'tipo_vivienda' => 'nullable|string|max:100',
+            'posee_luz' => 'nullable|string|max:10',
+            'posee_alcantarillado' => 'nullable|string|max:10',
             'apoderado_nombre' => 'nullable|string|max:255',
             'apoderado_domicilio' => 'nullable|string|max:255',
-            'apoderado_telefono' => 'nullable|string|max:20',
-
-            // Apoderado suplente
+            'apoderado_telefono' => 'nullable|string|max:50',
             'suplente_nombre' => 'nullable|string|max:255',
             'suplente_domicilio' => 'nullable|string|max:255',
-            'suplente_telefono' => 'nullable|string|max:20',
-            'autoriza_retiro_suplente' => 'nullable|boolean',
-
-            // Contacto de emergencia
+            'suplente_telefono' => 'nullable|string|max:50',
+            'autoriza_retiro_suplente' => 'nullable|string|max:10',
             'emergencia_contacto_nombre' => 'nullable|string|max:255',
-            'emergencia_contacto_celular' => 'nullable|string|max:20',
-
-            // Responsable ficha
+            'emergencia_contacto_celular' => 'nullable|string|max:50',
             'responsable_ficha_nombre' => 'nullable|string|max:255',
-            'responsable_ficha_firma' => 'nullable|string|max:255', // O puedes capturar un "sí/no" o subir imagen en el futuro
+            'responsable_ficha_firma' => 'nullable|string|max:255',
             'responsable_ficha_fecha' => 'nullable|date',
-
-
         ]);
+
+        Matricula2026::create($validatedData);
+
+        return redirect()->route('matricula.create')->with('success', '✅ Matrícula guardada correctamente.');
+    
 
         DB::table('matriculas_2026')->insert([
             // Estudiante
