@@ -109,12 +109,12 @@ class MatriculaController extends Controller
             'suplente_telefono' => $request->suplente_telefono,
             'autoriza_suplente' => $request->has('autoriza_retiro_suplente'),
 
-            'emergencia_contacto_nombre' => $request->emergencia_contacto_nombre,
-            'emergencia_contacto_celular' => $request->emergencia_contacto_celular,
+            'emergencia_nombre' => $request->emergencia_contacto_nombre,
+            'emergencia_celular' => $request->emergencia_contacto_celular,
 
-            'responsable_ficha_nombre' => $request->responsable_ficha_nombre,
-            'responsable_ficha_firma' => $request->responsable_ficha_firma,
-            'responsable_ficha_fecha' => $request->responsable_ficha_fecha,
+            'responsable_ficha' => $request->responsable_ficha_nombre,
+            'firma_responsable' => $request->responsable_ficha_firma,
+            'fecha_ficha' => $request->responsable_ficha_fecha,
 
 
             'created_at' => now(),
