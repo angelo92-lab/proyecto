@@ -63,7 +63,7 @@ class MatriculaController extends Controller
             'responsable_ficha_fecha' => 'nullable|date',
         ]);
 
-        Matricula2026::create($validatedData);
+        Matricula::create($validatedData);
 
         return redirect()->route('matricula.create')->with('success', '✅ Matrícula guardada correctamente.');
     
