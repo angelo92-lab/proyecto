@@ -68,7 +68,7 @@
 
         <div class="col-md-3">
             <label for="edad_2026" class="form-label">Edad al 31 de Marzo 2026</label>
-            <input type="number" name="edad_2026" class="form-control" required>
+            <input type="number" name="edad_al_31_marzo" class="form-control" required>
         </div>
 
         <div class="col-md-3">
