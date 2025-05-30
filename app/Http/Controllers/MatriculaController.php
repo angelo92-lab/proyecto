@@ -95,9 +95,8 @@ class MatriculaController extends Controller
             'cursos_repetidos' => $request->cursos_repetidos,
             'establecimiento_procedencia' => $request->establecimiento_procedencia,
             'alergico_medicamentos' => $request->alergico_medicamentos,
-            'enfermedad_diagnosticada' => $request->enfermedad_diagnosticada,
-
-            // Padres y tutor
+            'enfermedad_diagnosticada' => $request->enfermedad_diagnosticada,   
+            
             'padre_nombre' => $request->padre_nombre,
             'padre_nivel_educacional' => $request->padre_nivel_educacional,
             'madre_nombre' => $request->madre_nombre,
@@ -110,22 +109,18 @@ class MatriculaController extends Controller
             'posee_luz' => $request->has('posee_luz'),
             'posee_alcantarillado' => $request->has('posee_alcantarillado'),
 
-            // Apoderado titular
             'apoderado_nombre' => $request->apoderado_nombre,
             'apoderado_domicilio' => $request->apoderado_domicilio,
             'apoderado_telefono' => $request->apoderado_telefono,
 
-            // Apoderado suplente
             'suplente_nombre' => $request->suplente_nombre,
             'suplente_domicilio' => $request->suplente_domicilio,
             'suplente_telefono' => $request->suplente_telefono,
             'autoriza_retiro_suplente' => $request->has('autoriza_retiro_suplente'),
 
-            // Contacto de emergencia
             'emergencia_contacto_nombre' => $request->emergencia_contacto_nombre,
             'emergencia_contacto_celular' => $request->emergencia_contacto_celular,
 
-            // Responsable ficha
             'responsable_ficha_nombre' => $request->responsable_ficha_nombre,
             'responsable_ficha_firma' => $request->responsable_ficha_firma,
             'responsable_ficha_fecha' => $request->responsable_ficha_fecha,
@@ -180,17 +175,6 @@ public function exportarPDF(Request $request)
     $pdf = Pdf::loadView('matricula.pdf', compact('matriculas'));
 
     return $pdf->download('reporte_matriculas.pdf');
-}
-
-public function importarNuevos(Request $request)
-{
-    $request->validate([
-        'archivo' => 'required|file|mimes:xlsx,xls',
-    ]);
-
-    Excel::import(new NuevosMatriculadosImport, $request->file('archivo'));
-
-    return back()->with('success', 'Alumnos nuevos importados correctamente.');
 }
 
 }
