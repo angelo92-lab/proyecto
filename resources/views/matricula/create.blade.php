@@ -116,11 +116,10 @@
 
         <div class="col-md-4">
             <label class="form-label">¿Programa de integración?</label>
-            <select name="programa_integracion" class="form-select">
-                <option value="">Seleccionar</option>
-                <option value="Sí">Sí</option>
-                <option value="No">No</option>
-            </select>
+           <select name="programa_integracion" class="form-control">
+    <option value="1">Sí</option>
+    <option value="0">No</option>
+</select>
         </div>
 
         <div class="col-md-4">
