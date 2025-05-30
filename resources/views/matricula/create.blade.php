@@ -34,7 +34,7 @@
 
         <div class="col-md-4">
             <label for="rut" class="form-label">RUT</label>
-            <input type="text" name="rut" id="rut" class="form-control" required>
+            <input type="text" name="run" id="rut" class="form-control" required>
         </div>
 
         <div class="col-md-4">
