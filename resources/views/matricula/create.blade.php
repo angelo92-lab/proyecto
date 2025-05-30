@@ -93,7 +93,7 @@
 
         <div class="col-md-4">
             <label class="form-label">¿Requiere locomoción municipal?</label>
-            <select name="locomocion_municipal" class="form-select">
+            <select name="requiere_locomocion" class="form-select">
                 <option value="">Seleccionar</option>
                 <option value="Sí">Sí</option>
                 <option value="No">No</option>
@@ -111,7 +111,7 @@
 
         <div class="col-md-4">
             <label for="pueblo_especifico" class="form-label">¿Cuál?</label>
-            <input type="text" name="pueblo_especifico" class="form-control">
+            <input type="text" name="pueblo_originario" class="form-control">
         </div>
 
         <div class="col-md-4">
@@ -144,7 +144,7 @@
 
         <div class="col-md-6">
             <label for="enfermedades" class="form-label">¿Padece alguna enfermedad diagnosticada?</label>
-            <input type="text" name="enfermedades" class="form-control">
+            <input type="text" name="enfermedad_diagnosticada" class="form-control">
         </div>
     </div>
 
@@ -223,7 +223,7 @@
             <input type="text" name="suplente_domicilio" class="form-control mt-2" placeholder="Domicilio">
             <input type="text" name="suplente_telefono" class="form-control mt-2" placeholder="Teléfono">
             <div class="form-check mt-2">
-                <input class="form-check-input" type="checkbox" name="autoriza_retiro_suplente" value="1">
+                <input class="form-check-input" type="checkbox" name="autoriza_suplente" value="1">
                 <label class="form-check-label">¿Autoriza al suplente a retirar?</label>
             </div>
         </div>
@@ -234,11 +234,11 @@
     <div class="row g-3">
         <div class="col-md-6">
             <label class="form-label">Nombre</label>
-            <input type="text" name="emergencia_contacto_nombre" class="form-control">
+            <input type="text" name="emergencia_nombre" class="form-control">
         </div>
         <div class="col-md-6">
             <label class="form-label">Celular</label>
-            <input type="text" name="emergencia_contacto_celular" class="form-control">
+            <input type="text" name="emergencia_celular" class="form-control">
         </div>
     </div>
 
@@ -246,15 +246,15 @@
     <div class="row g-3">
         <div class="col-md-6">
             <label class="form-label">Nombre</label>
-            <input type="text" name="responsable_ficha_nombre" class="form-control">
+            <input type="text" name="responsable_ficha" class="form-control">
         </div>
         <div class="col-md-3">
             <label class="form-label">Firma</label>
-            <input type="text" name="responsable_ficha_firma" class="form-control" placeholder="ej: Sí">
+            <input type="text" name="firma_responsable" class="form-control" placeholder="ej: Sí">
         </div>
         <div class="col-md-3">
             <label class="form-label">Fecha</label>
-            <input type="date" name="responsable_ficha_fecha" class="form-control">
+            <input type="date" name="fecha_ficha" class="form-control">
         </div>
     </div>
 
