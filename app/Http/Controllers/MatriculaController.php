@@ -56,7 +56,7 @@ class MatriculaController extends Controller
             'suplente_nombre' => 'nullable|string|max:255',
             'suplente_domicilio' => 'nullable|string|max:255',
             'suplente_telefono' => 'nullable|string|max:50',
-            'autoriza_retiro_suplente' => 'nullable|string|max:10',
+            'autoriza_suplente' => 'nullable|string|max:10',
             'emergencia_contacto_nombre' => 'nullable|string|max:255',
             'emergencia_contacto_celular' => 'nullable|string|max:50',
             'responsable_ficha_nombre' => 'nullable|string|max:255',
@@ -107,7 +107,7 @@ class MatriculaController extends Controller
             'suplente_nombre' => $request->suplente_nombre,
             'suplente_domicilio' => $request->suplente_domicilio,
             'suplente_telefono' => $request->suplente_telefono,
-            'autoriza_retiro_suplente' => $request->has('autoriza_retiro_suplente'),
+            'autoriza_suplente' => $request->has('autoriza_retiro_suplente'),
 
             'emergencia_contacto_nombre' => $request->emergencia_contacto_nombre,
             'emergencia_contacto_celular' => $request->emergencia_contacto_celular,
