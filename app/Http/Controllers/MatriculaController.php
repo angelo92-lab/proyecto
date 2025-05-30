@@ -22,11 +22,11 @@ class MatriculaController extends Controller
             'nombres' => 'required|string|max:255',
             'apellido_paterno' => 'required|string|max:255',
             'apellido_materno' => 'required|string|max:255',
-            'rut' => 'required|string|max:12',
+            'run' => 'required|string|max:12',
             'curso' => 'nullable|string|max:50',
             'sexo' => 'nullable|string|max:10',
             'fecha_nacimiento' => 'nullable|date',
-            'edad_2026' => 'nullable|integer',
+            'edad_al_31_marzo' => 'nullable|integer',
             'nacionalidad' => 'nullable|string|max:100',
             'direccion' => 'nullable|string|max:255',
             'localidad' => 'nullable|string|max:100',
@@ -37,8 +37,9 @@ class MatriculaController extends Controller
             'programa_integracion' => 'nullable|string|max:10',
             'cursos_repetidos' => 'nullable|string|max:100',
             'establecimiento_procedencia' => 'nullable|string|max:255',
-            'alergias' => 'nullable|string|max:255',
-            'enfermedades' => 'nullable|string|max:255',
+            'alergias' => 'nullable|string|max:10',
+            'alergias_detalle' => 'nullable|string|max:255',
+            'enfermedad_diagnosticada' => 'nullable|string|max:255',
             'padre_nombre' => 'nullable|string|max:255',
             'padre_nivel_educacional' => 'nullable|string|max:100',
             'madre_nombre' => 'nullable|string|max:255',
@@ -62,10 +63,6 @@ class MatriculaController extends Controller
             'responsable_ficha_firma' => 'nullable|string|max:255',
             'responsable_ficha_fecha' => 'nullable|date',
         ]);
-
-        Matricula::create($validatedData);
-
-        return redirect()->route('matricula.create')->with('success', '✅ Matrícula guardada correctamente.');
     
 
         DB::table('matriculas_2026')->insert([
@@ -84,7 +81,7 @@ class MatriculaController extends Controller
             'comuna' => $request->comuna,
             'locomocion_municipal' => $request->locomocion_municipal,
             'pueblos_originarios' => $request->pueblos_originarios,
-            'pertenece_pie' => $request->pertenece_pie,
+            'programa_integracion' => $request->programa_integracion,
             'cursos_repetidos' => $request->cursos_repetidos,
             'establecimiento_procedencia' => $request->establecimiento_procedencia,
             'alergico_medicamentos' => $request->alergico_medicamentos,
@@ -123,7 +120,8 @@ class MatriculaController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('matricula.create')->with('success', 'Matrícula ingresada correctamente.');
+        return redirect()->route('matricula.create')->with('success', '✅ Matrícula guardada correctamente.');
+
     }
 
     public function reportes(Request $request)
@@ -170,4 +168,4 @@ public function exportarPDF(Request $request)
     return $pdf->download('reporte_matriculas.pdf');
 }
 
-}
+}   

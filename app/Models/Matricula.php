@@ -14,7 +14,7 @@ class Matricula extends Model
     protected $fillable = [
         // Datos del estudiante
         'run', 'apellido_paterno', 'apellido_materno', 'nombres', 'sexo', 'fecha_nacimiento',
-        'edad_2026', 'nacionalidad', 'direccion', 'localidad', 'comuna', 'locomocion_municipal',
+        'edad_al_31_marzo', 'nacionalidad', 'direccion', 'localidad', 'comuna', 'locomocion_municipal',
         'pertenece_pueblo_originario', 'pueblo_originario', 'programa_integracion',
         'cursos_repetidos', 'establecimiento_procedencia', 'alergias', 'enfermedades',
 
