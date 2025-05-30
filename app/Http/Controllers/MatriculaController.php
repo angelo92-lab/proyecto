@@ -84,7 +84,8 @@ class MatriculaController extends Controller
             'programa_integracion' => $request->programa_integracion,
             'cursos_repetidos' => $request->cursos_repetidos,
             'establecimiento_procedencia' => $request->establecimiento_procedencia,
-            'alergico_medicamentos' => $request->alergico_medicamentos,
+            'alergias' => $request->has('alergias') ? 'sí' : 'no',
+            'alergias_detalle' => $request->alergias_detalle,
             'enfermedad_diagnosticada' => $request->enfermedad_diagnosticada,   
             
             'padre_nombre' => $request->padre_nombre,

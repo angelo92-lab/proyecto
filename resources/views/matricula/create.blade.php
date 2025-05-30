@@ -140,6 +140,13 @@
                 <option value="0">No</option>
             </select>
         </div>
+        <div class="col-md-6">      
+        <label>
+                Detalle alergias
+                <input type="text" name="alergias_detalle" class="form-control">
+            </label>
+            </div>
+        
 
         <div class="col-md-6">
             <label for="enfermedades" class="form-label">¿Padece alguna enfermedad diagnosticada?</label>
