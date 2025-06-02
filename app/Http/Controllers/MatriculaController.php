@@ -59,9 +59,9 @@ class MatriculaController extends Controller
             'autoriza_suplente' => 'nullable|string|max:10',
             'emergencia_nombre' => 'nullable|string|max:255',
             'emergencia_celular' => 'nullable|string|max:50',
-            'responsable_ficha_nombre' => 'nullable|string|max:255',
-            'responsable_ficha_firma' => 'nullable|string|max:255',
-            'responsable_ficha_fecha' => 'nullable|date',
+            'responsable_ficha' => 'nullable|string|max:255',
+            'firma_responsable' => 'nullable|string|max:255',
+            'fecha_ficha' => 'nullable|date',
         ]);
     
 
@@ -112,9 +112,9 @@ class MatriculaController extends Controller
             'emergencia_nombre' => $request->emergencia_nombre,
             'emergencia_celular' => $request->emergencia_celular,
 
-            'responsable_ficha' => $request->responsable_ficha_nombre,
-            'firma_responsable' => $request->responsable_ficha_firma,
-            'fecha_ficha' => $request->responsable_ficha_fecha,
+            'responsable_ficha' => $request->responsable_ficha,
+            'firma_responsable' => $request->firma_responsable,
+            'fecha_ficha' => $request->fecha_ficha,
 
 
             'created_at' => now(),
