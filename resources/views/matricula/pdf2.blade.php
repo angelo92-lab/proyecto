@@ -32,6 +32,11 @@
     </style>
 </head>
 <body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+    <img src="{{ public_path('images/logo.png') }}" alt="Logo" style="width: 80px;">
+    <h1 style="margin: 0;">Ficha de Matrícula 2026</h1>
+</div>
+
 
 <h1>Ficha de Matrícula 2026</h1>
 
