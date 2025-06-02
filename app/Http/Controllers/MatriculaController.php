@@ -176,12 +176,13 @@ public function show($id)
 }
 
 
-public function exportarPDF2($id)
+public function descargarPDF($id)
 {
     $matricula = Matricula2026::findOrFail($id);
+    $pdf = Pdf::loadView('matricula2026.pdf', compact('matricula'));
 
-    $pdf = PDF::loadView('matricula2026.pdf', compact('matricula'));
-    return $pdf->download('matricula_' . $matricula->nombres . '.pdf');
+    $nombreArchivo = 'Ficha_Matricula_' . $matricula->nombres . '_' . $matricula->apellido_paterno . '.pdf';
+    return $pdf->download($nombreArchivo);
 }
 
 
