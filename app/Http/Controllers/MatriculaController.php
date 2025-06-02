@@ -175,5 +175,15 @@ public function show($id)
     return view('matricula.show', compact('matricula'));
 }
 
+use PDF; // Asegúrate de tener este use al principio
+
+public function exportarPDF2($id)
+{
+    $matricula = Matricula2026::findOrFail($id);
+
+    $pdf = PDF::loadView('matricula2026.pdf', compact('matricula'));
+    return $pdf->download('matricula_' . $matricula->nombres . '.pdf');
+}
+
 
 }   

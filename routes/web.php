@@ -193,6 +193,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matricula/reportes', [MatriculaController::class, 'reportes'])->name('matricula.reportes');
     Route::get('/matricula/exportar-pdf', [MatriculaController::class, 'exportarPDF'])->name('matricula.exportar.pdf');
     Route::get('/matriculas/{id}', [MatriculaController::class, 'show'])->name('matricula.show');
+    Route::get('/matricula2026/{id}/pdf', [MatriculaController::class, 'exportarPDF'])->name('matricula2026.pdf');
+
 
 
 });
