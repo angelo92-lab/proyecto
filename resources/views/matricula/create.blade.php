@@ -104,8 +104,8 @@
             <label class="form-label">¿Pertenece a pueblos originarios?</label>
             <select name="pueblos_originarios" class="form-select">
                 <option value="">Seleccionar</option>
-                <option value="Sí">Sí</option>
-                <option value="No">No</option>
+                <option value="1">Sí</option>
+                <option value="0">No</option>
             </select>
         </div>
 
