@@ -25,6 +25,6 @@
 
     <!-- Repite para madre, tutor legal, apoderado, vivienda, emergencia, etc. -->
 
-    <a href="{{ route('matriculas.index') }}" class="btn btn-secondary">Volver</a>
+    <a href="{{ route('matricula.index') }}" class="btn btn-secondary">Volver</a>
 </div>
-@endsection
+@endsection 
