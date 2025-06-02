@@ -121,7 +121,9 @@ class MatriculaController extends Controller
             'updated_at' => now(),
         ]);
 
-        return redirect()->route('matricula.create')->with('success', '✅ Matrícula guardada correctamente.');
+        return redirect()->route('matricula2026.edit', $matricula->id)
+                     ->with('success', 'Matrícula guardada correctamente.');
+
 
     }
 
@@ -174,7 +176,11 @@ public function show($id)
     $matricula = Matricula::findOrFail($id);
     return view('matricula.show', compact('matricula'));
 }
-
+public function edit($id)
+{
+    $matricula = Matricula2026::findOrFail($id);
+    return view('matricula2026.edit', compact('matricula'));
+}
 
 public function descargarPDF($id)
 {

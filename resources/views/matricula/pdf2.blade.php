@@ -38,8 +38,6 @@
 </div>
 
 
-<h1>Ficha de Matrícula 2026</h1>
-
 <table border="1">
     <tr><th colspan="4" class="section-title">👤 Estudiante</th></tr>
     <tr><td>Nombre</td><td colspan="3">{{ $matricula->nombres }} {{ $matricula->apellido_paterno }} {{ $matricula->apellido_materno }}</td></tr>
