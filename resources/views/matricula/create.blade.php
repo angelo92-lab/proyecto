@@ -95,8 +95,8 @@
             <label class="form-label">¿Requiere locomoción municipal?</label>
             <select name="requiere_locomocion" class="form-select">
                 <option value="">Seleccionar</option>
-                <option value="Sí">Sí</option>
-                <option value="No">No</option>
+                <option value="1">Sí</option>
+                <option value="0">No</option>
             </select>
         </div>
 
