@@ -169,4 +169,11 @@ public function exportarPDF(Request $request)
     return $pdf->download('reporte_matriculas.pdf');
 }
 
+public function show($id)
+{
+    $matricula = Matricula2026::findOrFail($id);
+    return view('matriculas.show', compact('matricula'));
+}
+
+
 }   
