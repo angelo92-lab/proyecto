@@ -179,7 +179,7 @@ public function show($id)
 public function descargarPDF($id)
 {
     $matricula = Matricula::findOrFail($id);
-    $pdf = Pdf::loadView('matricula2026.pdf', compact('matricula'));
+    $pdf = Pdf::loadView('matricula.pdf2', compact('matricula'));
 
     $nombreArchivo = 'Ficha_Matricula_' . $matricula->nombres . '_' . $matricula->apellido_paterno . '.pdf';
     return $pdf->download($nombreArchivo);
