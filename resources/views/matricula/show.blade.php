@@ -82,12 +82,12 @@
     </div>
 
     <div class="mt-4">
-        <a href="{{ route('matricula.reportes') }}" class="btn btn-secondary">← Volver al listado</a>
+    <a href="{{ route('matricula2026.pdf', $matricula->id) }}" class="btn btn-danger" target="_blank">
+        🖨️ Exportar a PDF
+    </a>
+    <a href="{{ route('matricula.reportes') }}" class="btn btn-secondary">← Volver al listado</a>
     </div>
 
-    <a href="{{ route('matricula2026.pdf', $matricula->id) }}" class="btn btn-danger" target="_blank">
-    🖨️ Exportar a PDF
-</a>
-
+    
 </div>
 @endsection
