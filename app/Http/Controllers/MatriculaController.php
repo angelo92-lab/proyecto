@@ -171,7 +171,7 @@ public function exportarPDF(Request $request)
 
 public function show($id)
 {
-    $matricula = Matricula2026::findOrFail($id);
+    $matricula = Matricula::findOrFail($id);
     return view('matriculas.show', compact('matricula'));
 }
 
