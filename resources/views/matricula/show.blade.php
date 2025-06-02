@@ -1,103 +1,88 @@
 @extends('layouts.app')
 
+@section('title', 'Detalle de Matrícula')
+
 @section('content')
 <div class="container">
-    <h2 class="mb-4">Detalle de Matrícula</h2>
+    <h1 class="mb-4">📄 Detalle de Matrícula 2026</h1>
 
-    <!-- DATOS DEL ESTUDIANTE -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Datos del Estudiante</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->nombres }} {{ $matricula->ap_paterno }} {{ $matricula->ap_materno }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->run }}-{{ $matricula->dv }}</p>
-            <p><strong>Fecha de Nacimiento:</strong> {{ $matricula->fecha_nacimiento }}</p>
-            <p><strong>Curso al que postula:</strong> {{ $matricula->desc_grado }}</p>
-        </div>
+    {{-- Estudiante --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">👤 Datos del Estudiante</h4>
+        <p><strong>Curso:</strong> {{ $matricula->curso }}</p>
+        <p><strong>RUN:</strong> {{ $matricula->run }}</p>
+        <p><strong>Nombre Completo:</strong> {{ $matricula->nombres }} {{ $matricula->apellido_paterno }} {{ $matricula->apellido_materno }}</p>
+        <p><strong>Sexo:</strong> {{ $matricula->sexo }}</p>
+        <p><strong>Fecha de Nacimiento:</strong> {{ $matricula->fecha_nacimiento }}</p>
+        <p><strong>Edad al 31 de marzo:</strong> {{ $matricula->edad_al_31_marzo }}</p>
+        <p><strong>Nacionalidad:</strong> {{ $matricula->nacionalidad }}</p>
+        <p><strong>Dirección:</strong> {{ $matricula->direccion }}</p>
+        <p><strong>Localidad:</strong> {{ $matricula->localidad }}</p>
+        <p><strong>Comuna:</strong> {{ $matricula->comuna }}</p>
+        <p><strong>Requiere locomoción:</strong> {{ $matricula->requiere_locomocion ? 'Sí' : 'No' }}</p>
+        <p><strong>¿Pertenece a pueblo originario?:</strong> {{ $matricula->pueblos_originarios ? 'Sí' : 'No' }}</p>
+        @if ($matricula->pueblo_originario)
+            <p><strong>Pueblo originario:</strong> {{ $matricula->pueblo_originario }}</p>
+        @endif
+        <p><strong>Programa de integración:</strong> {{ $matricula->programa_integracion ? 'Sí' : 'No' }}</p>
+        <p><strong>Cursos repetidos:</strong> {{ $matricula->cursos_repetidos }}</p>
+        <p><strong>Establecimiento de procedencia:</strong> {{ $matricula->establecimiento_procedencia }}</p>
+        <p><strong>¿Tiene alergias?:</strong> {{ $matricula->alergias ? 'Sí' : 'No' }}</p>
+        @if ($matricula->alergias_detalle)
+            <p><strong>Detalle de alergias:</strong> {{ $matricula->alergias_detalle }}</p>
+        @endif
+        <p><strong>Enfermedad diagnosticada:</strong> {{ $matricula->enfermedad_diagnosticada }}</p>
     </div>
 
-    <!-- DATOS DEL PADRE -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Datos del Padre</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->padre_nombre }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->padre_run }}</p>
-            <p><strong>Ocupación:</strong> {{ $matricula->padre_ocupacion }}</p>
-        </div>
+    {{-- Grupo Familiar --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">👨‍👩‍👧 Grupo Familiar</h4>
+        <p><strong>Nombre del padre:</strong> {{ $matricula->padre_nombre }}</p>
+        <p><strong>Nivel educacional del padre:</strong> {{ $matricula->padre_nivel_educacional }}</p>
+        <p><strong>Nombre de la madre:</strong> {{ $matricula->madre_nombre }}</p>
+        <p><strong>Nivel educacional de la madre:</strong> {{ $matricula->madre_nivel_educacional }}</p>
+        <p><strong>Nombre del tutor legal:</strong> {{ $matricula->tutor_nombre }}</p>
+        <p><strong>Nivel educacional del tutor:</strong> {{ $matricula->tutor_nivel_educacional }}</p>
+        <p><strong>Personas con las que vive:</strong> {{ $matricula->personas_con_quien_vive }}</p>
     </div>
 
-    <!-- DATOS DE LA MADRE -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Datos de la Madre</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->madre_nombre }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->madre_run }}</p>
-            <p><strong>Ocupación:</strong> {{ $matricula->madre_ocupacion }}</p>
-        </div>
+    {{-- Vivienda --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">🏠 Vivienda</h4>
+        <p><strong>Tipo de vivienda:</strong> {{ $matricula->tipo_vivienda }}</p>
+        <p><strong>¿Posee luz eléctrica?:</strong> {{ $matricula->posee_luz ? 'Sí' : 'No' }}</p>
+        <p><strong>¿Posee alcantarillado?:</strong> {{ $matricula->posee_alcantarillado ? 'Sí' : 'No' }}</p>
     </div>
 
-    <!-- DATOS DEL TUTOR LEGAL -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Tutor Legal</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->tutor_nombre }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->tutor_run }}</p>
-            <p><strong>Parentesco:</strong> {{ $matricula->tutor_parentesco }}</p>
-        </div>
+    {{-- Apoderado --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">🧑‍⚖️ Apoderado</h4>
+        <p><strong>Nombre:</strong> {{ $matricula->apoderado_nombre }}</p>
+        <p><strong>Domicilio:</strong> {{ $matricula->apoderado_domicilio }}</p>
+        <p><strong>Teléfono:</strong> {{ $matricula->apoderado_telefono }}</p>
+        <p><strong>Apoderado suplente:</strong> {{ $matricula->suplente_nombre }}</p>
+        <p><strong>Domicilio suplente:</strong> {{ $matricula->suplente_domicilio }}</p>
+        <p><strong>Teléfono suplente:</strong> {{ $matricula->suplente_telefono }}</p>
+        <p><strong>¿Autoriza al suplente?:</strong> {{ $matricula->autoriza_suplente ? 'Sí' : 'No' }}</p>
     </div>
 
-    <!-- DATOS DE CON QUIÉN VIVE -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Con quién vive el estudiante</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->vive_nombre }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->vive_run }}</p>
-            <p><strong>Parentesco:</strong> {{ $matricula->vive_parentesco }}</p>
-        </div>
+    {{-- Contacto de emergencia --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">🚨 Contacto de Emergencia</h4>
+        <p><strong>Nombre:</strong> {{ $matricula->emergencia_nombre }}</p>
+        <p><strong>Celular:</strong> {{ $matricula->emergencia_celular }}</p>
     </div>
 
-    <!-- DATOS DE LA VIVIENDA -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Datos de la Vivienda</h5>
-            <p><strong>Dirección:</strong> {{ $matricula->direccion }}</p>
-            <p><strong>Comuna:</strong> {{ $matricula->comuna }}</p>
-            <p><strong>Teléfono:</strong> {{ $matricula->telefono }}</p>
-        </div>
+    {{-- Responsable ficha --}}
+    <div class="card p-4 mb-4 shadow-sm">
+        <h4 class="text-primary">📝 Responsable del Llenado</h4>
+        <p><strong>Nombre:</strong> {{ $matricula->responsable_ficha }}</p>
+        <p><strong>Firma:</strong> {{ $matricula->firma_responsable }}</p>
+        <p><strong>Fecha:</strong> {{ $matricula->fecha_ficha }}</p>
     </div>
 
-    <!-- DATOS DEL APODERADO -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Apoderado</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->apoderado_nombre }}</p>
-            <p><strong>RUN:</strong> {{ $matricula->apoderado_run }}</p>
-            <p><strong>Parentesco:</strong> {{ $matricula->apoderado_parentesco }}</p>
-            <p><strong>Teléfono:</strong> {{ $matricula->apoderado_telefono }}</p>
-            <p><strong>Correo:</strong> {{ $matricula->apoderado_email }}</p>
-        </div>
+    <div class="mt-4">
+        <a href="{{ route('matricula.reportes') }}" class="btn btn-secondary">← Volver al listado</a>
     </div>
-
-    <!-- DATOS DE EMERGENCIA -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Contacto de Emergencia</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->emergencia_nombre }}</p>
-            <p><strong>Parentesco:</strong> {{ $matricula->emergencia_parentesco }}</p>
-            <p><strong>Teléfono:</strong> {{ $matricula->emergencia_telefono }}</p>
-        </div>
-    </div>
-
-    <!-- RESPONSABLE DEL LLENADO -->
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5>Responsable del llenado</h5>
-            <p><strong>Nombre:</strong> {{ $matricula->responsable_nombre }}</p>
-            <p><strong>Parentesco:</strong> {{ $matricula->responsable_parentesco }}</p>
-            <p><strong>Fecha de llenado:</strong> {{ $matricula->fecha_lleno }}</p>
-        </div>
-    </div>
-
-    <!-- BOTÓN VOLVER -->
-    <a href="{{ route('matricula.reportes') }}" class="btn btn-secondary">Volver</a>
 </div>
 @endsection
