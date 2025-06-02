@@ -175,7 +175,6 @@ public function show($id)
     return view('matricula.show', compact('matricula'));
 }
 
-use PDF; // Asegúrate de tener este use al principio
 
 public function exportarPDF2($id)
 {
