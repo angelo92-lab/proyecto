@@ -75,7 +75,7 @@
                     <td>{{ $matricula->comuna }}</td>
                     <td>{{ $matricula->direccion }}</td>
                      <td>
-        <a href="{{ route('matriculas.show', $matricula->id) }}" class="btn btn-sm btn-primary">Ver</a>
+        <a href="{{ route('matricula.show', $matricula->id) }}" class="btn btn-sm btn-primary">Ver</a>
     </td>
                 </tr>
                 @endforeach
