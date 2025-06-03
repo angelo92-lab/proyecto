@@ -20,6 +20,36 @@
             <canvas id="chartComuna"></canvas>
         </div>
     </div>
+    <div class="row mt-4">
+    <div class="col-md-4">
+        <div class="card p-3">
+            <strong>🩺 Con alergias:</strong> {{ $conAlergias }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3">
+            <strong>🧬 Con enfermedades diagnosticadas:</strong> {{ $conEnfermedades }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card p-3">
+            <strong>🚌 Requieren locomoción:</strong> {{ $requiereLocomocion }}
+        </div>
+    </div>
+</div>
+   <div class="col-md-6">
+        <canvas id="chartVivienda"></canvas>
+    </div>
+    <div class="col-md-6">
+        <canvas id="chartPueblos"></canvas>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <canvas id="chartProcedencia"></canvas>
+    </div>
+</div>
 </div>
 @endsection
 
@@ -82,5 +112,53 @@
             }
         }
     });
+
+    const viviendaData = {
+    labels: {!! json_encode($porVivienda->pluck('tipo_vivienda')) !!},
+    datasets: [{
+        label: 'Tipo de vivienda',
+        data: {!! json_encode($porVivienda->pluck('total')) !!},
+        backgroundColor: 'rgba(153, 102, 255, 0.6)'
+    }]
+};
+
+const pueblosData = {
+    labels: {!! json_encode($pueblosOriginarios->pluck('pueblos_originarios')) !!},
+    datasets: [{
+        label: 'Pueblos originarios',
+        data: {!! json_encode($pueblosOriginarios->pluck('total')) !!},
+        backgroundColor: 'rgba(255, 159, 64, 0.6)'
+    }]
+};
+
+const procedenciaData = {
+    labels: {!! json_encode($procedencia->pluck('establecimiento_procedencia')) !!},
+    datasets: [{
+        label: 'Procedencia (top 10)',
+        data: {!! json_encode($procedencia->pluck('total')) !!},
+        backgroundColor: 'rgba(75, 192, 192, 0.6)'
+    }]
+};
+
+new Chart(document.getElementById('chartVivienda'), {
+    type: 'bar',
+    data: viviendaData,
+    options: { responsive: true }
+});
+
+new Chart(document.getElementById('chartPueblos'), {
+    type: 'pie',
+    data: pueblosData,
+    options: { responsive: true }
+});
+
+new Chart(document.getElementById('chartProcedencia'), {
+    type: 'bar',
+    data: procedenciaData,
+    options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+    }
+});
 </script>
 @endsection

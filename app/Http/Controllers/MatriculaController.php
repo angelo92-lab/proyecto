@@ -188,22 +188,49 @@ public function descargarPDF($id)
 public function dashboard()
 {
     $total = DB::table('matriculas_2026')->count();
+
     $porCurso = DB::table('matriculas_2026')
-                  ->select('curso', DB::raw('count(*) as total'))
-                  ->groupBy('curso')
-                  ->get();
+        ->select('curso', DB::raw('count(*) as total'))
+        ->groupBy('curso')
+        ->get();
 
     $porSexo = DB::table('matriculas_2026')
-                 ->select('sexo', DB::raw('count(*) as total'))
-                 ->groupBy('sexo')
-                 ->get();
+        ->select('sexo', DB::raw('count(*) as total'))
+        ->groupBy('sexo')
+        ->get();
 
     $porComuna = DB::table('matriculas_2026')
-                   ->select('comuna', DB::raw('count(*) as total'))
-                   ->groupBy('comuna')
-                   ->get();
+        ->select('comuna', DB::raw('count(*) as total'))
+        ->groupBy('comuna')
+        ->get();
 
-    return view('matricula.dashboard', compact('total', 'porCurso', 'porSexo', 'porComuna'));
+    // NUEVAS MÉTRICAS
+    $conAlergias = DB::table('matriculas_2026')->where('alergias', 1)->count();
+    $conEnfermedades = DB::table('matriculas_2026')->whereNotNull('enfermedad_diagnosticada')->where('enfermedad_diagnosticada', '!=', '')->count();
+    $requiereLocomocion = DB::table('matriculas_2026')->where('requiere_locomocion', 'Sí')->count();
+
+    $porVivienda = DB::table('matriculas_2026')
+        ->select('tipo_vivienda', DB::raw('count(*) as total'))
+        ->groupBy('tipo_vivienda')
+        ->get();
+
+    $pueblosOriginarios = DB::table('matriculas_2026')
+        ->select('pueblos_originarios', DB::raw('count(*) as total'))
+        ->groupBy('pueblos_originarios')
+        ->get();
+
+    $procedencia = DB::table('matriculas_2026')
+        ->select('establecimiento_procedencia', DB::raw('count(*) as total'))
+        ->groupBy('establecimiento_procedencia')
+        ->orderByDesc('total')
+        ->limit(10)
+        ->get();
+
+    return view('matricula.dashboard', compact(
+        'total', 'porCurso', 'porSexo', 'porComuna',
+        'conAlergias', 'conEnfermedades', 'requiereLocomocion',
+        'porVivienda', 'pueblosOriginarios', 'procedencia'
+    ));
 }
 
 
