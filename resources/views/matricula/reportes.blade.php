@@ -66,6 +66,7 @@
                     <th>Fecha Nac.</th>
                     <th>Comuna</th>
                     <th>Dirección</th>
+                    <th>DatosImp.</th>
                 </tr>
             </thead>
             <tbody>
