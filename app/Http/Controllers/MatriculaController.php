@@ -185,5 +185,27 @@ public function descargarPDF($id)
     return $pdf->download($nombreArchivo);
 }
 
+public function dashboard()
+{
+    $total = DB::table('matriculas_2026')->count();
+    $porCurso = DB::table('matriculas_2026')
+                  ->select('curso', DB::raw('count(*) as total'))
+                  ->groupBy('curso')
+                  ->get();
+
+    $porSexo = DB::table('matriculas_2026')
+                 ->select('sexo', DB::raw('count(*) as total'))
+                 ->groupBy('sexo')
+                 ->get();
+
+    $porComuna = DB::table('matriculas_2026')
+                   ->select('comuna', DB::raw('count(*) as total'))
+                   ->groupBy('comuna')
+                   ->get();
+
+    return view('matricula.dashboard', compact('total', 'porCurso', 'porSexo', 'porComuna'));
+}
+
+
 
 }   

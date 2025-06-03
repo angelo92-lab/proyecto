@@ -11,6 +11,9 @@
     </div>
 @endif
 
+<a href="{{ route('matricula.dashboard') }}" class="btn btn-info">📊 Ver Dashboard</a>
+
+
 {{-- Buscador + filtro por curso --}}
 <form method="GET" action="{{ route('matricula.reportes') }}" class="mb-4">
     <div class="row g-2">
