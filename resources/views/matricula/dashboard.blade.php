@@ -36,20 +36,7 @@
             <strong>🚌 Requieren locomoción:</strong> {{ $requiereLocomocion }}
         </div>
     </div>
-</div>
-   <div class="col-md-6">
-        <canvas id="chartVivienda"></canvas>
-    </div>
-    <div class="col-md-6">
-        <canvas id="chartPueblos"></canvas>
-    </div>
-</div>
 
-<div class="row mt-4">
-    <div class="col-md-12">
-        <canvas id="chartProcedencia"></canvas>
-    </div>
-</div>
 </div>
 @endsection
 

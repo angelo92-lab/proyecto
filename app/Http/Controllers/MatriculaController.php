@@ -231,7 +231,7 @@ public function dashboard()
         'conAlergias', 'conEnfermedades', 'requiereLocomocion',
         'porVivienda', 'pueblosOriginarios', 'procedencia'
     ));
-}
+}   
 
 
 
