@@ -169,21 +169,19 @@ public function exportarPDF(Request $request)
     return $pdf->download('reporte_matriculas.pdf');
 }
 
-public function show($id)
-{
-    $matricula = Matricula::findOrFail($id);
-    return view('matricula.show', compact('matricula'));
-}
+  public function show($id)
+    {
+        $matricula = DB::table('matriculas_2026')->find($id);
+        return view('matricula.show', compact('matricula'));
+    }
 
-
-public function descargarPDF($id)
-{
-    $matricula = Matricula::findOrFail($id);
-    $pdf = Pdf::loadView('matricula.pdf2', compact('matricula'));
-
-    $nombreArchivo = 'Ficha_Matricula_' . $matricula->nombres . '_' . $matricula->apellido_paterno . '.pdf';
-    return $pdf->download($nombreArchivo);
-}
+    public function descargarPDF($id)
+    {
+        $matricula = DB::table('matriculas_2026')->find($id);
+        $pdf = Pdf::loadView('matricula.pdf2', compact('matricula'));
+        $nombreArchivo = 'Ficha_Matricula_' . $matricula->nombres . '_' . $matricula->apellido_paterno . '.pdf';
+        return $pdf->download($nombreArchivo);
+    }
 
 
 }   
