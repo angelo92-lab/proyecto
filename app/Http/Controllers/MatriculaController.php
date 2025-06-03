@@ -84,7 +84,7 @@ class MatriculaController extends Controller
             'programa_integracion' => $request->programa_integracion,
             'cursos_repetidos' => $request->cursos_repetidos,
             'establecimiento_procedencia' => $request->establecimiento_procedencia,
-            'alergias' => (int) $request->input('alergias', 0),
+            'alergias' => $request->boolean('alergias'),
             'alergias_detalle' => $request->alergias_detalle,
             'enfermedad_diagnosticada' => $request->enfermedad_diagnosticada,   
             
@@ -97,8 +97,8 @@ class MatriculaController extends Controller
             'personas_con_quien_vive' => $request->personas_con_quien_vive,
 
             'tipo_vivienda' => $request->tipo_vivienda,
-            'posee_luz' => $request->has('posee_luz'),
-            'posee_alcantarillado' => $request->has('posee_alcantarillado'),
+            'posee_luz' => $request->boolean('posee_luz'),
+            'posee_alcantarillado' => $request->boolean('posee_alcantarillado'),
 
             'apoderado_nombre' => $request->apoderado_nombre,
             'apoderado_domicilio' => $request->apoderado_domicilio,
@@ -107,7 +107,7 @@ class MatriculaController extends Controller
             'suplente_nombre' => $request->suplente_nombre,
             'suplente_domicilio' => $request->suplente_domicilio,
             'suplente_telefono' => $request->suplente_telefono,
-            'autoriza_suplente' => $request->has('autoriza_retiro_suplente'),
+           'autoriza_suplente' => $request->boolean('autoriza_retiro_suplente'),
 
             'emergencia_nombre' => $request->emergencia_nombre,
             'emergencia_celular' => $request->emergencia_celular,
@@ -139,6 +139,10 @@ class MatriculaController extends Controller
         });
     }
 
+    if ($request->filled('curso')) {
+    $query->where('curso', $request->curso);
+}
+
     $matriculas = $query->get();
 
     return view('matricula.reportes', compact('matriculas'));
@@ -156,10 +160,6 @@ public function exportarPDF(Request $request)
               ->orWhere('apellido_materno', 'like', '%' . $request->search . '%')
               ->orWhere('curso', 'like', '%' . $request->search . '%');
         });
-    }
-
-    if ($request->filled('curso')) {
-        $query->where('curso', $request->curso);
     }
 
     $matriculas = $query->get();
