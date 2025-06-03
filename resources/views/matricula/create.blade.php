@@ -268,17 +268,6 @@
         <button type="submit" class="btn btn-success">💾 Guardar Matrícula</button>
     </div>
 
-    <div class="d-flex justify-content-between mt-4">
-    <button type="submit" class="btn btn-success">
-        💾 Guardar Matrícula
-    </button>
-
-    @isset($matricula)
-        <a href="{{ route('matricula2026.pdf', $matricula->id) }}" target="_blank" class="btn btn-primary">
-            🖨️ Imprimir Matrícula
-        </a>
-    @endisset
-</div>
 </div>
 </form>
 @endsection
