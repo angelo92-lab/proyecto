@@ -16,6 +16,27 @@
             background-color: #121212 !important;
             color: #e0e0e0;
         }
+
+        
+        body.dark-mode,
+        body.dark-mode h1,
+        body.dark-mode h2,
+        body.dark-mode h3,
+        body.dark-mode h4,
+        body.dark-mode h5,
+        body.dark-mode h6,
+        body.dark-mode p,
+        body.dark-mode span,
+        body.dark-mode label,
+        body.dark-mode table,
+        body.dark-mode td,
+        body.dark-mode th,
+        body.dark-mode a,
+        body.dark-mode li,
+        body.dark-mode .form-control {
+            color: #e0e0e0 !important;
+                background-color: transparent;
+        }
         body.dark-mode .navbar {
             background-color: #1f1f1f !important;
         }
