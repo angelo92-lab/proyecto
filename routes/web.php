@@ -94,7 +94,6 @@ Route::post('/alumnos/importar', [AlumnoController::class, 'importarExcel'])->na
 
 Route::middleware(['auth', 'verificarfuncionario'])->group(function () {
 
-    // Funcionario: vistas adicionales
     Route::get('/funcionarios/informacion', function () {
         return view('funcionarios.informacion');
     })->name('funcionarios.informacion');
@@ -198,5 +197,15 @@ Route::middleware(['auth'])->group(function () {
 
 
 });
+
+Route::prefix('funcionarios/utp/planificaciones')->group(function () {
+    Route::get('/', [App\Http\Controllers\PlanificacionController::class, 'index'])->name('planificaciones.index');
+    Route::get('/{unidad}', [App\Http\Controllers\PlanificacionController::class, 'showUnidad'])->name('planificaciones.unidad');
+    Route::get('/{unidad}/{subcarpeta}', [App\Http\Controllers\PlanificacionController::class, 'showSubcarpeta'])->name('planificaciones.subcarpeta');
+});
+
+
+
+
 
 

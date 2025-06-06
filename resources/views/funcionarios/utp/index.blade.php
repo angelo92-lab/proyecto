@@ -14,6 +14,9 @@
         <a href="{{ route('utp.lineamientos') }}" class="list-group-item list-group-item-action">
             📘 Lineamientos
         </a>
+        <a href="{{ route('planificaciones.index') }}" class="list-group-item list-group-item-action">
+            📁 Planificaciones
+        </a>
     </div>
 </div>
 @endsection

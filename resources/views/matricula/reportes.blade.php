@@ -92,8 +92,7 @@
     </div>
 @endif
 
-@if(session('success'))
-    <div style="color: green; margin-bottom: 1em;">
+@if(session('success')) 
         {{ session('success') }}
     </div>
 @endif
