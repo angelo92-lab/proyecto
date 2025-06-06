@@ -198,6 +198,8 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+use App\Http\Controllers\PlanificacionController;
+
 Route::prefix('utp/planificaciones')->group(function () {
     Route::get('/', [PlanificacionController::class, 'index'])->name('planificaciones.index');
     Route::get('/basica', [PlanificacionController::class, 'basica'])->name('planificaciones.basica');
