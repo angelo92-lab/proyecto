@@ -19,6 +19,7 @@ class PlanificacionController extends Controller
         return view('utp.planificaciones.basica', compact('carpetas'));
     }
 
+
     public function media()
     {
         $ruta = public_path('planificaciones/media');
