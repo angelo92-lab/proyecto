@@ -9,7 +9,7 @@ class PlanificacionController extends Controller
 {
     public function index()
     {
-        return view('utp.planificaciones.index');
+        return view('funcionarios.utp.planificaciones.index');
     }
 
     public function basica()
