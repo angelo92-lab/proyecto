@@ -199,9 +199,9 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('utp/planificaciones')->group(function () {
-    Route::get('/', [PlanificacionesController::class, 'index'])->name('planificaciones.index');
-    Route::get('/basica', [PlanificacionesController::class, 'basica'])->name('planificaciones.basica');
-    Route::get('/media', [PlanificacionesController::class, 'media'])->name('planificaciones.media');
+    Route::get('/', [PlanificacionController::class, 'index'])->name('planificaciones.index');
+    Route::get('/basica', [PlanificacionController::class, 'basica'])->name('planificaciones.basica');
+    Route::get('/media', [PlanificacionController::class, 'media'])->name('planificaciones.media');
 });
 
 
