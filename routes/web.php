@@ -198,11 +198,12 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
-Route::prefix('funcionarios/utp/planificaciones')->group(function () {
-    Route::get('/', [App\Http\Controllers\PlanificacionController::class, 'index'])->name('planificaciones.index');
-    Route::get('/{unidad}', [App\Http\Controllers\PlanificacionController::class, 'showUnidad'])->name('planificaciones.unidad');
-    Route::get('/{unidad}/{subcarpeta}', [App\Http\Controllers\PlanificacionController::class, 'showSubcarpeta'])->name('planificaciones.subcarpeta');
+Route::prefix('utp/planificaciones')->group(function () {
+    Route::get('/', [PlanificacionesController::class, 'index'])->name('planificaciones.index');
+    Route::get('/basica', [PlanificacionesController::class, 'basica'])->name('planificaciones.basica');
+    Route::get('/media', [PlanificacionesController::class, 'media'])->name('planificaciones.media');
 });
+
 
 
 
