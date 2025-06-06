@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 
-class PlanificacionesController extends Controller
+class PlanificacionController extends Controller
 {
     public function index()
     {
