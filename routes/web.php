@@ -205,7 +205,8 @@ Route::prefix('funcionarios/utp/planificaciones')->name('planificaciones.')->gro
     Route::get('/', [PlanificacionController::class, 'index'])->name('index');
     Route::get('/basica', [PlanificacionController::class, 'basica'])->name('basica');
     Route::get('/media', [PlanificacionController::class, 'media'])->name('media');
-    Route::get('/{nivel}/{carpeta}', [PlanificacionController::class, 'verArchivos'])->name('archivos');
+    Route::get('/{nivel}/{carpeta}/{subcarpeta?}', [PlanificacionController::class, 'verArchivos'])->name('archivos');
+
 });
 
 
