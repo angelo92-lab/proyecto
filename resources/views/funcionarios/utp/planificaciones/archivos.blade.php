@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">📁 Archivos: {{ $carpeta }}</h2>
+    <h2 class="mb-4">📂 Archivos en: {{ $carpeta }}</h2>
 
     <ul class="list-group">
         @forelse ($archivos as $archivo)

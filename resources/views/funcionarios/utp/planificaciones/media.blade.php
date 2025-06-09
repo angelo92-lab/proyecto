@@ -8,11 +8,14 @@
         <p class="text-muted">No hay carpetas disponibles por el momento.</p>
     @else
         <div class="list-group">
-            @foreach($carpetas as $carpeta)
-                <a href="{{ url('planificaciones/media/' . $carpeta) }}" class="list-group-item list-group-item-action">
-                    📁 {{ $carpeta }}
-                </a>
-            @endforeach
+            @foreach ($carpetas as $carpeta)
+    <li class="list-group-item">
+        <a href="{{ route('planificaciones.archivos', ['nivel' => 'media', 'carpeta' => urlencode($carpeta)]) }}">
+            📁 {{ $carpeta }}
+        </a>
+    </li>
+@endforeach
+
         </div>
     @endif
 </div>

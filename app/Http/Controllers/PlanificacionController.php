@@ -35,17 +35,22 @@ class PlanificacionController extends Controller
         return view('funcionarios.utp.planificaciones.media', compact('carpetas'));
     }
 
-    public function mostrarArchivos($nivel, $carpeta)
+    public function verArchivos($nivel, $carpeta)
 {
-    $ruta = public_path("planificaciones/$nivel/$carpeta");
+    $carpetaDecodificada = urldecode($carpeta);
+    $ruta = public_path("planificaciones/$nivel/$carpetaDecodificada");
 
     if (!File::exists($ruta)) {
-        abort(404, "Carpeta no encontrada");
+        abort(404, 'Carpeta no encontrada.');
     }
 
     $archivos = collect(File::files($ruta))->map(fn($file) => basename($file));
 
-    return view('funcionarios.utp.planificaciones.archivos', compact('nivel', 'carpeta', 'archivos'));
+    return view('funcionarios.utp.planificaciones.archivos', [
+        'nivel' => $nivel,
+        'carpeta' => $carpetaDecodificada,
+        'archivos' => $archivos
+    ]);
 }
 
 }
