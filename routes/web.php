@@ -200,11 +200,12 @@ Route::middleware(['auth'])->group(function () {
 
 use App\Http\Controllers\PlanificacionController;
 
-Route::prefix('utp/planificaciones')->name('planificaciones.')->group(function () {
+Route::prefix('funcionarios/utp/planificaciones')->name('planificaciones.')->group(function () {
     Route::get('/', [PlanificacionController::class, 'index'])->name('index');
     Route::get('/basica', [PlanificacionController::class, 'basica'])->name('basica');
     Route::get('/media', [PlanificacionController::class, 'media'])->name('media');
 });
+
 
 
 

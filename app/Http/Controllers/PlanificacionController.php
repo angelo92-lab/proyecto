@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Response;
 
 class PlanificacionController extends Controller
 {
@@ -13,17 +12,27 @@ class PlanificacionController extends Controller
     }
 
     public function basica()
-{
-    $ruta = public_path('planificaciones/basica');
-    $carpetas = collect(File::directories($ruta))->map(fn($dir) => basename($dir));
-    return view('funcionarios.utp.planificaciones.basica', compact('carpetas'));
+    {
+        $ruta = public_path('planificaciones/basica');
+
+        if (!File::exists($ruta)) {
+            abort(404, "La carpeta no existe: $ruta");
+        }
+
+        $carpetas = collect(File::directories($ruta))->map(fn($dir) => basename($dir));
+        return view('funcionarios.utp.planificaciones.basica', compact('carpetas'));
+    }
+
+    public function media()
+    {
+        $ruta = public_path('planificaciones/media');
+
+        if (!File::exists($ruta)) {
+            abort(404, "La carpeta no existe: $ruta");
+        }
+
+        $carpetas = collect(File::directories($ruta))->map(fn($dir) => basename($dir));
+        return view('funcionarios.utp.planificaciones.media', compact('carpetas'));
+    }
 }
 
-public function media()
-{
-    $ruta = public_path('planificaciones/media');
-    $carpetas = collect(File::directories($ruta))->map(fn($dir) => basename($dir));
-    return view('funcionarios.utp.planificaciones.media', compact('carpetas'));
-}
-
-}
