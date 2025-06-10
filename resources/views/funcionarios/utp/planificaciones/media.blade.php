@@ -22,14 +22,11 @@
             📁 {{ $carpeta }}
         </a>
     </li>
-
-    <a href="{{ route('utp.index') }}" class="btn btn-secondary mt-4">
-    ⬅️ Volver a Unidad Técnico Pedagógica
-</a>
-
+    
 @endforeach
-
         </div>
+        <a href="{{ route('utp.index') }}" class="btn btn-secondary mt-4">
+    ⬅️ Volver a Unidad Técnico Pedagógica
     @endif
 </div>
 @endsection
