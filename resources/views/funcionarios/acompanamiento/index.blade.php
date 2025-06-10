@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h2 class="mb-4">👩‍🏫 Acompañamiento Docente</h2>
+    <h1 class="titulo-principal">🧑‍🏫 Acompañamiento Docente</h1>
 
     <h4>📄 Archivos principales:</h4>
     <ul class="list-group mb-4">

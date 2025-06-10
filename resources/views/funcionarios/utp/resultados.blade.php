@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4">📊 Resultados de Evaluaciones</h1>
+    <h1 class="titulo-principal">📊 Resultados de Evaluaciones</h1>
+
 
     <div class="list-group">
         <a href="{{ route('utp.resultados.diagnostico') }}" class="list-group-item list-group-item-action">

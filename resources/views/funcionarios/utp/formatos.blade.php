@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4">📄 Formatos UTP</h1>
+    <h1 class="titulo-principal">📄 Formatos</h1>
 
     <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center">

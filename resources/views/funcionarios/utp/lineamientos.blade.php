@@ -2,7 +2,8 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4">📘 Lineamientos Técnico-Pedagógicos</h1>
+    <h1 class="titulo-principal">📘 Lineamientos</h1>
+
 
     <p>En este apartado se presentan los lineamientos definidos por la Unidad Técnica Pedagógica para el presente año.</p>
 

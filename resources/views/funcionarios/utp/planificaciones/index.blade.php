@@ -10,8 +10,8 @@
         <li class="breadcrumb-item active" aria-current="page">Planificaciones</li>
       </ol>
     </nav>
+<h2 class="titulo-principal">📘 Planificaciones</h2>
 
-    <h2 class="mb-4">📚 Planificaciones</h2>
 
    <div class="list-group"> 
     <a href="{{ route('planificaciones.basica') }}" class="list-group-item list-group-item-action"> 🏫 Primera Unidad - Educación Básica </a>

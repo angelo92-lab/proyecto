@@ -12,7 +12,8 @@
       </ol>
     </nav>
 
-    <h2 class="mb-4">📘 Primera Unidad - Educación Básica</h2>
+   <h2 class="titulo-principal">📘 Primera Unidad - Educación Media</h2>
+
 
     @if($carpetas->isEmpty())
         <p class="text-muted">No hay carpetas disponibles por el momento.</p>
