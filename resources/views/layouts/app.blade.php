@@ -51,6 +51,17 @@
         body.dark-mode .card {
             background-color: #1e1e1e;
         }
+         .titulo-principal {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #dee2e6;
+        padding-bottom: 0.5rem;
+    }
+
+    .dark-mode .titulo-principal {
+        border-color: #444;
+    }
     </style>
 </head>
 <body id="body">

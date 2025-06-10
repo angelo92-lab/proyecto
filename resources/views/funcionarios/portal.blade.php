@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container">
-    <h2 class="mb-4 text-center">📚 Portal de Funcionarios</h2>
+    <h2 class="titulo-principal text-center">📚 Portal de Funcionarios</h2>
     <p class="text-center mb-5">Selecciona la sección a la que deseas acceder:</p>
 
     <div class="row row-cols-1 row-cols-md-3 g-4">

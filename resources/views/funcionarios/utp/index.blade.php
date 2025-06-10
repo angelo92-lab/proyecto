@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container py-4">
-    <h1 class="mb-4">📚 Unidad Técnica Pedagógica (UTP)</h1>
+    <h1 class="titulo-principal">📚 Unidad Técnica Pedagógica (UTP)</h1>
 
     <div class="list-group">
         <a href="{{ route('utp.formatos') }}" class="list-group-item list-group-item-action">
