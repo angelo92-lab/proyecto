@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ route('utp.index') }}">UTP</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('planificaciones.index') }}">Planificaciones</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Educación Básica</li>
+  </ol>
+</nav>
+
 <div class="container py-4">
     <h2 class="mb-4">📘 Primera Unidad - Educación Básica</h2>
 
@@ -14,6 +22,11 @@
             📁 {{ $carpeta }}
         </a>
     </li>
+
+    <a href="{{ route('utp.index') }}" class="btn btn-secondary mt-4">
+    ⬅️ Volver a Unidad Técnico Pedagógica
+</a>
+
 @endforeach
 
         </div>
