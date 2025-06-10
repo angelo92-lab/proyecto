@@ -209,6 +209,10 @@ Route::prefix('funcionarios/utp/planificaciones')->name('planificaciones.')->gro
 
 });
 
+use App\Http\Controllers\AcompanamientoDocenteController;
+
+Route::get('/funcionarios/acompanamiento-docente', [AcompanamientoDocenteController::class, 'index'])->name('funcionarios.acompanamiento');
+
 
 
 

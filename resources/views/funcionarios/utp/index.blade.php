@@ -6,7 +6,7 @@
 
     <div class="list-group">
         <a href="{{ route('utp.formatos') }}" class="list-group-item list-group-item-action">
-            📄 Formatos
+            📄 Formatos 
         </a>
         <a href="{{ route('utp.resultados') }}" class="list-group-item list-group-item-action">
             📊 Resultados de Evaluaciones
@@ -16,6 +16,9 @@
         </a>
         <a href="{{ route('planificaciones.index') }}" class="list-group-item list-group-item-action">
             📁 Planificaciones
+        </a>
+        <a href="{{ route('funcionarios.acompanamiento') }}" class="list-group-item list-group-item-action">
+            📁 Acomapañamiento Docente
         </a>
     </div>
 </div>
