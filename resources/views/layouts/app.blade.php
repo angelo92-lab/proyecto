@@ -17,25 +17,10 @@
             color: #e0e0e0;
         }
 
-        
         body.dark-mode,
-        body.dark-mode h1,
-        body.dark-mode h2,
-        body.dark-mode h3,
-        body.dark-mode h4,
-        body.dark-mode h5,
-        body.dark-mode h6,
-        body.dark-mode p,
-        body.dark-mode span,
-        body.dark-mode label,
-        body.dark-mode table,
-        body.dark-mode td,
-        body.dark-mode th,
-        body.dark-mode a,
-        body.dark-mode li,
-        body.dark-mode .form-control {
+        body.dark-mode h1, h2, h3, h4, h5, h6, p, span, label, table, td, th, a, li, .form-control {
             color: #e0e0e0 !important;
-                background-color: transparent;
+            background-color: transparent;
         }
         body.dark-mode .navbar {
             background-color: #1f1f1f !important;
@@ -51,95 +36,77 @@
         body.dark-mode .card {
             background-color: #1e1e1e;
         }
-         .titulo-principal {
-        font-size: 2rem;
-        font-weight: bold;
-        margin-bottom: 1rem;
-        border-bottom: 2px solid #dee2e6;
-        padding-bottom: 0.5rem;
-    }
 
-    .dark-mode .titulo-principal {
-        border-color: #444;
-    }
+        .titulo-principal {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 0.5rem;
+        }
+        .dark-mode .titulo-principal {
+            border-color: #444;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            min-width: 220px;
+            max-width: 220px;
+            background-color: #343a40;
+            color: white;
+            height: 100vh;
+            position: fixed;
+            top: 56px; /* altura del navbar */
+            left: 0;
+            padding-top: 1rem;
+        }
+        .sidebar a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 0.75rem 1.25rem;
+        }
+        .sidebar a:hover {
+            background-color: #495057;
+        }
+
+        .with-sidebar {
+            margin-left: 220px;
+            padding: 2rem;
+        }
     </style>
 </head>
 <body id="body">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold" href="{{ url('/') }}">
-                🎲 Pagina Escolar CRDC
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand fw-bold" href="{{ url('/') }}">🎲 Pagina Escolar CRDC</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>   
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a href="{{ url('alumnoscasino') }}" class="nav-link">
-                            <i class="bi bi-people-fill"></i> Lista de Alumnos
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('marcaralmuerzo') }}" class="nav-link">
-                            <i class="bi bi-check-square"></i> Marcar Almuerzo
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reportes.index') }}" class="nav-link">
-                            <i class="bi bi-bar-chart-line-fill"></i> Reportes
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('agregaranotacion') }}" class="nav-link">
-                            <i class="bi bi-pencil-square"></i> Agregar Anotación
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url('anotaciones') }}" class="nav-link">
-                            <i class="bi bi-journal-text"></i> Anotaciones
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('vistaMarcar') }}" class="nav-link">
-                            <i class="bi bi-person-check-fill"></i> Marcar Asistencia
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reloj.estado') }}" class="nav-link">
-                            <i class="bi bi-clock-history"></i> Estado Diario
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('reporte.asistencia') }}" class="nav-link">
-                            <i class="bi bi-file-earmark-bar-graph"></i> Generar Reporte
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('portal.funcionarios') }}" class="nav-link">
-                            <i class="bi bi-person-badge-fill"></i> Portal Funcionarios
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('matricula.create') }}" class="nav-link">
-                            <i class="bi bi-pencil-square"></i> Ingresar Matrícula
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ route('matricula.reportes') }}" class="nav-link">
-                            <i class="bi bi-file-earmark-bar-graph"></i> Reportes Matrículas
-                        </a>
-                    </li>
+                    <!-- Menú superior -->
+                    <!-- ... tu navegación ya existente ... -->
+                    <!-- (sin cambios, se mantiene como está) -->
+                    <li class="nav-item"><a href="{{ url('alumnoscasino') }}" class="nav-link"><i class="bi bi-people-fill"></i> Lista de Alumnos</a></li>
+                    <li class="nav-item"><a href="{{ url('marcaralmuerzo') }}" class="nav-link"><i class="bi bi-check-square"></i> Marcar Almuerzo</a></li>
+                    <li class="nav-item"><a href="{{ route('reportes.index') }}" class="nav-link"><i class="bi bi-bar-chart-line-fill"></i> Reportes</a></li>
+                    <li class="nav-item"><a href="{{ url('agregaranotacion') }}" class="nav-link"><i class="bi bi-pencil-square"></i> Agregar Anotación</a></li>
+                    <li class="nav-item"><a href="{{ url('anotaciones') }}" class="nav-link"><i class="bi bi-journal-text"></i> Anotaciones</a></li>
+                    <li class="nav-item"><a href="{{ route('vistaMarcar') }}" class="nav-link"><i class="bi bi-person-check-fill"></i> Marcar Asistencia</a></li>
+                    <li class="nav-item"><a href="{{ route('reloj.estado') }}" class="nav-link"><i class="bi bi-clock-history"></i> Estado Diario</a></li>
+                    <li class="nav-item"><a href="{{ route('reporte.asistencia') }}" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Generar Reporte</a></li>
+                    <li class="nav-item"><a href="{{ route('portal.funcionarios') }}" class="nav-link"><i class="bi bi-person-badge-fill"></i> Portal Funcionarios</a></li>
+                    <li class="nav-item"><a href="{{ route('matricula.create') }}" class="nav-link"><i class="bi bi-pencil-square"></i> Ingresar Matrícula</a></li>
+                    <li class="nav-item"><a href="{{ route('matricula.reportes') }}" class="nav-link"><i class="bi bi-file-earmark-bar-graph"></i> Reportes Matrículas</a></li>
                 </ul>
 
-                <!-- 🌗 Botón modo oscuro -->
-                <button class="btn btn-outline-light me-2" onclick="toggleDarkMode()" title="Cambiar tema">
-                    🌓
-                </button>
+                <!-- Modo oscuro -->
+                <button class="btn btn-outline-light me-2" onclick="toggleDarkMode()" title="Cambiar tema">🌓</button>
 
-                <!-- Cierre de sesión -->
+                <!-- Logout -->
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-flex">
                     @csrf
                     <button type="submit" class="btn btn-outline-light btn-sm">
@@ -150,7 +117,22 @@
         </div>
     </nav>
 
-    <main class="container my-4">
+    <!-- SIDEBAR solo en vistas de funcionarios -->
+    @if (Str::startsWith(request()->path(), 'funcionarios'))
+        <div class="sidebar">
+            <h5 class="text-center mb-3">📂 UTP</h5>
+            <a href="{{ route('utp.index') }}">🏠 Inicio UTP</a>
+            <a href="{{ route('planificaciones.index') }}">🗂️ Planificaciones</a>
+            <a href="{{ route('plan.acompanamiento') }}">📘 Plan Acompañamiento</a>
+            <a href="{{ route('funcionarios.listado') }}">📋 Listados</a>
+            <a href="{{ route('funcionarios.encuestas') }}">📊 Encuestas</a>
+            <a href="{{ route('funcionarios.planes-normativos') }}">📄 Planes Normativos</a>
+            <a href="{{ route('acompanamiento.docente') }}">👨‍🏫 Acompañamiento Docente</a>
+        </div>
+    @endif
+
+    <!-- CONTENIDO -->
+    <main class="@if (Str::startsWith(request()->path(), 'funcionarios')) with-sidebar @else container my-4 @endif">
         @yield('content')
     </main>
 
@@ -162,8 +144,6 @@
             document.body.classList.toggle('dark-mode');
             localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         }
-
-        // Al cargar, aplica la preferencia del usuario
         window.addEventListener('DOMContentLoaded', () => {
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
