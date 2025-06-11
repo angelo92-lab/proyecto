@@ -127,7 +127,7 @@
             <a href="{{ route('funcionarios.listado') }}">📋 Listados</a>
             <a href="{{ route('funcionarios.encuestas') }}">📊 Encuestas</a>
             <a href="{{ route('funcionarios.planes-normativos') }}">📄 Planes Normativos</a>
-            <a href="{{ route('acompanamiento.docente') }}">👨‍🏫 Acompañamiento Docente</a>
+            <a href="{{ route('funcionarios.acompanamiento') }}">👨‍🏫 Acompañamiento Docente</a>
         </div>
     @endif
 
