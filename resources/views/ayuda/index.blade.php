@@ -23,8 +23,8 @@
             <div class="card card-body">
                 1. Ir al menú superior y hacer clic en “Anotaciones o en el boton anotacion de la lista de alumnos”.<br>
                 2. Buscar al alumno por nombre<br>
-                3. EScribir la anotacion.
-                4. Apretar "Guardar Anotacion"
+                3. Escribir la anotacion.<br>
+                4. Apretar "Guardar Anotacion"<br>
                 5. En anotaciones ver la lista de anotaciones de cada alumno.
             </div>
         </div>
