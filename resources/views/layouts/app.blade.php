@@ -132,6 +132,12 @@
                             <i class="bi bi-file-earmark-bar-graph"></i> Reportes Matrículas
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('ayuda') }}" class="nav-link">
+                            <i class="bi bi-question-circle-fill"></i> Ayuda
+                        </a>
+                    </li>
+
                 </ul>
 
                 <!-- 🌗 Botón modo oscuro -->

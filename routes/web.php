@@ -213,6 +213,11 @@ use App\Http\Controllers\AcompanamientoDocenteController;
 
 Route::get('/funcionarios/acompanamiento-docente', [AcompanamientoDocenteController::class, 'index'])->name('funcionarios.acompanamiento');
 
+Route::get('/ayuda', function () {
+    return view('ayuda.index');
+})->name('ayuda');
+
+
 
 
 
