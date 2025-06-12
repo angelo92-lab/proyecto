@@ -194,6 +194,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/matriculas/{id}', [MatriculaController::class, 'show'])->name('matricula.show');
     Route::get('/matricula2026/{id}/pdf', [MatriculaController::class, 'descargarPDF'])->name('matricula2026.pdf');
     Route::get('/matricula/dashboard', [MatriculaController::class, 'dashboard'])->name('matricula.dashboard');
+    Route::get('/matricula2026/{id}/editar', [MatriculaController::class, 'editar'])->name('matricula.2026.editar');
+
 
 
 });
@@ -216,6 +218,7 @@ Route::get('/funcionarios/acompanamiento-docente', [AcompanamientoDocenteControl
 Route::get('/ayuda', function () {
     return view('ayuda.index');
 })->name('ayuda');
+
 
 
 

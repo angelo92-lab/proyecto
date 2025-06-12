@@ -233,6 +233,15 @@ public function dashboard()
     ));
 }   
 
+public function editar($id)
+{
+    $alumno = Alumno::findOrFail($id);
+
+    // Puedes adaptar los datos que quieres precargar en el formulario
+    return view('matricula.create', compact('alumno'));
+}
+
+
 
 
 }   

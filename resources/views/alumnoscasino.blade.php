@@ -65,11 +65,15 @@
                     <a href="{{ url('agregaranotacion') }}?rut={{ $row->Run }}" class="btn btn-sm btn-outline-secondary">
                         Anotar
                     </a>
+                <td class="text-center">
+                    <a href="{{ route('matricula.2026.editar', ['id' => $alumno->id]) }}" class="btn btn-sm btn-primary">
+                        Matricular 2026
+                    </a>
                <td class="text-center">
-    <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
-        📚 Ver historial
-    </a>
-</td>
+                    <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
+                     📚 Ver historial
+                    </a>
+                </td>
 
             </tr>
         @endforeach
