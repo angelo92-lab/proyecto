@@ -11,9 +11,15 @@ use App\Imports\NuevosMatriculadosImport;
 
 class MatriculaController extends Controller
 {
-    public function create()
+    public function create($alumno_id = null)
     {
-        return view('matricula.create'); // Asegúrate de que esta vista exista
+    $alumno = null;
+
+    if ($alumno_id) {
+        $alumno = Colegio20252::find($alumno_id); 
+    }
+
+    return view('matricula.create', compact('alumno'));
     }
 
     public function store(Request $request)

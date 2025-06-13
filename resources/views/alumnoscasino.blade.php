@@ -73,8 +73,11 @@
                     <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
                      📚 Ver historial
                     </a>
-                </td>
+                    <a href="{{ route('matricula.create', $alumno->id) }}" class="btn btn-sm btn-primary">
+    Ingresar Matrícula
+</a>
 
+                </td>
             </tr>
         @endforeach
     </tbody>
