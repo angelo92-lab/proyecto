@@ -237,11 +237,28 @@ public function editar($id)
 {
     $alumno = Alumno::findOrFail($id);
 
-    // Puedes adaptar los datos que quieres precargar en el formulario
     return view('matricula.create', compact('alumno'));
 }
 
 
+public function update(Request $request, $id)
+{
+    $matricula = Matricula::findOrFail($id);
+
+    $validatedData = $request->validate([
+        'nombres' => 'required|string|max:255',
+        'apellido_paterno' => 'required|string|max:255',
+        'apellido_materno' => 'required|string|max:255',
+        'run' => 'required|string|max:12',
+        // Agrega las demás validaciones necesarias como en store
+    ]);
+
+    $matricula->update($request->all());
+
+    return redirect()->route('matricula.show', $matricula->id)->with('success', '✅ Matrícula actualizada correctamente.');
+}
+
+    
 
 
 }   
