@@ -66,14 +66,14 @@
                         Anotar
                     </a>
                <td class="text-center">
-                    <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
-                     📚 Ver historial
-                    </a>
-                    <a href="{{ route('matricula.create', ['alumno_id' => $alumno->id]) }}" class="btn btn-sm btn-primary">
-                     Ingresar Matrícula
-                    </a>
+    <a href="{{ route('anotaciones.historial', ['rut' => $row->Run]) }}" class="btn btn-sm btn-outline-info">
+        📚 Ver historial
+    </a>
+    <a href="{{ route('matricula.create', ['alumno_id' => $row->id]) }}" class="btn btn-sm btn-primary">
+        🧾 Ingresar Matrícula
+    </a>
+</td>
 
-                </td>
             </tr>
         @endforeach
     </tbody>
