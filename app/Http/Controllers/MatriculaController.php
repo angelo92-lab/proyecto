@@ -12,15 +12,16 @@ use App\Imports\NuevosMatriculadosImport;
 class MatriculaController extends Controller
 {
     public function create($alumno_id = null)
-    {
+{
     $alumno = null;
 
     if ($alumno_id) {
-        $alumno = Colegio20252::find($alumno_id); 
+        $alumno = Colegio20252::where('run', $alumno_id)->first(); // Busca por RUN en vez de id
     }
 
     return view('matricula.create', compact('alumno'));
-    }
+}
+
 
     public function store(Request $request)
     {
