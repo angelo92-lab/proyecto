@@ -73,7 +73,7 @@ class MatriculaController extends Controller
     
 
         DB::table('matriculas_2026')->insert([
-            // Estudiante
+            // Estudiantes y demas 
             'curso' => $request->curso,
             'run' => $request->run,
             'apellido_paterno' => $request->apellido_paterno,
