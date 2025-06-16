@@ -8,6 +8,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\Matricula;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\NuevosMatriculadosImport;
+use App\Models\Alumno;
+
 
 class MatriculaController extends Controller
 {
@@ -16,7 +18,7 @@ class MatriculaController extends Controller
     $alumno = null;
 
     if ($alumno_id) {
-        $alumno = Colegio20252::where('run', $alumno_id)->first(); // Busca por RUN en vez de id
+        $alumno = Alumno::where('run', $alumno_id)->first(); // Busca por RUN en vez de id
     }
 
     return view('matricula.create', compact('alumno'));

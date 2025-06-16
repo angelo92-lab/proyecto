@@ -83,6 +83,8 @@
 </div>
 
 {{-- Estilos personalizados --}}
+
+
 <style>
     body {
         background: linear-gradient(to right, #e0f7fa, #f1f8e9);
