@@ -15,23 +15,23 @@
         <h4>Datos del Estudiante</h4>
         <div class="form-group">
             <label>Nombres</label>
-            <input type="text" name="nombres" class="form-control" value="{{ old('nombres', $alumno->nombres ?? '') }}">
+            <input type="text" name="nombres" class="form-control" value="{{ old('nombres') }}">
         </div>
         <div class="form-group">
             <label>Apellido Paterno</label>
-            <input type="text" name="apellido_paterno" class="form-control" value="{{ old('apellido_paterno', $alumno->apellido_paterno ?? '') }}">
+            <input type="text" name="apellido_paterno" class="form-control" value="{{ old('apellido_paterno') }}">
         </div>
         <div class="form-group">
             <label>Apellido Materno</label>
-            <input type="text" name="apellido_materno" class="form-control" value="{{ old('apellido_materno', $alumno->apellido_materno ?? '') }}">
+            <input type="text" name="apellido_materno" class="form-control" value="{{ old('apellido_materno') }}">
         </div>
         <div class="form-group">
             <label>RUN</label>
-            <input type="text" name="run" class="form-control" value="{{ old('run', $alumno->run ?? '') }}">
+            <input type="text" name="run" class="form-control" value="{{ old('run') }}">
         </div>
         <div class="form-group">
             <label>Curso</label>
-            <input type="text" name="curso" class="form-control" value="{{ old('curso', $alumno->curso ?? '') }}">
+            <input type="text" name="curso" class="form-control" value="{{ old('curso') }}">
         </div>
         <div class="form-group">
             <label>Edad</label>
