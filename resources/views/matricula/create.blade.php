@@ -11,6 +11,7 @@
     <form action="{{ route('matricula.store') }}" method="POST">
         @csrf
 
+        {{-- DATOS DEL ESTUDIANTE --}}
         <h4>Datos del Estudiante</h4>
         <div class="form-group">
             <label>Nombres</label>
@@ -32,6 +33,7 @@
             <label>Curso</label>
             <input type="text" name="curso" class="form-control">
         </div>
+
         <div class="form-group">
             <label>Edad</label>
             <input type="number" name="edad" class="form-control">
@@ -47,70 +49,44 @@
 
         <hr>
 
-        <h4>Información del Padre</h4>
+        {{-- INFORMACIÓN DE SALUD --}}
+        <h4>Salud</h4>
         <div class="form-group">
-            <label>Nombre del Padre</label>
-            <input type="text" name="nombre_padre" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Teléfono del Padre</label>
-            <input type="text" name="telefono_padre" class="form-control">
+            <label>¿Tiene enfermedades diagnosticadas?</label><br>
+            <input type="checkbox" name="enfermedades[]" value="Asma"> Asma<br>
+            <input type="checkbox" name="enfermedades[]" value="Diabetes"> Diabetes<br>
+            <input type="checkbox" name="enfermedades[]" value="Otra"> Otra<br>
+            <input type="text" name="otra_enfermedad" class="form-control mt-2" placeholder="Especifique si seleccionó otra">
         </div>
 
-        <hr>
-
-        <h4>Información de la Madre</h4>
         <div class="form-group">
-            <label>Nombre de la Madre</label>
-            <input type="text" name="nombre_madre" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Teléfono de la Madre</label>
-            <input type="text" name="telefono_madre" class="form-control">
+            <label>¿Tiene alergias?</label><br>
+            <input type="checkbox" name="alergias[]" value="Polen"> Polen<br>
+            <input type="checkbox" name="alergias[]" value="Alimentos"> Alimentos<br>
+            <input type="checkbox" name="alergias[]" value="Medicamentos"> Medicamentos<br>
+            <input type="checkbox" name="alergias[]" value="Otra"> Otra<br>
+            <input type="text" name="otra_alergia" class="form-control mt-2" placeholder="Especifique si seleccionó otra">
         </div>
 
         <hr>
 
-        <h4>Tutor Legal</h4>
-        <div class="form-group">
-            <label>Nombre del Tutor</label>
-            <input type="text" name="nombre_tutor" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Parentesco</label>
-            <input type="text" name="parentesco_tutor" class="form-control">
-        </div>
-
-        <hr>
-
+        {{-- VIVIENDA --}}
         <h4>Información de Vivienda</h4>
+        <div class="form-group">
+            <label>Tipo de Vivienda</label><br>
+            <input type="radio" name="tipo_vivienda" value="Casa"> Casa<br>
+            <input type="radio" name="tipo_vivienda" value="Departamento"> Departamento<br>
+            <input type="radio" name="tipo_vivienda" value="Otro"> Otro<br>
+            <input type="text" name="otro_tipo_vivienda" class="form-control mt-2" placeholder="Especifique si seleccionó otro">
+        </div>
         <div class="form-group">
             <label>Dirección</label>
             <input type="text" name="direccion" class="form-control">
         </div>
-        <div class="form-group">
-            <label>Tipo de Vivienda</label>
-            <input type="text" name="tipo_vivienda" class="form-control">
-        </div>
 
         <hr>
 
-        <h4>Apoderado</h4>
-        <div class="form-group">
-            <label>Nombre del Apoderado</label>
-            <input type="text" name="nombre_apoderado" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>RUN del Apoderado</label>
-            <input type="text" name="run_apoderado" class="form-control">
-        </div>
-        <div class="form-group">
-            <label>Teléfono del Apoderado</label>
-            <input type="text" name="telefono_apoderado" class="form-control">
-        </div>
-
-        <hr>
-
+        {{-- CONTACTOS DE EMERGENCIA --}}
         <h4>Contactos de Emergencia</h4>
         <div class="form-group">
             <label>Nombre Contacto 1</label>
@@ -120,6 +96,7 @@
             <label>Teléfono Contacto 1</label>
             <input type="text" name="telefono_contacto1" class="form-control">
         </div>
+
         <div class="form-group">
             <label>Nombre Contacto 2</label>
             <input type="text" name="nombre_contacto2" class="form-control">
@@ -131,6 +108,7 @@
 
         <hr>
 
+        {{-- RESPONSABLE DEL LLENADO --}}
         <h4>Responsable del Llenado</h4>
         <div class="form-group">
             <label>Nombre</label>
